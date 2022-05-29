@@ -1,0 +1,42 @@
+[
+  {
+    "field": "name",
+    "operator": "like",
+    "value": "%guitar%"
+  },
+  {
+    "operator": "or",
+    "conditions": [
+      {
+        "operator": "and",
+        "conditions": [
+          {
+            "field": "description",
+            "operator": "like",
+            "value": "%fender%"
+          },
+          {
+            "field": "rate",
+            "operator": "gt",
+            "value": 3
+          }
+        ]
+      },
+      {
+        "operator": "and",
+        "conditions": [
+          {
+            "field": "description",
+            "operator": "like",
+            "value": "%ibanez%"
+          },
+          {
+            "field": "rate",
+            "operator": "lt",
+            "value": 2
+          }
+        ]
+      }
+    ]
+  }
+]
