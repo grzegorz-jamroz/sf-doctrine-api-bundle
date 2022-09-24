@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Ifrost\DoctrineApiBundle\Utility;
 
+use Doctrine\DBAL\Exception as DbalException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Ifrost\ApiBundle\Utility\ApiRequestInterface;
 use Ifrost\DoctrineApiBundle\Entity\EntityInterface;
@@ -59,7 +60,8 @@ class DefaultApi
     }
 
     /**
-     * @throws \Doctrine\DBAL\Exception
+     * @throws DbalException
+     * @throws NotUniqueException
      */
     public function create(): JsonResponse
     {
@@ -82,7 +84,9 @@ class DefaultApi
     }
 
     /**
-     * @throws \Doctrine\DBAL\Exception
+     * @throws DbalException
+     * @throws NotFoundException
+     * @throws NotUniqueException
      */
     public function update(): JsonResponse
     {
@@ -114,7 +118,9 @@ class DefaultApi
     }
 
     /**
-     * @throws \Doctrine\DBAL\Exception
+     * @throws DbalException
+     * @throws NotFoundException
+     * @throws NotUniqueException
      */
     public function modify(): JsonResponse
     {
@@ -148,7 +154,7 @@ class DefaultApi
     }
 
     /**
-     * @throws \Doctrine\DBAL\Exception
+     * @throws DbalException
      */
     public function delete(): JsonResponse
     {
