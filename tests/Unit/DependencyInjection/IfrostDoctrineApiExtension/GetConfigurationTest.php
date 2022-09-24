@@ -53,7 +53,7 @@ class GetConfigurationTest extends TestCase
             ],
         ];
         $containerBuilder = new ContainerBuilder();
-        $containerBuilder->setParameter('kernel.cache_dir', sprintf('%s\var\cache\test', ABSPATH));
+        $containerBuilder->setParameter('kernel.cache_dir', sprintf('%s/var/cache/test', ABSPATH));
         $expectedCacheDir = sprintf('%s/doctrine/dbal', $containerBuilder->getParameter('kernel.cache_dir'));
 
         // When
