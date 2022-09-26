@@ -40,7 +40,7 @@ class CreateTest extends ProductTestCase
         );
     }
 
-    public function testShouldThrowNotUniqueExceptionWhenTryingToCreateProductWhichHasNotUniqueCode()
+    public function testShouldThrowNotUniqueExceptionWhenTryingToCreateProductWhichHasNotUniqueUuid()
     {
         // Expect & Given
         $this->truncateTable(Product::TABLE);
@@ -54,6 +54,27 @@ class CreateTest extends ProductTestCase
         $controller->getApi(Product::class)->create();
         $controller->getApi(Product::class)->create();
     }
+
+    public function testShouldThrowNotUniqueExceptionWhenTryingToCreateProductWhichHasNotUniqueCode()
+    {
+        // Expect & Given
+        $this->truncateTable(Product::TABLE);
+        $this->expectException(NotUniqueException::class);
+        $this->expectExceptionMessage(sprintf('Unable to create "%s" due to not unique fields.', Product::class));
+        $productOneData = $this->productsData->get('f3e56592-0bfd-4669-be39-6ac8ab5ac55f');
+        $productTwoData = $this->productsData->get('f3e56592-0bfd-4669-be39-6ac8ab5ac55f');
+        $productTwoData['uuid'] = '1e6c4129-30ba-4bfa-8d35-9df10ffcb1d1';
+
+        // When & Then
+        $request = new Request([], $productOneData);
+        $controller = new DoctrineApiControllerVariant($request);
+        $controller->getApi(Product::class)->create();
+
+        $request = new Request([], $productTwoData);
+        $controller = new DoctrineApiControllerVariant($request);
+        $controller->getApi(Product::class)->create();
+    }
+
 
     public function testShouldThrowDbalExceptionWhenUnknownErrorOccurred()
     {

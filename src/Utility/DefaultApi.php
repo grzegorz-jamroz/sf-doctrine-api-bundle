@@ -76,8 +76,6 @@ class DefaultApi
             );
         } catch (UniqueConstraintViolationException) {
             throw new NotUniqueException(sprintf('Unable to create "%s" due to not unique fields.', $this->entityClassName));
-        } catch (\Exception $e) {
-            throw $e;
         }
 
         return new JsonResponse($entity->jsonSerialize());
@@ -95,9 +93,8 @@ class DefaultApi
             $this->db->fetchOne(EntityQuery::class, $this->entityClassName::getTableName(), $uuid);
         } catch (NotFoundException) {
             throw new NotFoundException(sprintf('Record "%s" not found', $this->entityClassName), 404);
-        } catch (\Exception $e) {
-            throw $e;
         }
+
         $data = $this->apiRequest->getRequest($this->entityClassName::getFields());
         $data['uuid'] = $uuid;
         $entity = $this->entityClassName::createFromArray($data);
@@ -110,8 +107,6 @@ class DefaultApi
             );
         } catch (UniqueConstraintViolationException) {
             throw new NotUniqueException(sprintf('Unable to update "%s" due to not unique fields.', $this->entityClassName));
-        } catch (\Exception $e) {
-            throw $e;
         }
 
         return new JsonResponse($entity->jsonSerialize());
@@ -134,8 +129,6 @@ class DefaultApi
             ]);
         } catch (NotFoundException) {
             throw new NotFoundException(sprintf('Record "%s" not found', $this->entityClassName), 404);
-        } catch (\Exception $e) {
-            throw $e;
         }
 
         try {
@@ -146,8 +139,6 @@ class DefaultApi
             );
         } catch (UniqueConstraintViolationException) {
             throw new NotUniqueException(sprintf('Unable to modify "%s" due to not unique fields.', $this->entityClassName));
-        } catch (\Exception $e) {
-            throw $e;
         }
 
         return new JsonResponse($entity->jsonSerialize());
