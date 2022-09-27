@@ -48,15 +48,20 @@ class DefaultApi
     }
 
     /**
-     * @throws \Exception
+     * @throws NotFoundException
+     * @throws DbalException
      */
     public function findOne(): JsonResponse
     {
-        return new JsonResponse($this->db->fetchOne(
-            EntityQuery::class,
-            $this->entityClassName::getTableName(),
-            $this->apiRequest->getAttribute('uuid', '')
-        ));
+        try {
+            return new JsonResponse($this->db->fetchOne(
+                EntityQuery::class,
+                $this->entityClassName::getTableName(),
+                $this->apiRequest->getAttribute('uuid', '')
+            ));
+        } catch (NotFoundException) {
+            throw new NotFoundException(sprintf('Record "%s" not found', $this->entityClassName), 404);
+        }
     }
 
     /**
