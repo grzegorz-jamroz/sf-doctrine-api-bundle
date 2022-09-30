@@ -7,10 +7,10 @@ namespace Tests\Variant\Controller;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
+use Ifrost\ApiFoundation\ApiInterface;
 use Ifrost\DoctrineApiBundle\Controller\DoctrineApiController;
 use Ifrost\DoctrineApiBundle\Query\DbalQuery;
 use Ifrost\DoctrineApiBundle\Utility\DbClient;
-use Ifrost\DoctrineApiBundle\Utility\DefaultApi;
 use PlainDataTransformer\Transform;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\DependencyInjection\Container;
@@ -91,7 +91,7 @@ class DoctrineApiControllerVariant extends DoctrineApiController
         return parent::fetchAll($query, ...$params);
     }
 
-    public function getApi(string $entityClassName): DefaultApi
+    public function getApi(string $entityClassName = ''): ApiInterface
     {
         return parent::getApi($entityClassName);
     }

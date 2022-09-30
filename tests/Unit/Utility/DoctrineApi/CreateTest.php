@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Utility\DefaultApi;
+namespace Tests\Unit\Utility\DoctrineApi;
 
 use Doctrine\DBAL\Exception;
 use Ifrost\ApiBundle\Utility\ApiRequest;
 use Ifrost\DoctrineApiBundle\Exception\NotUniqueException;
 use Ifrost\DoctrineApiBundle\Query\Entity\EntitiesQuery;
 use Ifrost\DoctrineApiBundle\Query\Entity\EntityQuery;
-use Ifrost\DoctrineApiBundle\Utility\DefaultApi;
+use Ifrost\DoctrineApiBundle\Utility\DoctrineApi;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Tests\Unit\ProductTestCase;
@@ -88,6 +88,6 @@ class CreateTest extends ProductTestCase
         $requestStack->push(new Request());
 
         // When & Then
-        (new DefaultApi(Product::class, $dbClient, new ApiRequest($requestStack)))->create();
+        (new DoctrineApi(Product::class, $dbClient, new ApiRequest($requestStack)))->create();
     }
 }

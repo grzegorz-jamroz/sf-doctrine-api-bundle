@@ -1,34 +1,35 @@
 {
-    "name": "grzegorz-jamroz/sf-doctrine-api-bundle",
-    "description": "Bundle provides basic features for Symfony Doctrine Api",
-    "authors": [
-        {
-            "name": "Grzegorz Jamróz",
-            "email": "grzegorz.jamrooz@gmail.com"
-        }
-    ],
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\": "tests/"
-        }
-    },
-    "autoload": {
-        "psr-4": {
-            "Ifrost\\DoctrineApiBundle\\": "src/"
-        }
-    },
-    "require": {
-        "doctrine/doctrine-bundle": "^2.6",
-        "doctrine/orm": "^2.11",
-        "grzegorz-jamroz/foundations": "^0.0.3",
-        "ramsey/uuid-doctrine": "^1.8",
-        "grzegorz-jamroz/sf-api-bundle": "^0.0.1"
-    },
-    "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.8",
-        "phpstan/phpstan": "^1.6",
-        "phpunit/phpunit": "^9.5",
-        "symfony/dotenv": "^6.0",
-        "grzegorz-jamroz/filesystem": "^0.0.9"
+  "name": "grzegorz-jamroz/sf-doctrine-api-bundle",
+  "description": "Bundle provides basic features for Symfony Doctrine Api",
+  "authors": [
+    {
+      "name": "Grzegorz Jamróz",
+      "email": "grzegorz.jamrooz@gmail.com"
     }
+  ],
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "Ifrost\\DoctrineApiBundle\\": "src/"
+    }
+  },
+  "require": {
+    "grzegorz-jamroz/foundations": "^0.0.3",
+    "grzegorz-jamroz/sf-api-foundation": "^6.1",
+    "doctrine/doctrine-bundle": "^2.7",
+    "doctrine/orm": "^2.13",
+    "ramsey/uuid-doctrine": "^1.8",
+    "grzegorz-jamroz/sf-api-bundle": "^6.1"
+  },
+  "require-dev": {
+    "grzegorz-jamroz/filesystem": "^0.0.9",
+    "symfony/dotenv": "^6.1",
+    "phpunit/phpunit": "^9.5",
+    "phpstan/phpstan": "^1.8",
+    "friendsofphp/php-cs-fixer": "^3.11"
+  }
 }

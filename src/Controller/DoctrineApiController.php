@@ -8,10 +8,12 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use Ifrost\ApiBundle\Controller\ApiController;
+use Ifrost\ApiFoundation\ApiInterface;
 use Ifrost\DoctrineApiBundle\Exception\NotFoundException;
 use Ifrost\DoctrineApiBundle\Query\DbalQuery;
 use Ifrost\DoctrineApiBundle\Utility\DbClient;
-use Ifrost\DoctrineApiBundle\Utility\DefaultApi;
+use Ifrost\DoctrineApiBundle\Utility\DoctrineApi;
+use PHPUnit\Framework\MockObject\Api;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 
@@ -100,8 +102,14 @@ class DoctrineApiController extends ApiController
         return $this->getDbClient()->fetchAll($query, ...$params);
     }
 
-    protected function getApi(string $entityClassName): DefaultApi
+    protected function getApi(string $entityClassName = ''): ApiInterface
     {
-        return new DefaultApi($entityClassName, $this->getDbClient(), $this->getApiRequestService());
+        if ($entityClassName === '') {
+            $attributes = (new \ReflectionClass(static::class))->getAttributes(Api::class, \ReflectionAttribute::IS_INSTANCEOF);
+            $attributes[0] ?? throw new \RuntimeException(sprintf('Controller "%s" has to declare "%s" attribute.', static::class, Api::class));
+            $entityClassName = $attributes[0]->getArguments()['entity'];
+        }
+
+        return new DoctrineApi($entityClassName, $this->getDbClient(), $this->getApiRequestService());
     }
 }

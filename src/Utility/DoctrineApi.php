@@ -7,6 +7,7 @@ namespace Ifrost\DoctrineApiBundle\Utility;
 use Doctrine\DBAL\Exception as DbalException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Ifrost\ApiBundle\Utility\ApiRequestInterface;
+use Ifrost\ApiFoundation\ApiInterface;
 use Ifrost\DoctrineApiBundle\Entity\EntityInterface;
 use Ifrost\DoctrineApiBundle\Exception\NotFoundException;
 use Ifrost\DoctrineApiBundle\Exception\NotUniqueException;
@@ -17,7 +18,7 @@ use PlainDataTransformer\Transform;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class DefaultApi
+class DoctrineApi implements ApiInterface
 {
     private string $entityClassName;
 

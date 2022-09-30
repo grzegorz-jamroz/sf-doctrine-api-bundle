@@ -20,6 +20,7 @@ enum DbalOperator: string
     case NOT_IN = 'notIn';
     case IS_NOT_NULL = 'isNotNull';
     case IS_NULL = 'isNull';
+
     public function isConjunction(): bool
     {
         $operators = [

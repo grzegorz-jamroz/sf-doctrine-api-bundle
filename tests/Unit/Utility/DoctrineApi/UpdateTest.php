@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Utility\DefaultApi;
+namespace Tests\Unit\Utility\DoctrineApi;
 
 use Doctrine\DBAL\Exception;
 use Ifrost\ApiBundle\Utility\ApiRequest;
@@ -10,7 +10,7 @@ use Ifrost\DoctrineApiBundle\Exception\NotFoundException;
 use Ifrost\DoctrineApiBundle\Exception\NotUniqueException;
 use Ifrost\DoctrineApiBundle\Query\Entity\EntitiesQuery;
 use Ifrost\DoctrineApiBundle\Query\Entity\EntityQuery;
-use Ifrost\DoctrineApiBundle\Utility\DefaultApi;
+use Ifrost\DoctrineApiBundle\Utility\DoctrineApi;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Tests\Unit\ProductTestCase;
@@ -110,7 +110,7 @@ class UpdateTest extends ProductTestCase
         $requestStack->push(new Request());
 
         // When & Then
-        (new DefaultApi(Product::class, $dbClient, new ApiRequest($requestStack)))->update();
+        (new DoctrineApi(Product::class, $dbClient, new ApiRequest($requestStack)))->update();
     }
 
     public function testShouldThrowDbalExceptionWhenUnknownErrorOccurred()
@@ -135,6 +135,6 @@ class UpdateTest extends ProductTestCase
         $requestStack->push(new Request([], $requestData, ['uuid' => $uuid]));
 
         // When & Then
-        (new DefaultApi(Product::class, $dbClient, new ApiRequest($requestStack)))->update();
+        (new DoctrineApi(Product::class, $dbClient, new ApiRequest($requestStack)))->update();
     }
 }

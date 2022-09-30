@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Utility\DefaultApi;
+namespace Tests\Unit\Utility\DoctrineApi;
 
 use Ifrost\DoctrineApiBundle\Entity\EntityInterface;
 use Ifrost\DoctrineApiBundle\Query\DbalOperator;

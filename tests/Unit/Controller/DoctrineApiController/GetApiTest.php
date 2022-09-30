@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Controller\DoctrineApiController;
 
-use Ifrost\DoctrineApiBundle\Utility\DefaultApi;
+use Ifrost\DoctrineApiBundle\Utility\DoctrineApi;
 use PHPUnit\Framework\TestCase;
 use Tests\Variant\Controller\DoctrineApiControllerVariant;
 use Tests\Variant\Entity\Product;
@@ -17,6 +17,6 @@ class GetApiTest extends TestCase
         $controller = new DoctrineApiControllerVariant();
 
         // When & Then
-        $this->assertInstanceOf(DefaultApi::class, $controller->getApi(Product::class));
+        $this->assertInstanceOf(DoctrineApi::class, $controller->getApi(Product::class));
     }
 }
