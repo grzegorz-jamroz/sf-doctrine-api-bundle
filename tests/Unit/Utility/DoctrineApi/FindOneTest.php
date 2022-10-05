@@ -40,7 +40,7 @@ class FindOneTest extends ProductTestCase
     {
         // Expect & Given
         $this->expectException(NotFoundException::class);
-        $this->expectExceptionMessage(sprintf('Record not found for query "%s"', EntityQuery::class));
+        $this->expectExceptionMessage(sprintf('Record "%s" not found', Product::class));
         $this->truncateTable(Product::TABLE);
         $uuid = '850186cc-9bac-44b8-a0f4-cea287290b8b';
         $request = new Request([], [], ['uuid' => $uuid]);

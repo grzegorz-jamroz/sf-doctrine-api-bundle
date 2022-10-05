@@ -9,11 +9,11 @@ use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use Ifrost\ApiBundle\Controller\ApiController;
 use Ifrost\ApiFoundation\ApiInterface;
+use Ifrost\ApiFoundation\Attribute\Api;
 use Ifrost\DoctrineApiBundle\Exception\NotFoundException;
 use Ifrost\DoctrineApiBundle\Query\DbalQuery;
 use Ifrost\DoctrineApiBundle\Utility\DbClient;
 use Ifrost\DoctrineApiBundle\Utility\DoctrineApi;
-use PHPUnit\Framework\MockObject\Api;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 

@@ -1362,19 +1362,21 @@
         },
         {
             "name": "grzegorz-jamroz/sf-api-foundation",
-            "version": "6.1",
+            "version": "6.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/grzegorz-jamroz/sf-api-foundation.git",
-                "reference": "68d9987204a5df467f527c03cbebec72f638606d"
+                "reference": "4cd69a42430ff8a719a59459ada836d9f369318b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/grzegorz-jamroz/sf-api-foundation/zipball/68d9987204a5df467f527c03cbebec72f638606d",
-                "reference": "68d9987204a5df467f527c03cbebec72f638606d",
+                "url": "https://api.github.com/repos/grzegorz-jamroz/sf-api-foundation/zipball/4cd69a42430ff8a719a59459ada836d9f369318b",
+                "reference": "4cd69a42430ff8a719a59459ada836d9f369318b",
                 "shasum": ""
             },
             "require": {
+                "grzegorz-jamroz/foundations": "^0.0.3",
+                "grzegorz-jamroz/plain-data-transformer": "^0.0.2",
                 "php": ">=8.1",
                 "symfony/http-foundation": "^6.1"
             },
@@ -1398,9 +1400,9 @@
             "description": "Project contains fundamental interfaces for iFrost Symfony Api.",
             "support": {
                 "issues": "https://github.com/grzegorz-jamroz/sf-api-foundation/issues",
-                "source": "https://github.com/grzegorz-jamroz/sf-api-foundation/tree/6.1"
+                "source": "https://github.com/grzegorz-jamroz/sf-api-foundation/tree/6.1.1"
             },
-            "time": "2022-09-27T15:54:57+00:00"
+            "time": "2022-10-05T13:59:48+00:00"
         },
         {
             "name": "psr/cache",
@@ -4812,16 +4814,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.8.6",
+            "version": "1.8.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "c386ab2741e64cc9e21729f891b28b2b10fe6618"
+                "reference": "536ff0ed719b5679e9f09c17aeaee9b31969cb8e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/c386ab2741e64cc9e21729f891b28b2b10fe6618",
-                "reference": "c386ab2741e64cc9e21729f891b28b2b10fe6618",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/536ff0ed719b5679e9f09c17aeaee9b31969cb8e",
+                "reference": "536ff0ed719b5679e9f09c17aeaee9b31969cb8e",
                 "shasum": ""
             },
             "require": {
@@ -4851,7 +4853,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.8.6"
+                "source": "https://github.com/phpstan/phpstan/tree/1.8.7"
             },
             "funding": [
                 {
@@ -4867,7 +4869,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-09-23T09:54:39+00:00"
+            "time": "2022-10-04T14:09:33+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
