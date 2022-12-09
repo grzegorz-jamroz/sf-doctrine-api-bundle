@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Variant;
+namespace Ifrost\DoctrineApiBundle\Tests\Variant;
 
 class Sample
 {

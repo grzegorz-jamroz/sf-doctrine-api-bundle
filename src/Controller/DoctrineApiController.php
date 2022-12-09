@@ -10,6 +10,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Ifrost\ApiBundle\Controller\ApiController;
 use Ifrost\ApiFoundation\ApiInterface;
 use Ifrost\ApiFoundation\Attribute\Api;
+use Ifrost\ApiFoundation\Traits\ApiControllerTrait;
 use Ifrost\DoctrineApiBundle\Exception\NotFoundException;
 use Ifrost\DoctrineApiBundle\Query\DbalQuery;
 use Ifrost\DoctrineApiBundle\Utility\DbClient;
@@ -19,6 +20,8 @@ use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 
 class DoctrineApiController extends ApiController
 {
+    use ApiControllerTrait;
+
     protected Connection $dbal;
     protected DbClient $db;
 
@@ -104,11 +107,14 @@ class DoctrineApiController extends ApiController
 
     protected function getApi(string $entityClassName = ''): ApiInterface
     {
-        if ($entityClassName === '') {
-            $attributes = (new \ReflectionClass(static::class))->getAttributes(Api::class, \ReflectionAttribute::IS_INSTANCEOF);
-            $attributes[0] ?? throw new \RuntimeException(sprintf('Controller "%s" has to declare "%s" attribute.', static::class, Api::class));
-            $entityClassName = $attributes[0]->getArguments()['entity'];
+        if ($entityClassName !== '') {
+            return new DoctrineApi($entityClassName, $this->getDbClient(), $this->getApiRequestService());
         }
+
+        $attributes = (new \ReflectionClass(static::class))->getAttributes(Api::class, \ReflectionAttribute::IS_INSTANCEOF);
+        $attributes[0] ?? throw new \RuntimeException(sprintf('Controller "%s" has to declare "%s" attribute.', static::class, Api::class));
+        $attribute = $attributes[0]->newInstance();
+        $entityClassName = $attribute->getEntity();
 
         return new DoctrineApi($entityClassName, $this->getDbClient(), $this->getApiRequestService());
     }

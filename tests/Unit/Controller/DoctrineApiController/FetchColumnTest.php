@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Controller\DoctrineApiController;
+namespace Ifrost\DoctrineApiBundle\Tests\Unit\Controller\DoctrineApiController;
 
 use Ifrost\DoctrineApiBundle\Exception\NotFoundException;
 use Ifrost\DoctrineApiBundle\Query\Entity\EntitiesQuery;
 use PlainDataTransformer\Transform;
-use Tests\Unit\ProductTestCase;
-use Tests\Variant\Controller\DoctrineApiControllerVariant;
-use Tests\Variant\Entity\Product;
-use Tests\Variant\Query\Product\GetProductName;
-use Tests\Variant\Query\Product\GetProductRate;
+use Ifrost\DoctrineApiBundle\Tests\Unit\ProductTestCase;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Entity\Product;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Query\Product\GetProductName;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Query\Product\GetProductRate;
 
 class FetchColumnTest extends ProductTestCase
 {

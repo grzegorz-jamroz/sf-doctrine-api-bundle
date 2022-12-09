@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Variant\Query\Product;
+namespace Ifrost\DoctrineApiBundle\Tests\Variant\Query\Product;
 
 use Doctrine\DBAL\Connection;
 use Ifrost\DoctrineApiBundle\Query\DbalQuery;
-use Tests\Variant\Entity\Product;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Entity\Product;
 
 class GetProductName extends DbalQuery
 {

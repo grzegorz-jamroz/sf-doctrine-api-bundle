@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Variant\Entity;
+namespace Ifrost\DoctrineApiBundle\Tests\Variant\Entity;
 
 use Ifrost\DoctrineApiBundle\Entity\EntityInterface;
 use PlainDataTransformer\Transform;

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tests\Variant\Query\Product;
+namespace Ifrost\DoctrineApiBundle\Tests\Variant\Query\Product;
 
 use Doctrine\DBAL\Cache\QueryCacheProfile;
 use Ifrost\DoctrineApiBundle\Query\DbalQuery;
-use Tests\Variant\Entity\Product;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Entity\Product;
 
 class GetAllProducts extends DbalQuery
 {

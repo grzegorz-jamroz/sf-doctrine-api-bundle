@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Utility\DoctrineApi;
+namespace Ifrost\DoctrineApiBundle\Tests\Unit\Utility\DoctrineApi;
 
 use Ifrost\DoctrineApiBundle\Entity\EntityInterface;
 use Ifrost\DoctrineApiBundle\Query\DbalOperator;
 use Ifrost\DoctrineApiBundle\Query\Entity\EntitiesQuery;
 use Ifrost\Filesystem\JsonFile;
 use Symfony\Component\HttpFoundation\Request;
-use Tests\Unit\ProductTestCase;
-use Tests\Variant\Controller\DoctrineApiControllerVariant;
-use Tests\Variant\Entity\Product;
-use Tests\Variant\Sample;
+use Ifrost\DoctrineApiBundle\Tests\Unit\ProductTestCase;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Entity\Product;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Sample;
 
 class FindTest extends ProductTestCase
 {

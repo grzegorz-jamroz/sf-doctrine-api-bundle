@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tests\Init;
+namespace Ifrost\DoctrineApiBundle\Tests\Init;
 
 use PHPUnit\Framework\TestCase;
-use Tests\Variant\Controller\DoctrineApiControllerVariant;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
 
 class BeforeTest extends TestCase
 {

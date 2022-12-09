@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Unit\Query;
+namespace Ifrost\DoctrineApiBundle\Tests\Unit\Query;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
@@ -12,7 +12,7 @@ use Ifrost\DoctrineApiBundle\Query\Entity\EntitiesQuery;
 use Ifrost\Filesystem\JsonFile;
 use PHPUnit\Framework\TestCase;
 use PlainDataTransformer\Transform;
-use Tests\Variant\Entity\Product;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Entity\Product;
 
 class DbalQueryConditionableTest extends TestCase
 {

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Query\DbalQuery;
+namespace Ifrost\DoctrineApiBundle\Tests\Unit\Query\DbalQuery;
 
 use Ifrost\DoctrineApiBundle\Query\DbalQuery;
 use PHPUnit\Framework\TestCase;
-use Tests\Variant\Controller\DoctrineApiControllerVariant;
-use Tests\Variant\Sample;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Sample;
 
 class FetchAllTest extends TestCase
 {

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Controller\DoctrineApiController;
+namespace Ifrost\DoctrineApiBundle\Tests\Unit\Controller\DoctrineApiController;
 
 use Ifrost\DoctrineApiBundle\Query\Entity\EntitiesQuery;
-use Tests\Unit\ProductTestCase;
-use Tests\Variant\Controller\DoctrineApiControllerVariant;
-use Tests\Variant\Entity\Product;
-use Tests\Variant\Query\Product\GetAllProductName;
-use Tests\Variant\Query\Product\GetAllProductsByName;
+use Ifrost\DoctrineApiBundle\Tests\Unit\ProductTestCase;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Entity\Product;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Query\Product\GetAllProductName;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Query\Product\GetAllProductsByName;
 
 class FetchFirstColumnTest extends ProductTestCase
 {
