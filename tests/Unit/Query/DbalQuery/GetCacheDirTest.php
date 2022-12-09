@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Query\DbalQuery;
+namespace Ifrost\DoctrineApiBundle\Tests\Unit\Query\DbalQuery;
 
 use Doctrine\DBAL\Cache\CacheException;
 use Ifrost\Filesystem\Directory;
@@ -10,9 +10,9 @@ use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
-use Tests\Variant\Controller\DoctrineApiControllerVariant;
-use Tests\Variant\Query\Product\GetAllProducts;
-use Tests\Variant\Sample;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Query\Product\GetAllProducts;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Sample;
 
 class GetCacheDirTest extends TestCase
 {

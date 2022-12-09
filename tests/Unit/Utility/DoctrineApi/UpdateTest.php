@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Utility\DoctrineApi;
+namespace Ifrost\DoctrineApiBundle\Tests\Unit\Utility\DoctrineApi;
 
 use Doctrine\DBAL\Exception;
 use Ifrost\ApiBundle\Utility\ApiRequest;
@@ -13,11 +13,11 @@ use Ifrost\DoctrineApiBundle\Query\Entity\EntityQuery;
 use Ifrost\DoctrineApiBundle\Utility\DoctrineApi;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Tests\Unit\ProductTestCase;
-use Tests\Variant\Controller\DoctrineApiControllerVariant;
-use Tests\Variant\Entity\Product;
-use Tests\Variant\Utility\DbClientSecondVariant;
-use Tests\Variant\Utility\DbClientVariant;
+use Ifrost\DoctrineApiBundle\Tests\Unit\ProductTestCase;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Entity\Product;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Utility\DbClientSecondVariant;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Utility\DbClientVariant;
 
 class UpdateTest extends ProductTestCase
 {

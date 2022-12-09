@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Collection;
+namespace Ifrost\DoctrineApiBundle\Tests\Unit\Collection;
 
 use Ifrost\DoctrineApiBundle\Collection\ConditionCollection;
 use Ifrost\DoctrineApiBundle\Query\DbalCondition;

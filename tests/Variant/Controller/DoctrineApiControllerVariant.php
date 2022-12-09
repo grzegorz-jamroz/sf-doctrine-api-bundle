@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Variant\Controller;
+namespace Ifrost\DoctrineApiBundle\Tests\Variant\Controller;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\DBAL\Connection;
@@ -16,7 +16,7 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBag;
 use Symfony\Component\HttpFoundation\Request;
-use Tests\Variant\Utility\ApiRequestVariant;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Utility\ApiRequestVariant;
 
 class DoctrineApiControllerVariant extends DoctrineApiController
 {

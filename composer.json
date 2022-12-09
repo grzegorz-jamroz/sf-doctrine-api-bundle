@@ -9,7 +9,7 @@
   ],
   "autoload-dev": {
     "psr-4": {
-      "Tests\\": "tests/"
+      "Ifrost\\DoctrineApiBundle\\Tests\\": "tests/"
     }
   },
   "autoload": {
@@ -19,7 +19,7 @@
   },
   "require": {
     "grzegorz-jamroz/foundations": "^0.0.3",
-    "grzegorz-jamroz/sf-api-foundation": "^6.1",
+    "grzegorz-jamroz/sf-api-foundation": "^6.1.3",
     "doctrine/doctrine-bundle": "^2.7",
     "doctrine/orm": "^2.13",
     "ramsey/uuid-doctrine": "^1.8",
@@ -30,6 +30,7 @@
     "symfony/dotenv": "^6.1",
     "phpunit/phpunit": "^9.5",
     "phpstan/phpstan": "^1.8",
-    "friendsofphp/php-cs-fixer": "^3.11"
+    "friendsofphp/php-cs-fixer": "^3.11",
+    "symfony/yaml": "^6.1"
   }
 }

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit;
+namespace Ifrost\DoctrineApiBundle\Tests\Unit;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
 use Ifrost\DoctrineApiBundle\Utility\DbClient;
 use Ifrost\Filesystem\JsonFile;
 use PHPUnit\Framework\TestCase;
-use Tests\Variant\Controller\DoctrineApiControllerVariant;
-use Tests\Variant\Entity\Product;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Entity\Product;
 
 class ProductTestCase extends TestCase
 {

@@ -4,14 +4,9 @@ declare(strict_types=1);
 
 namespace Ifrost\DoctrineApiBundle\Entity;
 
-use Ifrost\Foundations\ArrayConstructable;
+use Ifrost\ApiFoundation\Entity\ApiEntityInterface;
 
-interface EntityInterface extends ArrayConstructable, \JsonSerializable
+interface EntityInterface extends ApiEntityInterface
 {
     public static function getTableName(): string;
-
-    /**
-     * @return array<int, string>
-     */
-    public static function getFields(): array;
 }

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Unit\Controller\DoctrineApiController;
+namespace Ifrost\DoctrineApiBundle\Tests\Unit\Controller\DoctrineApiController;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Ifrost\DoctrineApiBundle\Controller\DoctrineApiController as Controller;

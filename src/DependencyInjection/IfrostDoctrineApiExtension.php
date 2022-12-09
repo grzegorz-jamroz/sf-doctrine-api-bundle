@@ -9,9 +9,11 @@ use Psr\Cache\CacheItemPoolInterface;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\Extension\Extension;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 class IfrostDoctrineApiExtension extends Extension
 {
@@ -22,6 +24,11 @@ class IfrostDoctrineApiExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
+        $loader = new YamlFileLoader(
+            $container,
+            new FileLocator(__DIR__ . '/../../config')
+        );
+        $loader->load('services.yaml');
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 

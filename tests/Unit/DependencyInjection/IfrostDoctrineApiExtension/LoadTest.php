@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\DependencyInjection\IfrostDoctrineApiExtension;
+namespace Ifrost\DoctrineApiBundle\Tests\Unit\DependencyInjection\IfrostDoctrineApiExtension;
 
 use Ifrost\DoctrineApiBundle\DependencyInjection\Configuration;
 use Ifrost\DoctrineApiBundle\DependencyInjection\IfrostDoctrineApiExtension;

@@ -1,0 +1,7 @@
+services:
+  Ifrost\DoctrineApiBundle\Routing\AnnotatedRouteControllerLoader:
+  Ifrost\DoctrineApiBundle\Routing\DoctrineApiLoader:
+    arguments:
+      $locator: '@file_locator'
+      $loader: '@Ifrost\DoctrineApiBundle\Routing\AnnotatedRouteControllerLoader'
+    tags: [routing.loader]

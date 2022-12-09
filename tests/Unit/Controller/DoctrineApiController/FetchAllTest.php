@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Controller\DoctrineApiController;
+namespace Ifrost\DoctrineApiBundle\Tests\Unit\Controller\DoctrineApiController;
 
 use Ifrost\DoctrineApiBundle\Query\DbalCriteria;
 use Ifrost\DoctrineApiBundle\Query\Entity\EntitiesQuery;
-use Tests\Unit\ProductTestCase;
-use Tests\Variant\Controller\DoctrineApiControllerVariant;
-use Tests\Variant\Entity\Product;
+use Ifrost\DoctrineApiBundle\Tests\Unit\ProductTestCase;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Entity\Product;
 
 class FetchAllTest extends ProductTestCase
 {

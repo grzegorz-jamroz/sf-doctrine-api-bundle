@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\DependencyInjection\IfrostDoctrineApiExtension;
+namespace Ifrost\DoctrineApiBundle\Tests\Unit\DependencyInjection\IfrostDoctrineApiExtension;
 
 use Ifrost\DoctrineApiBundle\DependencyInjection\IfrostDoctrineApiExtension;
 use PHPUnit\Framework\TestCase;
@@ -13,7 +13,7 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
-use Tests\Variant\Sample;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Sample;
 
 class GetConfigurationTest extends TestCase
 {

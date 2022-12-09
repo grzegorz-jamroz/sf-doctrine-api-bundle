@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Variant\Utility;
+namespace Ifrost\DoctrineApiBundle\Tests\Variant\Utility;
 
 use Doctrine\DBAL\Exception;
 use Ifrost\DoctrineApiBundle\Query\DbalQuery;

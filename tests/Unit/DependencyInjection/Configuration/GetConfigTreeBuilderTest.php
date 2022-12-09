@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Unit\DependencyInjection\Configuration;
+namespace Ifrost\DoctrineApiBundle\Tests\Unit\DependencyInjection\Configuration;
 
 use Ifrost\DoctrineApiBundle\DependencyInjection\Configuration;
 use PHPUnit\Framework\TestCase;
