@@ -1,5 +1,5 @@
 # Changelog
-## Unreleased
+## [v6.1.3] - 2022.12.13
 ### Change
 - [EntityInterface](src/Entity/EntityInterface.php)
   - add method getWritableFormat responsible for providing data which can be stored in database
@@ -13,4 +13,5 @@
 - extend DoctrineApiController with ApiControllerTrait
 - add support for metadata `path` and `excludedActions` in Api attribute
 
+[v6.1.3]: https://github.com/grzegorz-jamroz/sf-storage-api-bundle/releases/tag/v6.1.3]
 [v6.1.2]: https://github.com/grzegorz-jamroz/sf-storage-api-bundle/releases/tag/v6.1.2]
