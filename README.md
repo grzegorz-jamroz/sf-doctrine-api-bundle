@@ -89,6 +89,7 @@ namespace App\Controller;
 use App\Entity\Product;
 use Ifrost\ApiFoundation\Attribute\Api;
 use Ifrost\DoctrineApiBundle\Controller\DoctrineApiController;
+use Symfony\Component\Routing\Annotation\Route;
 
 #[Api(
     entity: Product::class,
