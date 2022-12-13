@@ -3,5 +3,6 @@
   "code": "PDO79R564",
   "name": "Microphone",
   "description": "Shure",
-  "rate": 4
+  "rate": 4,
+  "tags": []
 }

@@ -24,7 +24,7 @@ class FetchColumnTest extends ProductTestCase
 
         /** @var Product $product */
         foreach ($this->products as $product) {
-            $this->dbClient->insert(Product::TABLE, $product->jsonSerialize());
+            $this->dbClient->insert(Product::TABLE, $product->getWritableFormat());
         }
 
         $this->assertCount(4, $this->dbClient->fetchAll(EntitiesQuery::class, Product::TABLE));

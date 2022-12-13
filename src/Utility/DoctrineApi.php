@@ -78,7 +78,7 @@ class DoctrineApi implements ApiInterface
         try {
             $this->db->insert(
                 $this->entityClassName::getTableName(),
-                $entity->jsonSerialize()
+                $entity->getWritableFormat()
             );
         } catch (UniqueConstraintViolationException) {
             throw new NotUniqueException(sprintf('Unable to create "%s" due to not unique fields.', $this->entityClassName));
@@ -108,7 +108,7 @@ class DoctrineApi implements ApiInterface
         try {
             $this->db->update(
                 $this->entityClassName::getTableName(),
-                $entity->jsonSerialize(),
+                $entity->getWritableFormat(),
                 ['uuid' => $uuid]
             );
         } catch (UniqueConstraintViolationException) {
@@ -140,7 +140,7 @@ class DoctrineApi implements ApiInterface
         try {
             $this->db->update(
                 $this->entityClassName::getTableName(),
-                $entity->jsonSerialize(),
+                $entity->getWritableFormat(),
                 ['uuid' => $uuid]
             );
         } catch (UniqueConstraintViolationException) {

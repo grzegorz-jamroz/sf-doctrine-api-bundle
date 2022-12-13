@@ -34,7 +34,17 @@ class ProductTestCase extends TestCase
         $this->productsData = array_reduce(
             $productUuids,
             function (ArrayCollection $acc, string $uuid) use ($testDirectoryPath) {
-                $acc->set($uuid, (new JsonFile(sprintf('%s/%s.json', $testDirectoryPath, $uuid)))->read());
+                $productData = array_map(
+                    function(mixed $value) {
+                        if (is_array($value)) {
+                            return json_encode($value);
+                        }
+
+                        return $value;
+                    },
+                    (new JsonFile(sprintf('%s/%s.json', $testDirectoryPath, $uuid)))->read()
+                );
+                $acc->set($uuid, $productData);
 
                 return $acc;
             },
@@ -43,6 +53,21 @@ class ProductTestCase extends TestCase
         $this->products = array_reduce(
             $this->productsData->toArray(),
             function (ArrayCollection $acc, array $productData) {
+                $productData = array_map(
+                    function(mixed $value) {
+                        if (is_string($value) === false) {
+                            return $value;
+                        }
+
+                        try {
+                            $value = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+                        } catch (\Exception) {
+                        }
+
+                        return $value;
+                    },
+                    $productData
+                );
                 $acc->set($productData['uuid'], Product::createFromArray($productData));
 
                 return $acc;

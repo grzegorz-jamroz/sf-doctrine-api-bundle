@@ -1,4 +1,9 @@
 # Changelog
+## Unreleased
+### Change
+- [EntityInterface](src/Entity/EntityInterface.php)
+  - add method getWritableFormat responsible for providing data which can be stored in database
+
 ## [v6.1.2] - 2022.12.09
 ### Change
 - Transfer some responsibilities to [sf-api-foundation](https://github.com/grzegorz-jamroz/sf-api-foundation) package

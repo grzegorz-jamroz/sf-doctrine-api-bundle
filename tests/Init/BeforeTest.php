@@ -25,6 +25,7 @@ class BeforeTest extends TestCase
               `description` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
               `code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
               `rate` float DEFAULT NULL,
+              `tags` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
               PRIMARY KEY (`uuid`),
               UNIQUE KEY `UNIQ_D34A04AD77153098` (`code`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

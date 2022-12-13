@@ -3,5 +3,6 @@
   "code": "ARD34FR89",
   "name": "Guitar",
   "description": "Fender",
-  "rate": 3.45
+  "rate": 3.45,
+  "tags": ["guitar", "rock", "Jimi Hendrix"]
 }

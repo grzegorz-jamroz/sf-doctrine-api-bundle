@@ -14,6 +14,7 @@ class Product implements EntityInterface
         private string $code,
         private string $name,
         private string $description,
+        private array $tags = [],
     ) {
     }
 
@@ -37,6 +38,11 @@ class Product implements EntityInterface
         return $this->description;
     }
 
+    public function getTags(): array
+    {
+        return $this->tags;
+    }
+
     public static function getTableName(): string
     {
         return self::TABLE;
@@ -57,6 +63,7 @@ class Product implements EntityInterface
             Transform::toString($data['code'] ?? ''),
             Transform::toString($data['name'] ?? ''),
             Transform::toString($data['description'] ?? ''),
+            Transform::toArray($data['tags'] ?? []),
         );
     }
 
@@ -70,6 +77,15 @@ class Product implements EntityInterface
             'code' => $this->code,
             'name' => $this->name,
             'description' => $this->description,
+            'tags' => $this->tags,
+        ];
+    }
+
+    public function getWritableFormat(): array
+    {
+        return [
+            ...$this->jsonSerialize(),
+            'tags' => json_encode($this->tags),
         ];
     }
 }

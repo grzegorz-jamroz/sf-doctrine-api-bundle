@@ -50,6 +50,7 @@ class UpdateTest extends ProductTestCase
                 'code' => 'PDO79R564',
                 'name' => 'accordion',
                 'description' => '',
+                'tags' => [],
             ],
             Product::createFromArray($productData)->jsonSerialize()
         );

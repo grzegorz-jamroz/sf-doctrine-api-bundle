@@ -40,6 +40,56 @@ class CreateTest extends ProductTestCase
         );
     }
 
+    public function testShouldCreateProductWithoutTags(): void
+    {
+        // Expect & Given
+        $this->truncateTable(Product::TABLE);
+        $this->assertCount(0, $this->dbClient->fetchAll(EntitiesQuery::class, Product::TABLE));
+        $uuid = 'fe687d4a-a5fc-426b-ba15-13901bda54a6';
+        $productData = $this->productsData->get($uuid);
+        $productData = array_filter($productData, fn (string $key) => $key !== 'tags', ARRAY_FILTER_USE_KEY);
+        $request = new Request([], $productData);
+        $controller = new DoctrineApiControllerVariant($request);
+
+        // When
+        $controller->getApi(Product::class)->create();
+
+        // Then
+        $productData = $controller->fetchOne(EntityQuery::class, Product::TABLE, $uuid);
+        $this->assertEquals(
+            [
+                ...$this->products->get($uuid)->getWritableFormat(),
+                'rate' => null,
+            ],
+            $productData
+        );
+    }
+
+    public function testShouldCreateProductWithArrayOfThreeTags(): void
+    {
+        // Expect & Given
+        $this->truncateTable(Product::TABLE);
+        $this->assertCount(0, $this->dbClient->fetchAll(EntitiesQuery::class, Product::TABLE));
+        $uuid = '8b40a6d6-1a79-4edc-bfca-0f8d993c29f3';
+        $productData = $this->productsData->get($uuid);
+        $productData['tags'] = json_decode($productData['tags']);
+        $request = new Request([], Product::createFromArray($productData)->jsonSerialize());
+        $controller = new DoctrineApiControllerVariant($request);
+
+        // When
+        $controller->getApi(Product::class)->create();
+
+        // Then
+        $productData = $controller->fetchOne(EntityQuery::class, Product::TABLE, $uuid);
+        $this->assertEquals(
+            [
+                ...$this->products->get($uuid)->getWritableFormat(),
+                'rate' => null,
+            ],
+            $productData
+        );
+    }
+
     public function testShouldThrowNotUniqueExceptionWhenTryingToCreateProductWhichHasNotUniqueUuid()
     {
         // Expect & Given

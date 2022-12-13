@@ -50,6 +50,7 @@ class ModifyTest extends ProductTestCase
                 'code' => 'EBG34F321',
                 'name' => 'Headphones',
                 'description' => 'Shure',
+                'tags' => [],
             ],
             Product::createFromArray($productData)->jsonSerialize()
         );

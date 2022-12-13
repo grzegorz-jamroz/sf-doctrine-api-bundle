@@ -22,7 +22,7 @@ class FetchFirstColumnTest extends ProductTestCase
         /** @var Product $product */
 
         foreach ($this->products as $product) {
-            $this->dbClient->insert(Product::TABLE, $product->jsonSerialize());
+            $this->dbClient->insert(Product::TABLE, $product->getWritableFormat());
         }
 
         $this->assertCount(4, $this->dbClient->fetchAll(EntitiesQuery::class, Product::TABLE));
@@ -42,7 +42,7 @@ class FetchFirstColumnTest extends ProductTestCase
         $this->assertEquals([], $this->dbClient->fetchAll(EntitiesQuery::class, Product::TABLE));
         /** @var Product $product */
         foreach ($this->products as $product) {
-            $this->dbClient->insert(Product::TABLE, $product->jsonSerialize());
+            $this->dbClient->insert(Product::TABLE, $product->getWritableFormat());
         }
 
         $this->assertCount(4, $this->dbClient->fetchAll(EntitiesQuery::class, Product::TABLE));
@@ -65,7 +65,7 @@ class FetchFirstColumnTest extends ProductTestCase
         $this->assertEquals([], $this->dbClient->fetchAll(EntitiesQuery::class, Product::TABLE));
         /** @var Product $product */
         foreach ($this->products as $product) {
-            $this->dbClient->insert(Product::TABLE, $product->jsonSerialize());
+            $this->dbClient->insert(Product::TABLE, $product->getWritableFormat());
         }
 
         $this->assertCount(4, $this->dbClient->fetchAll(EntitiesQuery::class, Product::TABLE));
@@ -91,7 +91,7 @@ class FetchFirstColumnTest extends ProductTestCase
         /** @var Product $product */
 
         foreach ($this->products as $product) {
-            $this->dbClient->insert(Product::TABLE, $product->jsonSerialize());
+            $this->dbClient->insert(Product::TABLE, $product->getWritableFormat());
         }
 
         $this->assertCount(4, $this->dbClient->fetchAll(EntitiesQuery::class, Product::TABLE));
