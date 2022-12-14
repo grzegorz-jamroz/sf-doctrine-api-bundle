@@ -1,4 +1,8 @@
 # Changelog
+## Unreleased
+### Change
+- upgrade [sf-api-bundle](https://github.com/grzegorz-jamroz/sf-api-bundle) version to [v6.1.1](https://github.com/grzegorz-jamroz/sf-api-bundle/releases/tag/v6.1.1)
+
 ## [v6.1.3] - 2022.12.13
 ### Change
 - [EntityInterface](src/Entity/EntityInterface.php)

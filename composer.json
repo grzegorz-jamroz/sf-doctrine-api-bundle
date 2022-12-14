@@ -23,7 +23,7 @@
     "doctrine/doctrine-bundle": "^2.7",
     "doctrine/orm": "^2.13",
     "ramsey/uuid-doctrine": "^1.8",
-    "grzegorz-jamroz/sf-api-bundle": "^6.1"
+    "grzegorz-jamroz/sf-api-bundle": "^6.1.1"
   },
   "require-dev": {
     "grzegorz-jamroz/filesystem": "^0.0.9",
