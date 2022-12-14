@@ -1,5 +1,5 @@
 # Changelog
-## Unreleased
+## [v6.1.4] - 2022.12.14
 ### Change
 - upgrade [sf-api-bundle](https://github.com/grzegorz-jamroz/sf-api-bundle) version to [v6.1.1](https://github.com/grzegorz-jamroz/sf-api-bundle/releases/tag/v6.1.1)
 
@@ -17,5 +17,6 @@
 - extend DoctrineApiController with ApiControllerTrait
 - add support for metadata `path` and `excludedActions` in Api attribute
 
+[v6.1.4]: https://github.com/grzegorz-jamroz/sf-storage-api-bundle/releases/tag/v6.1.4]
 [v6.1.3]: https://github.com/grzegorz-jamroz/sf-storage-api-bundle/releases/tag/v6.1.3]
 [v6.1.2]: https://github.com/grzegorz-jamroz/sf-storage-api-bundle/releases/tag/v6.1.2]
