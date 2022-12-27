@@ -17,6 +17,7 @@ use Ifrost\DoctrineApiBundle\Utility\DbClient;
 use Ifrost\DoctrineApiBundle\Utility\DoctrineApi;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class DoctrineApiController extends ApiController
 {
@@ -29,6 +30,7 @@ class DoctrineApiController extends ApiController
     {
         return array_merge(parent::getSubscribedServices(), [
             'doctrine' => '?' . ManagerRegistry::class,
+            'event_dispatcher' => '?' . EventDispatcherInterface::class,
         ]);
     }
 
@@ -108,7 +110,7 @@ class DoctrineApiController extends ApiController
     protected function getApi(string $entityClassName = ''): ApiInterface
     {
         if ($entityClassName !== '') {
-            return new DoctrineApi($entityClassName, $this->getDbClient(), $this->getApiRequestService());
+            return new DoctrineApi($entityClassName, $this->getDbClient(), $this->getApiRequestService(), $this->getEventDispatcher());
         }
 
         $attributes = (new \ReflectionClass(static::class))->getAttributes(Api::class, \ReflectionAttribute::IS_INSTANCEOF);
@@ -116,6 +118,15 @@ class DoctrineApiController extends ApiController
         $attribute = $attributes[0]->newInstance();
         $entityClassName = $attribute->getEntity();
 
-        return new DoctrineApi($entityClassName, $this->getDbClient(), $this->getApiRequestService());
+        return new DoctrineApi($entityClassName, $this->getDbClient(), $this->getApiRequestService(), $this->getEventDispatcher());
     }
+
+    protected function getEventDispatcher(): EventDispatcherInterface
+    {
+        $eventDispatcher = $this->container->get('event_dispatcher');
+        $eventDispatcher instanceof EventDispatcherInterface ?: throw new RuntimeException(sprintf('Container identifier "event_dispatcher" is not instance of %s', EventDispatcherInterface::class));
+
+        return $eventDispatcher;
+    }
+
 }

@@ -9,6 +9,11 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Ifrost\ApiBundle\Utility\ApiRequestInterface;
 use Ifrost\ApiFoundation\ApiInterface;
 use Ifrost\DoctrineApiBundle\Entity\EntityInterface;
+use Ifrost\DoctrineApiBundle\Event\BeforeCreateEvent;
+use Ifrost\DoctrineApiBundle\Event\BeforeDeleteEvent;
+use Ifrost\DoctrineApiBundle\Event\BeforeModifyEvent;
+use Ifrost\DoctrineApiBundle\Event\BeforeUpdateEvent;
+use Ifrost\DoctrineApiBundle\Events;
 use Ifrost\DoctrineApiBundle\Exception\NotFoundException;
 use Ifrost\DoctrineApiBundle\Exception\NotUniqueException;
 use Ifrost\DoctrineApiBundle\Query\DbalCriteria;
@@ -17,6 +22,7 @@ use Ifrost\DoctrineApiBundle\Query\Entity\EntityQuery;
 use PlainDataTransformer\Transform;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class DoctrineApi implements ApiInterface
 {
@@ -26,6 +32,7 @@ class DoctrineApi implements ApiInterface
         string $entityClassName,
         private DbClient $db,
         private ApiRequestInterface $apiRequest,
+        private EventDispatcherInterface $dispatcher
     ) {
         $this->setEntityClassName($entityClassName);
     }
@@ -74,11 +81,16 @@ class DoctrineApi implements ApiInterface
         $data = $this->apiRequest->getRequest($this->entityClassName::getFields());
         $data['uuid'] ??= (string) Uuid::uuid4();
         $entity = $this->entityClassName::createFromArray($data);
+        $event = new BeforeCreateEvent(
+            $entity,
+            $entity->getWritableFormat()
+        );
+        $this->dispatcher->dispatch($event, Events::BEFORE_CREATE);
 
         try {
             $this->db->insert(
                 $this->entityClassName::getTableName(),
-                $entity->getWritableFormat()
+                $event->getData()
             );
         } catch (UniqueConstraintViolationException) {
             throw new NotUniqueException(sprintf('Unable to create "%s" due to not unique fields.', $this->entityClassName));
@@ -96,7 +108,7 @@ class DoctrineApi implements ApiInterface
     {
         $uuid = $this->apiRequest->getAttribute('uuid', '');
         try {
-            $this->db->fetchOne(EntityQuery::class, $this->entityClassName::getTableName(), $uuid);
+            $previousData = $this->db->fetchOne(EntityQuery::class, $this->entityClassName::getTableName(), $uuid);
         } catch (NotFoundException) {
             throw new NotFoundException(sprintf('Record "%s" not found', $this->entityClassName), 404);
         }
@@ -104,11 +116,17 @@ class DoctrineApi implements ApiInterface
         $data = $this->apiRequest->getRequest($this->entityClassName::getFields());
         $data['uuid'] = $uuid;
         $entity = $this->entityClassName::createFromArray($data);
+        $event = new BeforeUpdateEvent(
+            $entity,
+            $entity->getWritableFormat(),
+            $previousData
+        );
+        $this->dispatcher->dispatch($event, Events::BEFORE_UPDATE);
 
         try {
             $this->db->update(
                 $this->entityClassName::getTableName(),
-                $entity->getWritableFormat(),
+                $event->getData(),
                 ['uuid' => $uuid]
             );
         } catch (UniqueConstraintViolationException) {
@@ -128,14 +146,22 @@ class DoctrineApi implements ApiInterface
         $uuid = $this->apiRequest->getAttribute('uuid', '');
 
         try {
+            $previousData = $this->db->fetchOne(EntityQuery::class, $this->entityClassName::getTableName(), $uuid);
             $entity = $this->entityClassName::createFromArray([
-                ...$this->db->fetchOne(EntityQuery::class, $this->entityClassName::getTableName(), $uuid),
+                ...$previousData,
                 ...$this->apiRequest->getRequest($this->entityClassName::getFields(), false),
                 'uuid' => $uuid,
             ]);
         } catch (NotFoundException) {
             throw new NotFoundException(sprintf('Record "%s" not found', $this->entityClassName), 404);
         }
+
+        $event = new BeforeModifyEvent(
+            $entity,
+            $entity->getWritableFormat(),
+            $previousData
+        );
+        $this->dispatcher->dispatch($event, Events::BEFORE_MODIFY);
 
         try {
             $this->db->update(
@@ -155,9 +181,12 @@ class DoctrineApi implements ApiInterface
      */
     public function delete(): JsonResponse
     {
+        $uuid = $this->apiRequest->getAttribute('uuid', '');
+        $event = new BeforeDeleteEvent($uuid);
+        $this->dispatcher->dispatch($event, Events::BEFORE_DELETE);
         $this->db->delete(
             $this->entityClassName::getTableName(),
-            ['uuid' => $this->apiRequest->getAttribute('uuid', '')]
+            ['uuid' => $uuid]
         );
 
         return new JsonResponse();
