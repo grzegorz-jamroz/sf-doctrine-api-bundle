@@ -9,6 +9,7 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Ifrost\ApiBundle\Utility\ApiRequestInterface;
 use Ifrost\ApiFoundation\ApiInterface;
 use Ifrost\DoctrineApiBundle\Entity\EntityInterface;
+use Ifrost\DoctrineApiBundle\Event\AfterFindEvent;
 use Ifrost\DoctrineApiBundle\Event\BeforeCreateEvent;
 use Ifrost\DoctrineApiBundle\Event\BeforeDeleteEvent;
 use Ifrost\DoctrineApiBundle\Event\BeforeModifyEvent;
@@ -37,21 +38,28 @@ class DoctrineApi implements ApiInterface
         $this->setEntityClassName($entityClassName);
     }
 
-    public function find(): JsonResponse
+    public function find(array $options = []): JsonResponse
     {
         $conditions = Transform::toArray($this->apiRequest->getField('conditions') ?? []);
+        $results = $this->db->fetchAll(
+            EntitiesQuery::class,
+            $this->entityClassName::getTableName(),
+            DbalCriteria::createFromArray([
+                'conditions' => $conditions,
+                'orderBy' => $this->apiRequest->getField('orderBy'),
+                'offset' => $this->apiRequest->getField('offset'),
+                'limit' => $this->apiRequest->getField('limit'),
+            ])
+        );
+        $event = new AfterFindEvent($this->entityClassName, $results);
+        $this->dispatcher->dispatch($event, Events::AFTER_FIND);
+
+        if (Transform::toBool($options['raw_data'] ?? false)) {
+            return new JsonResponse($event->getData());
+        }
 
         return new JsonResponse(
-            $this->db->fetchAll(
-                EntitiesQuery::class,
-                $this->entityClassName::getTableName(),
-                DbalCriteria::createFromArray([
-                    'conditions' => $conditions,
-                    'orderBy' => $this->apiRequest->getField('orderBy'),
-                    'offset' => $this->apiRequest->getField('offset'),
-                    'limit' => $this->apiRequest->getField('limit'),
-                ])
-            )
+            array_map(fn (array $result) => $this->entityClassName::createFromArray($result)->jsonSerialize(), $event->getData())
         );
     }
 
@@ -81,10 +89,7 @@ class DoctrineApi implements ApiInterface
         $data = $this->apiRequest->getRequest($this->entityClassName::getFields());
         $data['uuid'] ??= (string) Uuid::uuid4();
         $entity = $this->entityClassName::createFromArray($data);
-        $event = new BeforeCreateEvent(
-            $entity,
-            $entity->getWritableFormat()
-        );
+        $event = new BeforeCreateEvent($entity, $entity->getWritableFormat());
         $this->dispatcher->dispatch($event, Events::BEFORE_CREATE);
 
         try {

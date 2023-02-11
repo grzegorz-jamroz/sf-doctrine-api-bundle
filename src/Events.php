@@ -4,10 +4,16 @@ declare(strict_types=1);
 
 namespace Ifrost\DoctrineApiBundle;
 
-use Ifrost\DoctrineApiBundle\Event\BeforeDeleteEvent;
-
 final class Events
 {
+    /**
+     * Dispatched after results have been fetched from DB to allow override data
+     * Hook into this event if you need extend default find results.
+     *
+     * @Event("Ifrost\DoctrineApiBundle\Event\AfterFindEvent")
+     */
+    public const AFTER_FIND = 'ifrost_doctrine_api.on_after_find';
+
     /**
      * Dispatched before entity create to allow override stored data
      * Hook into this event if you need extend default create behaviour.

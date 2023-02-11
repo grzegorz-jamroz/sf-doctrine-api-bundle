@@ -1,4 +1,14 @@
 # Changelog
+## Unreleased
+### Add
+- [DoctrineApi](src/Utility/DoctrineApi.php)
+  - [AfterFindEvent](src/Event/AfterFindEvent.php)
+### Change
+- extends [NotUniqueException](src/Exception/NotUniqueException.php) with `Ifrost\ApiFoundation\Exception\NotUniqueException`
+- [DoctrineApi](src/Utility/DoctrineApi.php)
+  - method `find` by default return results processed by `jsonSerialize` 
+  - add possibility to return raw data in `find` method using option `raw_data`
+
 ## [v6.1.5] - 2022.12.27
 ### Add
 - add before events 
