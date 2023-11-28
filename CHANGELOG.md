@@ -1,7 +1,14 @@
 # Changelog
 ## Unreleased
+### Add
+- add [WithDbalWritableFormat](src/Entity/WithDbalWritableFormat.php) interface
+- add [DbClientInterface](src/Utility/DbClientInterface.php) interface
+
 ### Change
 - upgrade dependencies
+- fix deprecations in DbalQuery
+- extend [EntityInterface](src/Entity/EntityInterface.php) with [WithDbalWritableFormat](src/Entity/WithDbalWritableFormat.php)
+- extend [DbClient](src/Utility/DbClient.php) with [DbClientInterface](src/Utility/DbClientInterface.php)
 
 ## [v6.1.6] - 2022.02.11
 ### Add

@@ -12,7 +12,7 @@ use Psr\Cache\CacheItemPoolInterface;
 
 abstract class DbalQuery extends QueryBuilder
 {
-    public function __construct(Connection $connection)
+    public function __construct(private Connection $connection)
     {
         parent::__construct($connection);
         $this->prepareQuery();
@@ -20,7 +20,7 @@ abstract class DbalQuery extends QueryBuilder
 
     public function executeQuery(): Result
     {
-        return $this->getConnection()->executeQuery(
+        return $this->connection->executeQuery(
             $this->getSQL(),
             $this->getParameters(),
             $this->getParameterTypes(),
@@ -40,6 +40,6 @@ abstract class DbalQuery extends QueryBuilder
      */
     protected function getResultCache(): ?CacheItemPoolInterface
     {
-        return $this->getConnection()->getConfiguration()->getResultCache();
+        return $this->connection->getConfiguration()->getResultCache();
     }
 }
