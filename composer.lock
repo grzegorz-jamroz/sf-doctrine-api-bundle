@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0e37c4942d942e2b61f612794ed13c83",
+    "content-hash": "a9156a715fe4864bd6b95a4fb13b9bf9",
     "packages": [
         {
             "name": "brick/math",
@@ -1270,16 +1270,16 @@
         },
         {
             "name": "grzegorz-jamroz/sf-api-bundle",
-            "version": "v6.2.1",
+            "version": "v6.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/grzegorz-jamroz/sf-api-bundle.git",
-                "reference": "91777720b3e5a71d99dd98c39a2276a6972fd0bb"
+                "reference": "2f011fe1662fa48ffb1b0303ad2c489158ce78f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/grzegorz-jamroz/sf-api-bundle/zipball/91777720b3e5a71d99dd98c39a2276a6972fd0bb",
-                "reference": "91777720b3e5a71d99dd98c39a2276a6972fd0bb",
+                "url": "https://api.github.com/repos/grzegorz-jamroz/sf-api-bundle/zipball/2f011fe1662fa48ffb1b0303ad2c489158ce78f5",
+                "reference": "2f011fe1662fa48ffb1b0303ad2c489158ce78f5",
                 "shasum": ""
             },
             "require": {
@@ -1311,9 +1311,9 @@
             "description": "Bundle provides basic features for Symfony Api.",
             "support": {
                 "issues": "https://github.com/grzegorz-jamroz/sf-api-bundle/issues",
-                "source": "https://github.com/grzegorz-jamroz/sf-api-bundle/tree/v6.2.1"
+                "source": "https://github.com/grzegorz-jamroz/sf-api-bundle/tree/v6.2.2"
             },
-            "time": "2023-11-26T15:37:58+00:00"
+            "time": "2023-11-28T14:14:32+00:00"
         },
         {
             "name": "grzegorz-jamroz/sf-api-foundation",

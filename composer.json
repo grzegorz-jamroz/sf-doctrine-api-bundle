@@ -21,7 +21,7 @@
     "grzegorz-jamroz/foundations": "^0.0.3",
     "grzegorz-jamroz/sf-api-foundation": "^6.2",
     "ramsey/uuid-doctrine": "^2.0",
-    "grzegorz-jamroz/sf-api-bundle": "^6.2",
+    "grzegorz-jamroz/sf-api-bundle": "^6.2.2",
     "doctrine/doctrine-bundle": "^2.11",
     "doctrine/orm": "^2.17"
   },
