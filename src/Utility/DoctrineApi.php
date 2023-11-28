@@ -96,11 +96,34 @@ class DoctrineApi implements ApiInterface
     public function findOne(): JsonResponse
     {
         try {
-            return new JsonResponse($this->db->fetchOne(
-                EntityQuery::class,
-                $this->entityClassName::getTableName(),
-                $this->apiRequest->getAttribute('uuid', '')
-            ));
+            $result = array_map(
+                function(mixed $value) {
+                    if (is_string($value) === false) {
+                        return $value;
+                    }
+
+                    try {
+                        $value = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+                    } catch (\Exception) {
+                    }
+
+                    return $value;
+                },
+                $this->db->fetchOne(
+                    EntityQuery::class,
+                    $this->entityClassName::getTableName(),
+                    Uuid::fromString($this->apiRequest->getAttribute('uuid', ''))->getBytes()
+                )
+            );
+
+            return new JsonResponse(
+                $this->entityClassName::createFromArray(
+                    [
+                        ...$result,
+                        'uuid' => Uuid::fromBytes($result['uuid']),
+                    ]
+                )->jsonSerialize()
+            );
         } catch (NotFoundException) {
             throw new NotFoundException(sprintf('Record "%s" not found', $this->entityClassName), 404);
         }
@@ -113,8 +136,15 @@ class DoctrineApi implements ApiInterface
     public function create(): JsonResponse
     {
         $data = $this->apiRequest->getRequest($this->entityClassName::getFields());
-        $data['uuid'] ??= (string) Uuid::uuid4();
-        $entity = $this->entityClassName::createFromArray($data);
+
+        try {
+            $data['uuid'] = Uuid::fromString($data['uuid']);
+        } catch (\Throwable) {
+            unset($data['uuid']);
+        }
+
+        $entity = $this->entityClassName::createFromRequest($data);
+
         $event = new BeforeCreateEvent($entity, $entity->getWritableFormat());
         $this->dispatcher->dispatch($event, Events::BEFORE_CREATE);
 
@@ -124,7 +154,7 @@ class DoctrineApi implements ApiInterface
                 $event->getData()
             );
         } catch (UniqueConstraintViolationException) {
-            throw new NotUniqueException(sprintf('Unable to create "%s" due to not unique fields.', $this->entityClassName));
+            throw new NotUniqueException(sprintf('Unable to create "%s" due to not unique fields.', $this->entityClassName), 409);
         }
 
         return new JsonResponse($entity->jsonSerialize());
