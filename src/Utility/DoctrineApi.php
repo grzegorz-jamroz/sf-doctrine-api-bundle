@@ -22,6 +22,7 @@ use Ifrost\DoctrineApiBundle\Query\Entity\EntitiesQuery;
 use Ifrost\DoctrineApiBundle\Query\Entity\EntityQuery;
 use PlainDataTransformer\Transform;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -126,17 +127,7 @@ class DoctrineApi implements ApiInterface
     public function update(): JsonResponse
     {
         $uuid = Uuid::fromString($this->apiRequest->getAttribute('uuid', ''));
-
-        try {
-            $previousData = $this->db->fetchOne(
-                EntityQuery::class,
-                $this->entityClassName::getTableName(),
-                $uuid->getBytes(),
-            );
-        } catch (NotFoundException) {
-            throw new NotFoundException(sprintf('Record "%s" not found', $this->entityClassName), 404);
-        }
-
+        $previousData = $this->fetchOne($uuid);
         $entity = $this->entityClassName::createFromRequest(
             [
                 ...$this->apiRequest->getRequest($this->entityClassName::getFields()),
@@ -170,19 +161,13 @@ class DoctrineApi implements ApiInterface
      */
     public function modify(): JsonResponse
     {
-        $uuid = $this->apiRequest->getAttribute('uuid', '');
-
-        try {
-            $previousData = $this->db->fetchOne(EntityQuery::class, $this->entityClassName::getTableName(), $uuid);
-            $entity = $this->entityClassName::createFromArray([
-                ...$previousData,
-                ...$this->apiRequest->getRequest($this->entityClassName::getFields(), false),
-                'uuid' => $uuid,
-            ]);
-        } catch (NotFoundException) {
-            throw new NotFoundException(sprintf('Record "%s" not found', $this->entityClassName), 404);
-        }
-
+        $uuid = Uuid::fromString($this->apiRequest->getAttribute('uuid', ''));
+        $previousData = $this->fetchOne($uuid);
+        $entity = $this->entityClassName::createFromRequest([
+            ...$this->entityClassName::createFromArray([...$previousData, 'uuid' => $uuid])->jsonSerialize(),
+            ...$this->apiRequest->getRequest($this->entityClassName::getFields(), false),
+            'uuid' => $uuid,
+        ]);
         $event = new BeforeModifyEvent(
             $entity,
             $entity->getWritableFormat(),
@@ -193,11 +178,11 @@ class DoctrineApi implements ApiInterface
         try {
             $this->db->update(
                 $this->entityClassName::getTableName(),
-                $entity->getWritableFormat(),
-                ['uuid' => $uuid]
+                $event->getData(),
+                ['uuid' => $uuid->getBytes()]
             );
         } catch (UniqueConstraintViolationException) {
-            throw new NotUniqueException(sprintf('Unable to modify "%s" due to not unique fields.', $this->entityClassName));
+            throw new NotUniqueException(sprintf('Unable to modify "%s" due to not unique fields.', $this->entityClassName), 409);
         }
 
         return new JsonResponse($entity->jsonSerialize());
@@ -208,12 +193,12 @@ class DoctrineApi implements ApiInterface
      */
     public function delete(): JsonResponse
     {
-        $uuid = $this->apiRequest->getAttribute('uuid', '');
-        $event = new BeforeDeleteEvent($uuid);
+        $uuid = Uuid::fromString($this->apiRequest->getAttribute('uuid', ''));
+        $event = new BeforeDeleteEvent($uuid->toString());
         $this->dispatcher->dispatch($event, Events::BEFORE_DELETE);
         $this->db->delete(
             $this->entityClassName::getTableName(),
-            ['uuid' => $uuid]
+            ['uuid' => $uuid->getBytes()]
         );
 
         return new JsonResponse();
@@ -239,5 +224,18 @@ class DoctrineApi implements ApiInterface
                 'uuid' => Uuid::fromBytes($record['uuid']),
             ]
         )->jsonSerialize();
+    }
+
+    private function fetchOne(UuidInterface $uuid): array
+    {
+        try {
+            return $this->db->fetchOne(
+                EntityQuery::class,
+                $this->entityClassName::getTableName(),
+                $uuid->getBytes(),
+            );
+        } catch (NotFoundException) {
+            throw new NotFoundException(sprintf('Record "%s" not found', $this->entityClassName), 404);
+        }
     }
 }

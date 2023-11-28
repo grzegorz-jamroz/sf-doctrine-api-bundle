@@ -12,7 +12,10 @@
 - [DoctrineApi](src/Utility/DoctrineApi.php)
   - improved method `find` to return decoded json and uuid as `Ramsey\Uuid\UuidInterface`
   - improved method `findOne` to return decoded json and uuid as `Ramsey\Uuid\UuidInterface`
-  - improve method `create` to use `createFromRequest`
+  - change method `create` to use `createFromRequest` and uuid in `bytes` format for db queries
+  - change method `update` to use `createFromRequest` and uuid in `bytes` format for db queries
+  - change method `modify` to use `createFromRequest` and uuid in `bytes` format for db queries
+  - change method `delete` to use `createFromRequest` and uuid in `bytes` format for db queries
 
 ### Fix
 - fix deprecations in [DbalQuery](src/Query/DbalQuery.php)
