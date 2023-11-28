@@ -3,6 +3,7 @@
 ### Add
 - add [WithDbalWritableFormat](src/Entity/WithDbalWritableFormat.php) interface
 - add [DbClientInterface](src/Utility/DbClientInterface.php) interface
+- add [TransformRecord](src/Utility/TransformRecord.php) utility class
 
 ### Change
 - upgrade dependencies

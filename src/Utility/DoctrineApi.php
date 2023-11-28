@@ -41,7 +41,7 @@ class DoctrineApi implements ApiInterface
     public function find(array $options = []): JsonResponse
     {
         $conditions = Transform::toArray($this->apiRequest->getField('conditions') ?? []);
-        $results = $this->db->fetchAll(
+        $records = $this->db->fetchAll(
             EntitiesQuery::class,
             $this->entityClassName::getTableName(),
             DbalCriteria::createFromArray([
@@ -51,7 +51,7 @@ class DoctrineApi implements ApiInterface
                 'limit' => $this->apiRequest->getField('limit'),
             ])
         );
-        $event = new AfterFindEvent($this->entityClassName, $results);
+        $event = new AfterFindEvent($this->entityClassName, $records);
         $this->dispatcher->dispatch($event, Events::AFTER_FIND);
 
         if (Transform::toBool($options['raw_data'] ?? false)) {
@@ -60,30 +60,7 @@ class DoctrineApi implements ApiInterface
 
         return new JsonResponse(
             array_map(
-                function (array $result) {
-                    $result = array_map(
-                        function(mixed $value) {
-                            if (is_string($value) === false) {
-                                return $value;
-                            }
-
-                            try {
-                                $value = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
-                            } catch (\Exception) {
-                            }
-
-                            return $value;
-                        },
-                        $result
-                    );
-
-                    return $this->entityClassName::createFromArray(
-                        [
-                            ...$result,
-                            'uuid' => Uuid::fromBytes($result['uuid']),
-                        ]
-                    )->jsonSerialize();
-                },
+                fn (array $record) => $this->getEntityDataFromRecord($record),
                 $event->getData()
             )
         );
@@ -96,33 +73,14 @@ class DoctrineApi implements ApiInterface
     public function findOne(): JsonResponse
     {
         try {
-            $result = array_map(
-                function(mixed $value) {
-                    if (is_string($value) === false) {
-                        return $value;
-                    }
-
-                    try {
-                        $value = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
-                    } catch (\Exception) {
-                    }
-
-                    return $value;
-                },
-                $this->db->fetchOne(
-                    EntityQuery::class,
-                    $this->entityClassName::getTableName(),
-                    Uuid::fromString($this->apiRequest->getAttribute('uuid', ''))->getBytes()
-                )
-            );
-
             return new JsonResponse(
-                $this->entityClassName::createFromArray(
-                    [
-                        ...$result,
-                        'uuid' => Uuid::fromBytes($result['uuid']),
-                    ]
-                )->jsonSerialize()
+                $this->getEntityDataFromRecord(
+                    $this->db->fetchOne(
+                        EntityQuery::class,
+                        $this->entityClassName::getTableName(),
+                        Uuid::fromString($this->apiRequest->getAttribute('uuid', ''))->getBytes()
+                    )
+                )
             );
         } catch (NotFoundException) {
             throw new NotFoundException(sprintf('Record "%s" not found', $this->entityClassName), 404);
@@ -167,16 +125,24 @@ class DoctrineApi implements ApiInterface
      */
     public function update(): JsonResponse
     {
-        $uuid = $this->apiRequest->getAttribute('uuid', '');
+        $uuid = Uuid::fromString($this->apiRequest->getAttribute('uuid', ''));
+
         try {
-            $previousData = $this->db->fetchOne(EntityQuery::class, $this->entityClassName::getTableName(), $uuid);
+            $previousData = $this->db->fetchOne(
+                EntityQuery::class,
+                $this->entityClassName::getTableName(),
+                $uuid->getBytes(),
+            );
         } catch (NotFoundException) {
             throw new NotFoundException(sprintf('Record "%s" not found', $this->entityClassName), 404);
         }
 
-        $data = $this->apiRequest->getRequest($this->entityClassName::getFields());
-        $data['uuid'] = $uuid;
-        $entity = $this->entityClassName::createFromArray($data);
+        $entity = $this->entityClassName::createFromRequest(
+            [
+                ...$this->apiRequest->getRequest($this->entityClassName::getFields()),
+                'uuid' => $uuid,
+            ]
+        );
         $event = new BeforeUpdateEvent(
             $entity,
             $entity->getWritableFormat(),
@@ -188,10 +154,10 @@ class DoctrineApi implements ApiInterface
             $this->db->update(
                 $this->entityClassName::getTableName(),
                 $event->getData(),
-                ['uuid' => $uuid]
+                ['uuid' => $uuid->getBytes()]
             );
         } catch (UniqueConstraintViolationException) {
-            throw new NotUniqueException(sprintf('Unable to update "%s" due to not unique fields.', $this->entityClassName));
+            throw new NotUniqueException(sprintf('Unable to update "%s" due to not unique fields.', $this->entityClassName), 409);
         }
 
         return new JsonResponse($entity->jsonSerialize());
@@ -260,5 +226,18 @@ class DoctrineApi implements ApiInterface
         }
 
         $this->entityClassName = $entityClassName;
+    }
+
+    private function getEntityDataFromRecord(array $record): array
+    {
+        return $this->entityClassName::createFromArray(
+            [
+                ...array_map(
+                    fn (mixed $value) => TransformRecord::toRead($value),
+                    $record
+                ),
+                'uuid' => Uuid::fromBytes($record['uuid']),
+            ]
+        )->jsonSerialize();
     }
 }
