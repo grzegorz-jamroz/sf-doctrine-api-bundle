@@ -15,11 +15,11 @@ class FetchAllTest extends ProductTestCase
     public function testShouldReturnEmptyArray(): void
     {
         // Expect & Given
-        $this->truncateTable(Product::TABLE);
+        $this->truncateTable(Product::getTableName());
         $controller = new DoctrineApiControllerVariant();
 
         // When
-        $data = $controller->fetchAll(EntitiesQuery::class, Product::TABLE);
+        $data = $controller->fetchAll(EntitiesQuery::class, Product::getTableName());
 
         // Then
         $this->assertEquals([], $data);
@@ -28,62 +28,62 @@ class FetchAllTest extends ProductTestCase
     public function testShouldReturnArrayWithOneProduct(): void
     {
         // Expect & Given
-        $this->truncateTable(Product::TABLE);
+        $this->truncateTable(Product::getTableName());
         $controller = new DoctrineApiControllerVariant();
-        $product = $this->productsData->get('8b40a6d6-1a79-4edc-bfca-0f8d993c29f3');
-        $this->dbClient->insert(Product::TABLE, $product);
+        $product = $this->products->get('8b40a6d6-1a79-4edc-bfca-0f8d993c29f3');
+        $this->dbClient->insert(Product::getTableName(), $product->getWritableFormat());
 
-        // When
-        $data = $controller->fetchAll(EntitiesQuery::class, Product::TABLE);
-
-        // Then
-        $this->assertEquals([$product], $data);
+        // When & Then
+        $this->assertEquals(
+            [$product->getWritableFormat()],
+            $controller->fetchAll(EntitiesQuery::class, Product::getTableName())
+        );
     }
 
     public function testShouldReturnArrayWithTwoProducts(): void
     {
         // Expect & Given
-        $this->truncateTable(Product::TABLE);
+        $this->truncateTable(Product::getTableName());
         $controller = new DoctrineApiControllerVariant();
-        $productOne = $this->productsData->get('8b40a6d6-1a79-4edc-bfca-0f8d993c29f3');
-        $this->dbClient->insert(Product::TABLE, $productOne);
-        $productTwo = $this->productsData->get('f3e56592-0bfd-4669-be39-6ac8ab5ac55f');
-        $this->dbClient->insert(Product::TABLE, $productTwo);
+        $productOne = $this->products->get('8b40a6d6-1a79-4edc-bfca-0f8d993c29f3');
+        $this->dbClient->insert(Product::getTableName(), $productOne->getWritableFormat());
+        $productTwo = $this->products->get('f3e56592-0bfd-4669-be39-6ac8ab5ac55f');
+        $this->dbClient->insert(Product::getTableName(), $productTwo->getWritableFormat());
 
-        // When
-        $data = $controller->fetchAll(EntitiesQuery::class, Product::TABLE);
-
-        // Then
-        $this->assertEquals([$productOne, $productTwo], $data);
+        // When & Then
+        $this->assertEquals(
+            [$productOne->getWritableFormat(), $productTwo->getWritableFormat()],
+            $controller->fetchAll(EntitiesQuery::class, Product::getTableName())
+        );
     }
 
     public function testShouldReturnArrayWithOneProductWhenLimitIsOneAndOrderByNameDesc(): void
     {
         // Expect & Given
-        $this->truncateTable(Product::TABLE);
+        $this->truncateTable(Product::getTableName());
         $controller = new DoctrineApiControllerVariant();
         $criteria = DbalCriteria::createFromArray([
             'orderBy' => ['name' => 'DESC'],
             'limit' => 1,
         ]);
 
-        foreach ($this->productsData as $productData) {
-            $this->dbClient->insert(Product::TABLE, $productData);
+        foreach ($this->products as $product) {
+            $this->dbClient->insert(Product::getTableName(), $product->getWritableFormat());
         }
 
-        $this->assertCount(4, $this->dbClient->fetchAll(EntitiesQuery::class, Product::TABLE));
+        $this->assertCount(4, $this->dbClient->fetchAll(EntitiesQuery::class, Product::getTableName()));
 
-        // When
-        $data = $controller->fetchAll(EntitiesQuery::class, Product::TABLE, $criteria);
-
-        // Then
-        $this->assertEquals([$this->productsData->get('f3e56592-0bfd-4669-be39-6ac8ab5ac55f')], $data);
+        // When & Then
+        $this->assertEquals(
+            [$this->products->get('f3e56592-0bfd-4669-be39-6ac8ab5ac55f')->getWritableFormat()],
+            $controller->fetchAll(EntitiesQuery::class, Product::getTableName(), $criteria)
+        );
     }
 
     public function testShouldReturnArrayWithTwoProductsWhenOffsetIsOneLimitIsTwoAndOrderByNameDesc(): void
     {
         // Expect & Given
-        $this->truncateTable(Product::TABLE);
+        $this->truncateTable(Product::getTableName());
         $controller = new DoctrineApiControllerVariant();
         $criteria = DbalCriteria::createFromArray([
             'orderBy' => ['name' => 'DESC'],
@@ -91,22 +91,19 @@ class FetchAllTest extends ProductTestCase
             'offset' => 1,
         ]);
 
-        foreach ($this->productsData as $productData) {
-            $this->dbClient->insert(Product::TABLE, $productData);
+        foreach ($this->products as $product) {
+            $this->dbClient->insert(Product::getTableName(), $product->getWritableFormat());
         }
 
-        $this->assertCount(4, $this->dbClient->fetchAll(EntitiesQuery::class, Product::TABLE));
+        $this->assertCount(4, $this->dbClient->fetchAll(EntitiesQuery::class, Product::getTableName()));
 
-        // When
-        $data = $controller->fetchAll(EntitiesQuery::class, Product::TABLE, $criteria);
-
-        // Then
+        // When & Then
         $this->assertEquals(
             [
-                $this->productsData->get('8b40a6d6-1a79-4edc-bfca-0f8d993c29f3'),
-                $this->productsData->get('62d925ad-4ef7-47a9-be28-79d71534c099'),
+                $this->products->get('8b40a6d6-1a79-4edc-bfca-0f8d993c29f3')->getWritableFormat(),
+                $this->products->get('62d925ad-4ef7-47a9-be28-79d71534c099')->getWritableFormat(),
             ],
-            $data
+            $controller->fetchAll(EntitiesQuery::class, Product::getTableName(), $criteria)
         );
     }
 }

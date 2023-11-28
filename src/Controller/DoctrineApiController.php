@@ -96,7 +96,7 @@ class DoctrineApiController extends ApiController
         }
 
         $connection = $this->container->get('doctrine.dbal.default_connection');
-        $connection instanceof Connection ?: throw new RuntimeException(sprintf('Container identifier "doctrine.dbal.default_connection" is not instance of %s', Connection::class));
+        $connection instanceof Connection ?: throw new RuntimeException(sprintf('Container identifier "doctrine.dbal.default_connection" is not instance of %s (%s given).', Connection::class, gettype($connection)));
         $this->dbal = $connection;
 
         return $this->dbal;

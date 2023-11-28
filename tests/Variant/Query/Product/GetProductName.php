@@ -19,7 +19,7 @@ class GetProductName extends DbalQuery
     protected function prepareQuery(): void
     {
         $this->select('name');
-        $this->from(Product::TABLE);
+        $this->from(Product::getTableName());
         $this->where('uuid = :uuid');
         $this->setParameter('uuid', $this->uuid);
     }

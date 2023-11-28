@@ -10,6 +10,7 @@
 
 ### Fix
 - fixed problem with exception occurred when missing configuration with driver for cache a query.
+- fixed all tests due to new changes
 
 ### Change
 - changed strategy for storing UUIDs - from string to binary

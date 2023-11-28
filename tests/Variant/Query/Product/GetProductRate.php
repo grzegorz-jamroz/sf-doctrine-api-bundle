@@ -19,7 +19,7 @@ class GetProductRate extends DbalQuery
     protected function prepareQuery(): void
     {
         $this->select('rate');
-        $this->from(Product::TABLE);
+        $this->from(Product::getTableName());
         $this->where('uuid = :uuid');
         $this->setParameter('uuid', $this->uuid);
     }

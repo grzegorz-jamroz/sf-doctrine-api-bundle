@@ -10,13 +10,16 @@ use Doctrine\DBAL\DriverManager;
 use Ifrost\ApiFoundation\ApiInterface;
 use Ifrost\DoctrineApiBundle\Controller\DoctrineApiController;
 use Ifrost\DoctrineApiBundle\Query\DbalQuery;
+use Ifrost\DoctrineApiBundle\Tests\Variant\EventDispatcherVariant;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Utility\ApiRequestVariant;
 use Ifrost\DoctrineApiBundle\Utility\DbClient;
+use Ifrost\DoctrineApiBundle\Utility\DbClientInterface;
 use PlainDataTransformer\Transform;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBag;
 use Symfony\Component\HttpFoundation\Request;
-use Ifrost\DoctrineApiBundle\Tests\Variant\Utility\ApiRequestVariant;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class DoctrineApiControllerVariant extends DoctrineApiController
 {
@@ -37,10 +40,14 @@ class DoctrineApiControllerVariant extends DoctrineApiController
         $conn = DriverManager::getConnection([
             'url' => Transform::toString($_ENV['DATABASE_URL'] ?? ''),
         ]);
+        $dbClient = new DbClient($conn);
+        $apiRequest = new ApiRequestVariant($request);
         $container->set('doctrine.dbal.default_connection', $conn);
+        $container->set('ifrost_doctrine_api.db_client', $dbClient);
+        $container->set('ifrost_api.api_request', $apiRequest);
+        $container->set('event_dispatcher', new EventDispatcherVariant());
         $container->set('doctrine', $registry);
         $container->set('parameter_bag', new ContainerBag($container));
-        $container->set('app.api_request', new ApiRequestVariant($request));
         $this->setContainer($container);
     }
 
@@ -49,14 +56,19 @@ class DoctrineApiControllerVariant extends DoctrineApiController
         return $this->container instanceof Container ? $this->container : new Container();
     }
 
+    public function getDbClient(): DbClientInterface
+    {
+        return parent::getDbClient();
+    }
+
     public function getDbal(): Connection
     {
         return parent::getDbal();
     }
 
-    public function getDbClient(): DbClient
+    public function getEventDispatcher(): EventDispatcherInterface
     {
-        return parent::getDbClient();
+        return parent::getEventDispatcher();
     }
 
     /**

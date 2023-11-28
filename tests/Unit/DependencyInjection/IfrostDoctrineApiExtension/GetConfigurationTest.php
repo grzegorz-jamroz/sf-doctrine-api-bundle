@@ -7,12 +7,12 @@ namespace Ifrost\DoctrineApiBundle\Tests\Unit\DependencyInjection\IfrostDoctrine
 use Ifrost\DoctrineApiBundle\DependencyInjection\IfrostDoctrineApiExtension;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
-use Ramsey\Uuid\Doctrine\UuidType;
+use Ramsey\Uuid\Doctrine\UuidBinaryType;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\Config\Definition\Exception\InvalidTypeException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
-use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Sample;
 
 class GetConfigurationTest extends TestCase
@@ -42,57 +42,36 @@ class GetConfigurationTest extends TestCase
         $containerBuilder->getParameter('ifrost_doctrine_api.dbal_cache_dir');
     }
 
-    public function testShouldLoadConfigWithDefaultCacheAdpaterAndDefaultCacheDir()
+    public function testShouldLoadConfigWithDefaultCacheAdpater()
     {
         // Given
         $configs = [
             'ifrost_doctrine_api' => [
                 'doctrine_dbal_types_uuid' => true,
-                'dbal_cache_adapter' => 'default',
-                'dbal_cache_dir' => 'default',
+                'dbal_cache_adapter' => true,
             ],
         ];
         $containerBuilder = new ContainerBuilder();
         $containerBuilder->setParameter('kernel.cache_dir', sprintf('%s/var/cache/test', ABSPATH));
-        $expectedCacheDir = sprintf('%s/doctrine/dbal', $containerBuilder->getParameter('kernel.cache_dir'));
 
         // When
         (new IfrostDoctrineApiExtension())->load($configs, $containerBuilder);
 
         // Then
-        $this->assertEquals(UuidType::class, $containerBuilder->getExtensionConfig('doctrine')[0]['dbal']['types']['uuid']);
+        $this->assertEquals(UuidBinaryType::class, $containerBuilder->getExtensionConfig('doctrine')[0]['dbal']['types']['uuid_binary']);
         $this->assertInstanceOf(FilesystemAdapter::class, $containerBuilder->get('ifrost_doctrine_api.dbal_cache_adapter'));
-        $this->assertEquals($expectedCacheDir, $containerBuilder->getParameter('ifrost_doctrine_api.dbal_cache_dir'));
-    }
-
-    public function testShouldNotLoadDefaultCacheAdpaterWhenDefaultCacheDirIsNull()
-    {
-        // Given
-        $configs = [
-            'ifrost_doctrine_api' => [
-                'dbal_cache_adapter' => 'default',
-            ],
-        ];
-        $containerBuilder = new ContainerBuilder();
-        $containerBuilder->setParameter('kernel.cache_dir', sprintf('%s\var\cache\test', ABSPATH));
-
-        // When
-        (new IfrostDoctrineApiExtension())->load($configs, $containerBuilder);
-
-        // Then
-        $this->assertFalse($containerBuilder->has('ifrost_doctrine_api.dbal_cache_adapter'));
     }
 
     public function testShouldLoadConfigWithCustomCacheAdpater()
     {
         // Given
         $containerBuilder = new ContainerBuilder();
-        $containerBuilder->setParameter('kernel.cache_dir', sprintf('%s\var\cache\test', ABSPATH));
         $configs = [
             'ifrost_doctrine_api' => [
-                'dbal_cache_adapter' => new ArrayAdapter(),
+                'dbal_cache_adapter' => true,
             ],
         ];
+        $containerBuilder->set('ifrost_doctrine_api.dbal_cache_adapter', new ArrayAdapter());
 
         // When
         (new IfrostDoctrineApiExtension())->load($configs, $containerBuilder);
@@ -106,11 +85,9 @@ class GetConfigurationTest extends TestCase
         // Given
         $containerBuilder = new ContainerBuilder();
         $containerBuilder->setParameter('kernel.cache_dir', sprintf('%s\var\cache\test', ABSPATH));
-        $expectedCacheDir = sprintf('%s/doctrine/dbal/special', $containerBuilder->getParameter('kernel.cache_dir'));
         $configs = [
             'ifrost_doctrine_api' => [
-                'dbal_cache_adapter' => 'default',
-                'dbal_cache_dir' => $expectedCacheDir,
+                'dbal_cache_adapter' => true,
             ],
         ];
 
@@ -119,14 +96,13 @@ class GetConfigurationTest extends TestCase
 
         // Then
         $this->assertInstanceOf(FilesystemAdapter::class, $containerBuilder->get('ifrost_doctrine_api.dbal_cache_adapter'));
-        $this->assertEquals($expectedCacheDir, $containerBuilder->getParameter('ifrost_doctrine_api.dbal_cache_dir'));
     }
 
     public function testShouldThrowRuntimeExceptionWhenCacheAdapterIsInvalid()
     {
         // Expect
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage(sprintf('"ifrost_doctrine_api.dbal_cache_adapter" is not instance of %s (%s given).', CacheItemPoolInterface::class, gettype(new Sample())));
+        $this->expectException(InvalidTypeException::class);
+        $this->expectExceptionMessage(sprintf('Invalid type for path "ifrost_doctrine_api.dbal_cache_adapter". Expected "array", but got "%s"', get_debug_type(new Sample())));
 
         // Given
         $containerBuilder = new ContainerBuilder();

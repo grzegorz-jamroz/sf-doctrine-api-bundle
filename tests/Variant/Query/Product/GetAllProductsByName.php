@@ -19,7 +19,7 @@ class GetAllProductsByName extends DbalQuery
     protected function prepareQuery(): void
     {
         $this->select('name');
-        $this->from(Product::TABLE);
+        $this->from(Product::getTableName());
         $this->where('name LIKE :name');
         $this->setParameter('name', '%' . $this->name . '%');
     }

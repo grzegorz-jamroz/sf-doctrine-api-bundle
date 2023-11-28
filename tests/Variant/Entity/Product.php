@@ -4,21 +4,23 @@ namespace Ifrost\DoctrineApiBundle\Tests\Variant\Entity;
 
 use Ifrost\DoctrineApiBundle\Entity\EntityInterface;
 use PlainDataTransformer\Transform;
+use PlainDataTransformer\TransformNumeric;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 class Product implements EntityInterface
 {
-    public const TABLE = 'product';
-
     public function __construct(
-        private string $uuid,
-        private string $code,
+        private UuidInterface $uuid,
         private string $name,
+        private string $code,
         private string $description,
+        private int $rate,
         private array $tags = [],
     ) {
     }
 
-    public function getUuid(): string
+    public function getUuid(): UuidInterface
     {
         return $this->uuid;
     }
@@ -38,6 +40,11 @@ class Product implements EntityInterface
         return $this->description;
     }
 
+    public function getRate(): int
+    {
+        return $this->rate;
+    }
+
     public function getTags(): array
     {
         return $this->tags;
@@ -45,7 +52,7 @@ class Product implements EntityInterface
 
     public static function getTableName(): string
     {
-        return self::TABLE;
+        return 'product';
     }
 
     /**
@@ -56,36 +63,49 @@ class Product implements EntityInterface
         return array_keys(self::createFromArray([])->jsonSerialize());
     }
 
-    public static function createFromArray(array $data): static|self
-    {
-        return new self(
-            Transform::toString($data['uuid'] ?? ''),
-            Transform::toString($data['code'] ?? ''),
-            Transform::toString($data['name'] ?? ''),
-            Transform::toString($data['description'] ?? ''),
-            Transform::toArray($data['tags'] ?? []),
-        );
-    }
-
-    /**
-     * @return array<string, string>
-     */
-    public function jsonSerialize(): array
-    {
-        return [
-            'uuid' => $this->uuid,
-            'code' => $this->code,
-            'name' => $this->name,
-            'description' => $this->description,
-            'tags' => $this->tags,
-        ];
-    }
-
     public function getWritableFormat(): array
     {
         return [
             ...$this->jsonSerialize(),
+            'uuid' => $this->uuid->getBytes(),
             'tags' => json_encode($this->tags),
+            'rate' => $this->rate,
         ];
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'uuid' => (string) $this->uuid,
+            'name' => $this->name,
+            'code' => $this->code,
+            'description' => $this->description,
+            'rate' => TransformNumeric::toFloat($this->rate, 2),
+            'tags' => $this->tags,
+        ];
+    }
+
+    public static function createFromArray(array $data): static|self
+    {
+        return new self(
+            $data['uuid'] ?? Uuid::uuid7(),
+            Transform::toString($data['name'] ?? ''),
+            Transform::toString($data['code'] ?? ''),
+            Transform::toString($data['description'] ?? ''),
+            Transform::toInt($data['rate'] ?? 0),
+            Transform::toArray($data['tags'] ?? []),
+        );
+    }
+
+    public static function createFromRequest(array $data): static|self
+    {
+        return new self(
+            isset($data['uuid']) ? Uuid::fromString($data['uuid']) : Uuid::uuid7(),
+            Transform::toString($data['name'] ?? ''),
+            Transform::toString($data['code'] ?? ''),
+            Transform::toString($data['description'] ?? ''),
+            TransformNumeric::toInt($data['rate'] ?? 0, 2),
+            Transform::toArray($data['tags'] ?? []),
+        );
     }
 }

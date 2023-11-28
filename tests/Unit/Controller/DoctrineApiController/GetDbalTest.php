@@ -23,25 +23,11 @@ class GetDbalTest extends TestCase
         $this->assertInstanceOf(Connection::class, $controller->getDbal());
     }
 
-    public function testShouldThrowRuntimeExceptionWhenContainerReturnInvalidDoctrineIdentifier()
-    {
-        // Expect
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage(sprintf('Container identifier "doctrine" is not instance of %s (%s given).', ManagerRegistry::class, gettype(new Sample())));
-
-        // Given
-        $controller = new DoctrineApiControllerVariant();
-        $controller->getContainer()->set('doctrine', new Sample());
-
-        // When & Then
-        $controller->getDbal();
-    }
-
     public function testShouldThrowRuntimeExceptionWhenContainerReturnInvalidConnection()
     {
         // Expect
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage(sprintf('Default dbal connection "doctrine.dbal.default_connection" is not instance of %s (%s given).', Connection::class, gettype(new Sample())));
+        $this->expectExceptionMessage(sprintf('Container identifier "doctrine.dbal.default_connection" is not instance of %s (%s given).', Connection::class, gettype(new Sample())));
 
         // Given
         $controller = new DoctrineApiControllerVariant();

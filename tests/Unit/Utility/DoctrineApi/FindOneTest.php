@@ -17,23 +17,23 @@ class FindOneTest extends ProductTestCase
     public function testShouldReturnRequestedProduct()
     {
         // Expect & Given
-        $this->truncateTable(Product::TABLE);
+        $this->truncateTable(Product::getTableName());
         $uuid = 'f3e56592-0bfd-4669-be39-6ac8ab5ac55f';
         $request = new Request([], [], ['uuid' => $uuid]);
         $controller = new DoctrineApiControllerVariant($request);
 
-        foreach ($this->productsData as $productData) {
-            $this->dbClient->insert(Product::TABLE, $productData);
+        foreach ($this->products as $product) {
+            $this->dbClient->insert(Product::getTableName(), $product->getWritableFormat());
         }
 
-        $this->assertCount(4, $this->dbClient->fetchAll(EntitiesQuery::class, Product::TABLE));
+        $this->assertCount(4, $this->dbClient->fetchAll(EntitiesQuery::class, Product::getTableName()));
 
         // When
         $response = $controller->getApi(Product::class)->findOne();
         $productData = json_decode($response->getContent(), true);
 
         // Then
-        $this->assertEquals($this->productsData->get($uuid), $productData);
+        $this->assertEquals($this->products->get($uuid)->jsonSerialize(), $productData);
     }
 
     public function testShouldThrowExceptionNotFoundExceptionWhenRequestedProductDoesNotExist(): void
@@ -41,7 +41,7 @@ class FindOneTest extends ProductTestCase
         // Expect & Given
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage(sprintf('Record "%s" not found', Product::class));
-        $this->truncateTable(Product::TABLE);
+        $this->truncateTable(Product::getTableName());
         $uuid = '850186cc-9bac-44b8-a0f4-cea287290b8b';
         $request = new Request([], [], ['uuid' => $uuid]);
         $controller = new DoctrineApiControllerVariant($request);

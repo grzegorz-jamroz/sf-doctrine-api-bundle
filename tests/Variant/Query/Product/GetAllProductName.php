@@ -11,6 +11,6 @@ class GetAllProductName extends DbalQuery
     protected function prepareQuery(): void
     {
         $this->select('name');
-        $this->from(Product::TABLE);
+        $this->from(Product::getTableName());
     }
 }

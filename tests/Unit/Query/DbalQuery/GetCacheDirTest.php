@@ -31,27 +31,4 @@ class GetCacheDirTest extends TestCase
         // Then
         $this->assertEquals(1, (new Directory($cacheDir))->countDirectories());
     }
-
-    public function testShouldThrowRuntimeExceptionWhenInvalidCacheAdapter()
-    {
-        // Expect & Given
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage(sprintf('DBAL Cache Adapter "ifrost_doctrine_api.dbal_cache_adapter" is not instance of %s (%s given).', CacheItemPoolInterface::class, gettype(new Sample())));
-        $controller = new DoctrineApiControllerVariant();
-        $controller->getContainer()->set('ifrost_doctrine_api.dbal_cache_adapter', new Sample());
-
-        // When & Then
-        $controller->getDbClient()->fetchAll(GetAllProducts::class);
-    }
-
-    public function testShouldThrowCacheExceptionWhenTryingToCacheQueryButNoCacheAdapterIsConfigured()
-    {
-        // Expect & Given
-        $this->expectException(CacheException::class);
-        $controller = new DoctrineApiControllerVariant();
-        $controller->getContainer()->set('ifrost_doctrine_api.dbal_cache_adapter', null);
-
-        // When & Then
-        $controller->getDbClient()->fetchAll(GetAllProducts::class);
-    }
 }

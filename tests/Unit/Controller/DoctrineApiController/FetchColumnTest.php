@@ -18,23 +18,23 @@ class FetchColumnTest extends ProductTestCase
     public function testShouldReturnStringWithProductNameAsResult()
     {
         // Expect & Given
-        $this->truncateTable(Product::TABLE);
+        $this->truncateTable(Product::getTableName());
         $controller = new DoctrineApiControllerVariant();
-        $this->assertEquals([], $this->dbClient->fetchAll(EntitiesQuery::class, Product::TABLE));
+        $this->assertEquals([], $this->dbClient->fetchAll(EntitiesQuery::class, Product::getTableName()));
 
         /** @var Product $product */
         foreach ($this->products as $product) {
-            $this->dbClient->insert(Product::TABLE, $product->getWritableFormat());
+            $this->dbClient->insert(Product::getTableName(), $product->getWritableFormat());
         }
 
-        $this->assertCount(4, $this->dbClient->fetchAll(EntitiesQuery::class, Product::TABLE));
+        $this->assertCount(4, $this->dbClient->fetchAll(EntitiesQuery::class, Product::getTableName()));
 
         // When & Then
         /** @var Product $product */
         foreach ($this->products as $product) {
             $name = $controller->fetchColumn(
                 GetProductName::class,
-                $product->getUuid()
+                $product->getUuid()->getBytes()
             );
             $this->assertEquals($product->getName(), $name);
         }
@@ -43,23 +43,23 @@ class FetchColumnTest extends ProductTestCase
     public function testShouldReturnProperValuesInVariousTypes()
     {
         // Expect & Given
-        $this->truncateTable(Product::TABLE);
+        $this->truncateTable(Product::getTableName());
         $controller = new DoctrineApiControllerVariant();
-        $this->assertEquals([], $this->dbClient->fetchAll(EntitiesQuery::class, Product::TABLE));
+        $this->assertEquals([], $this->dbClient->fetchAll(EntitiesQuery::class, Product::getTableName()));
 
-        foreach ($this->productsData as $productData) {
-            $this->dbClient->insert(Product::TABLE, $productData);
+        foreach ($this->products as $product) {
+            $this->dbClient->insert(Product::getTableName(), $product->getWritableFormat());
         }
 
-        $this->assertCount(4, $this->dbClient->fetchAll(EntitiesQuery::class, Product::TABLE));
+        $this->assertCount(4, $this->dbClient->fetchAll(EntitiesQuery::class, Product::getTableName()));
 
         // When & Then
-        foreach ($this->productsData as $productData) {
+        foreach ($this->products as $product) {
             $rate = $controller->fetchColumn(
                 GetProductRate::class,
-                $productData['uuid']
+                $product->getUuid()->getBytes()
             );
-            $this->assertEquals(Transform::toString($productData['rate']), Transform::toString($rate));
+            $this->assertEquals($product->getRate(), $rate);
         }
     }
 
@@ -68,15 +68,15 @@ class FetchColumnTest extends ProductTestCase
         // Expect & Given
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage(sprintf('Record not found for query "%s"', GetProductName::class));
-        $this->truncateTable(Product::TABLE);
+        $this->truncateTable(Product::getTableName());
         $controller = new DoctrineApiControllerVariant();
-        $this->assertEquals([], $this->dbClient->fetchAll(EntitiesQuery::class, Product::TABLE));
+        $this->assertEquals([], $this->dbClient->fetchAll(EntitiesQuery::class, Product::getTableName()));
 
         // When & Then
         /* @var Product $product */
         $controller->fetchColumn(
             GetProductName::class,
-            $this->products->first()->getUuid()
+            $this->products->first()->getUuid()->getBytes()
         );
     }
 }

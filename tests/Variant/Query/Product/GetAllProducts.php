@@ -13,7 +13,7 @@ class GetAllProducts extends DbalQuery
     protected function prepareQuery(): void
     {
         $this->select('*');
-        $this->from(Product::TABLE);
+        $this->from(Product::getTableName());
     }
 
     public function getQueryCacheProfile(): ?QueryCacheProfile

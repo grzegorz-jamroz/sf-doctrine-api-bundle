@@ -38,7 +38,7 @@ class DbalQueryConditionableTest extends TestCase
         $criteria = new DbalCriteria([$condition]);
 
         // Then
-        $this->assertEquals('SELECT * FROM product WHERE (rate > ?) OR (rate IS NOT NULL) OR (name LIKE ?) LIMIT 10', (new EntitiesQuery($this->dbal, Product::TABLE, $criteria))->getSQL());
+        $this->assertEquals('SELECT * FROM product WHERE (rate > ?) OR (rate IS NOT NULL) OR (name LIKE ?) LIMIT 10', (new EntitiesQuery($this->dbal, Product::getTableName(), $criteria))->getSQL());
     }
 
     public function testShouldReturnProperQueryForEachCompareOperation()
@@ -100,7 +100,7 @@ class DbalQueryConditionableTest extends TestCase
             $criteria = new DbalCriteria([
                 new DbalCondition($variant['operator'], 'code', 'STY639PW1'),
             ]);
-            $this->assertEquals($variant['expectedSql'], (new EntitiesQuery($this->dbal, Product::TABLE, $criteria))->getSQL());
+            $this->assertEquals($variant['expectedSql'], (new EntitiesQuery($this->dbal, Product::getTableName(), $criteria))->getSQL());
         }
     }
 
@@ -124,11 +124,11 @@ SQL;
         // When & Then
         $conditions = array_map(fn(array $conditionData) => DbalCondition::createFromArray($conditionData), $variantOne);
         $criteria = new DbalCriteria($conditions);
-        $this->assertEquals($variantOneExpectedQuery, (new EntitiesQuery($this->dbal, Product::TABLE, $criteria))->getSQL());
+        $this->assertEquals($variantOneExpectedQuery, (new EntitiesQuery($this->dbal, Product::getTableName(), $criteria))->getSQL());
 
         $conditions = array_map(fn(array $conditionData) => DbalCondition::createFromArray($conditionData), $variantTwo);
         $criteria = new DbalCriteria($conditions);
-        $this->assertEquals($variantTwoExpectedQuery, (new EntitiesQuery($this->dbal, Product::TABLE, $criteria))->getSQL());
+        $this->assertEquals($variantTwoExpectedQuery, (new EntitiesQuery($this->dbal, Product::getTableName(), $criteria))->getSQL());
     }
 
     public function testShouldThrowInvalidArgumentExceptionWhenOperatorIsInvalid()

@@ -7,10 +7,13 @@ namespace Ifrost\DoctrineApiBundle\Tests\Unit;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
 use Ifrost\DoctrineApiBundle\Utility\DbClient;
+use Ifrost\DoctrineApiBundle\Utility\TransformRecord;
 use Ifrost\Filesystem\JsonFile;
 use PHPUnit\Framework\TestCase;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Entity\Product;
+use PlainDataTransformer\TransformNumeric;
+use Ramsey\Uuid\Uuid;
 
 class ProductTestCase extends TestCase
 {
@@ -54,21 +57,19 @@ class ProductTestCase extends TestCase
             $this->productsData->toArray(),
             function (ArrayCollection $acc, array $productData) {
                 $productData = array_map(
-                    function(mixed $value) {
-                        if (is_string($value) === false) {
-                            return $value;
-                        }
-
-                        try {
-                            $value = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
-                        } catch (\Exception) {
-                        }
-
-                        return $value;
-                    },
+                    fn (mixed $value) => TransformRecord::toRead($value),
                     $productData
                 );
-                $acc->set($productData['uuid'], Product::createFromArray($productData));
+                $acc->set(
+                    $productData['uuid'],
+                    Product::createFromArray(
+                        [
+                            ...$productData,
+                            'uuid' => Uuid::fromString($productData['uuid']),
+                            'rate' => TransformNumeric::toInt($productData['rate'] ?? 0, 2),
+                        ]
+                    )
+                );
 
                 return $acc;
             },
