@@ -59,7 +59,33 @@ class DoctrineApi implements ApiInterface
         }
 
         return new JsonResponse(
-            array_map(fn (array $result) => $this->entityClassName::createFromArray($result)->jsonSerialize(), $event->getData())
+            array_map(
+                function (array $result) {
+                    $result = array_map(
+                        function(mixed $value) {
+                            if (is_string($value) === false) {
+                                return $value;
+                            }
+
+                            try {
+                                $value = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+                            } catch (\Exception) {
+                            }
+
+                            return $value;
+                        },
+                        $result
+                    );
+
+                    return $this->entityClassName::createFromArray(
+                        [
+                            ...$result,
+                            'uuid' => Uuid::fromBytes($result['uuid']),
+                        ]
+                    )->jsonSerialize();
+                },
+                $event->getData()
+            )
         );
     }
 

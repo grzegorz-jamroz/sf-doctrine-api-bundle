@@ -6,9 +6,13 @@
 
 ### Change
 - upgrade dependencies
-- fix deprecations in DbalQuery
 - extend [EntityInterface](src/Entity/EntityInterface.php) with [WithDbalWritableFormat](src/Entity/WithDbalWritableFormat.php)
 - extend [DbClient](src/Utility/DbClient.php) with [DbClientInterface](src/Utility/DbClientInterface.php)
+- [DoctrineApi](src/Utility/DoctrineApi.php)
+  - improved method `find` to return decoded json and uuid as `Ramsey\Uuid\UuidInterface`
+
+### Fix
+- fix deprecations in [DbalQuery](src/Query/DbalQuery.php)
 
 ## [v6.1.6] - 2022.02.11
 ### Add
