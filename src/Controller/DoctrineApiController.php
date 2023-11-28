@@ -13,10 +13,8 @@ use Ifrost\ApiFoundation\Attribute\Api;
 use Ifrost\ApiFoundation\Traits\ApiControllerTrait;
 use Ifrost\DoctrineApiBundle\Exception\NotFoundException;
 use Ifrost\DoctrineApiBundle\Query\DbalQuery;
-use Ifrost\DoctrineApiBundle\Utility\DbClient;
 use Ifrost\DoctrineApiBundle\Utility\DbClientInterface;
 use Ifrost\DoctrineApiBundle\Utility\DoctrineApi;
-use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -25,47 +23,16 @@ class DoctrineApiController extends ApiController
     use ApiControllerTrait;
 
     protected Connection $dbal;
-    protected DbClient $db;
+    protected DbClientInterface $db;
 
     public static function getSubscribedServices(): array
     {
         return array_merge(parent::getSubscribedServices(), [
             'doctrine' => '?' . ManagerRegistry::class,
+            'doctrine.dbal.default_connection' => '?' . Connection::class,
+            'ifrost_doctrine_api.db_client' => '?' . DbClientInterface::class,
             'event_dispatcher' => '?' . EventDispatcherInterface::class,
         ]);
-    }
-
-    protected function getDbal(): Connection
-    {
-        if (isset($this->dbal)) {
-            return $this->dbal;
-        }
-
-        $doctrine = $this->container->get('doctrine');
-        $doctrine instanceof ManagerRegistry ?: throw new RuntimeException(sprintf('Container identifier "doctrine" is not instance of %s (%s given).', ManagerRegistry::class, gettype($doctrine)));
-        $connection = $doctrine->getConnection();
-        $connection instanceof Connection ?: throw new RuntimeException(sprintf('Default dbal connection "doctrine.dbal.default_connection" is not instance of %s (%s given).', Connection::class, gettype($connection)));
-        try {
-            $cache = $this->container->get('ifrost_doctrine_api.dbal_cache_adapter');
-            $cache instanceof CacheItemPoolInterface ?: throw new RuntimeException(sprintf('DBAL Cache Adapter "ifrost_doctrine_api.dbal_cache_adapter" is not instance of %s (%s given).', CacheItemPoolInterface::class, gettype($cache)));
-            $connection->getConfiguration()->setResultCache($cache);
-        } catch (RuntimeException $e) {
-            throw $e;
-        } catch (\Exception) {
-        }
-
-        $this->dbal = $connection;
-
-        return $this->dbal;
-    }
-
-    protected function getDbClient(): DbClientInterface
-    {
-        if (!isset($this->db)) {
-            $this->db = new DbClient($this->getDbal());
-        }
-
-        return $this->db;
     }
 
     /**
@@ -122,6 +89,32 @@ class DoctrineApiController extends ApiController
         return new DoctrineApi($entityClassName, $this->getDbClient(), $this->getApiRequestService(), $this->getEventDispatcher());
     }
 
+    protected function getDbal(): Connection
+    {
+        if (isset($this->dbal)) {
+            return $this->dbal;
+        }
+
+        $connection = $this->container->get('doctrine.dbal.default_connection');
+        $connection instanceof Connection ?: throw new RuntimeException(sprintf('Container identifier "doctrine.dbal.default_connection" is not instance of %s', Connection::class));
+        $this->dbal = $connection;
+
+        return $this->dbal;
+    }
+
+    protected function getDbClient(): DbClientInterface
+    {
+        if (isset($this->db)) {
+            return $this->db;
+        }
+
+        $db = $this->container->get('ifrost_doctrine_api.db_client');
+        $db instanceof DbClientInterface ?: throw new RuntimeException(sprintf('Container identifier "ifrost_doctrine_api.db_client" is not instance of %s', DbClientInterface::class));
+        $this->db = $db;
+
+        return $this->db;
+    }
+
     protected function getEventDispatcher(): EventDispatcherInterface
     {
         $eventDispatcher = $this->container->get('event_dispatcher');
@@ -129,5 +122,4 @@ class DoctrineApiController extends ApiController
 
         return $eventDispatcher;
     }
-
 }

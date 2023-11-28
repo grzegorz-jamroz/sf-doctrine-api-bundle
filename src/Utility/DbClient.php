@@ -9,11 +9,16 @@ use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Types\Type;
 use Ifrost\DoctrineApiBundle\Exception\NotFoundException;
 use Ifrost\DoctrineApiBundle\Query\DbalQuery;
+use Psr\Cache\CacheItemPoolInterface;
 
 class DbClient implements DbClientInterface
 {
-    public function __construct(private Connection $connection)
+    public function __construct(
+        private Connection $connection,
+        ?CacheItemPoolInterface $cache = null,
+    )
     {
+        $cache !== null && $this->connection->getConfiguration()->setResultCache($cache);
     }
 
     /**

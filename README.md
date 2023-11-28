@@ -279,9 +279,10 @@ You can add `config/packages/ifrost_doctrine_api.yaml` in your project to enable
 # default config
 ifrost_doctrine_api:
     doctrine_dbal_types_uuid: true
-    # instance of Psr\Cache\CacheItemPoolInterface
-    dbal_cache_adapter: null
-    dbal_cache_dir: null
+    dbal_cache_adapter:
+      enabled: false
+    db_client:
+      enabled: true
   # ...
 ```
 
@@ -290,7 +291,9 @@ ifrost_doctrine_api:
 # config/packages/ifrost_doctrine_api.yaml
 ifrost_doctrine_api:
     doctrine_dbal_types_uuid: true
-    dbal_cache_adapter: 'default'
-    dbal_cache_dir: 'default'
+    dbal_cache_adapter:
+      enabled: true
+    db_client:
+      enabled: true
 # ...
 ```

@@ -4,18 +4,27 @@
 - add [WithDbalWritableFormat](src/Entity/WithDbalWritableFormat.php) interface
 - add [DbClientInterface](src/Utility/DbClientInterface.php) interface
 - add [TransformRecord](src/Utility/TransformRecord.php) utility class
+- new bundle configuration `ifrost_doctrine_api.yaml`
+  - add possibility to automatically register [DbClientInterface](src/Utility/DbClientInterface.php) with alias `ifrost_doctrine_api.db_client`
+  - add possibility to automatically register ResultCache for [DbalQuery](src/Query/DbalQuery.php) with alias `ifrost_doctrine_api.dbal_cache_adapter`
+
+### Fix
+- fixed problem with exception occurred when missing configuration with driver for cache a query.
 
 ### Change
-- upgrade dependencies
+- changed strategy for storing UUIDs - from string to binary
 - extend [EntityInterface](src/Entity/EntityInterface.php) with [WithDbalWritableFormat](src/Entity/WithDbalWritableFormat.php)
 - extend [DbClient](src/Utility/DbClient.php) with [DbClientInterface](src/Utility/DbClientInterface.php)
-- [DoctrineApi](src/Utility/DoctrineApi.php)
+- [DoctrineApi](src/Utility/DoctrineApi.php) - changed all core methods due to new "storing UUIDs strategy"
   - improved method `find` to return decoded json and uuid as `Ramsey\Uuid\UuidInterface`
   - improved method `findOne` to return decoded json and uuid as `Ramsey\Uuid\UuidInterface`
   - change method `create` to use `createFromRequest` and uuid in `bytes` format for db queries
   - change method `update` to use `createFromRequest` and uuid in `bytes` format for db queries
   - change method `modify` to use `createFromRequest` and uuid in `bytes` format for db queries
   - change method `delete` to use `createFromRequest` and uuid in `bytes` format for db queries
+- upgrade dependencies
+- refactored [DoctrineApiController](src/Controller/DoctrineApiController.php)
+- changed documentation in `README.md`
 
 ### Fix
 - fix deprecations in [DbalQuery](src/Query/DbalQuery.php)

@@ -1,0 +1,5 @@
+services:
+  ifrost_doctrine_api.dbal_cache_adapter:
+    class: Symfony\Component\Cache\Adapter\FilesystemAdapter
+    arguments:
+      $directory: '%kernel.cache_dir%/doctrine/doctrine_api/dbal'

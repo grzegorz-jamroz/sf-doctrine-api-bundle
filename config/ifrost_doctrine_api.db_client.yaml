@@ -3,5 +3,6 @@ services:
     class: Ifrost\DoctrineApiBundle\Utility\DbClient
     arguments:
       $connection: '@doctrine.dbal.default_connection'
+      $cache: '@?ifrost_doctrine_api.dbal_cache_adapter'
 
   Ifrost\DoctrineApiBundle\Utility\DbClientInterface: '@ifrost_doctrine_api.db_client'

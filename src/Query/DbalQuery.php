@@ -24,7 +24,7 @@ abstract class DbalQuery extends QueryBuilder
             $this->getSQL(),
             $this->getParameters(),
             $this->getParameterTypes(),
-            $this->getQueryCacheProfile()
+            $this->getResultCache() !== null ? $this->getQueryCacheProfile() : null
         );
     }
 
