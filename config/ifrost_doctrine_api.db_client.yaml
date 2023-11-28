@@ -1,0 +1,7 @@
+services:
+  ifrost_doctrine_api.db_client:
+    class: Ifrost\DoctrineApiBundle\Utility\DbClient
+    arguments:
+      $connection: '@doctrine.dbal.default_connection'
+
+  Ifrost\DoctrineApiBundle\Utility\DbClientInterface: '@ifrost_doctrine_api.db_client'

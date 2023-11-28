@@ -6,7 +6,7 @@ namespace Ifrost\DoctrineApiBundle\DependencyInjection;
 
 use PlainDataTransformer\Transform;
 use Psr\Cache\CacheItemPoolInterface;
-use Ramsey\Uuid\Doctrine\UuidType;
+use Ramsey\Uuid\Doctrine\UuidBinaryType;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\FileLocator;
@@ -24,16 +24,23 @@ class IfrostDoctrineApiExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
+        $configuration = $this->getConfiguration($configs, $container);
+        $config = $this->processConfiguration($configuration, $configs);
+
+        $container->setParameter('ifrost_doctrine_api.db_client', $config['db_client'] ?? []);
+
         $loader = new YamlFileLoader(
             $container,
             new FileLocator(__DIR__ . '/../../config')
         );
         $loader->load('services.yaml');
-        $configuration = $this->getConfiguration($configs, $container);
-        $config = $this->processConfiguration($configuration, $configs);
 
         if (Transform::toBool($config['doctrine_dbal_types_uuid'])) {
-            $container->prependExtensionConfig('doctrine', ['dbal' => ['types' => ['uuid' => UuidType::class]]]);
+            $container->prependExtensionConfig('doctrine', ['dbal' => ['types' => ['uuid_binary' => UuidBinaryType::class]]]);
+        }
+
+        if ($container->getParameter('ifrost_doctrine_api.db_client')['enabled']) {
+            $loader->load('ifrost_doctrine_api.db_client.yaml');
         }
 
         $this->setDbalCacheDir($config, $container);

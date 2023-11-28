@@ -32,7 +32,7 @@ class DoctrineApi implements ApiInterface
 
     public function __construct(
         string $entityClassName,
-        private DbClient $db,
+        private DbClientInterface $db,
         private ApiRequestInterface $apiRequest,
         private EventDispatcherInterface $dispatcher
     ) {

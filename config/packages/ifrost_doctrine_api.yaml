@@ -1,0 +1,4 @@
+# default values
+ifrost_doctrine_api:
+  db_client:
+    enabled: true

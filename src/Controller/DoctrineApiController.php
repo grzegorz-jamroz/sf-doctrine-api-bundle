@@ -14,6 +14,7 @@ use Ifrost\ApiFoundation\Traits\ApiControllerTrait;
 use Ifrost\DoctrineApiBundle\Exception\NotFoundException;
 use Ifrost\DoctrineApiBundle\Query\DbalQuery;
 use Ifrost\DoctrineApiBundle\Utility\DbClient;
+use Ifrost\DoctrineApiBundle\Utility\DbClientInterface;
 use Ifrost\DoctrineApiBundle\Utility\DoctrineApi;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
@@ -58,7 +59,7 @@ class DoctrineApiController extends ApiController
         return $this->dbal;
     }
 
-    protected function getDbClient(): DbClient
+    protected function getDbClient(): DbClientInterface
     {
         if (!isset($this->db)) {
             $this->db = new DbClient($this->getDbal());
