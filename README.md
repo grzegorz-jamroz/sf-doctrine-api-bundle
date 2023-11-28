@@ -34,7 +34,115 @@ ifrost_doctrine_api_controllers:
 # ...
 ```
 
-2. Create your controller:
+2. Configure Doctrine to store UUIDs as binary strings
+```yaml
+# config/packages/doctrine.yaml
+doctrine:
+    dbal:
+        types:
+            uuid_binary:  Ramsey\Uuid\Doctrine\UuidBinaryType
+# Uncomment if using doctrine/orm <2.8
+        # mapping_types:
+            # uuid_binary: binary
+```
+
+**Note:** It is possible to configure Doctrine to store UUIDs in different way - you can read about it [here](https://github.com/ramsey/uuid-doctrine). Please note that bundle will work only with UUIDs stored as binary types.
+
+3. Create Entity which implements [EntityInterface](src/Entity/EntityInterface.php) and in this case annotate properties by setting the `@Column` type to `uuid_binary`, and define custom generator of `Ramsey\Uuid\Doctrine\UuidV7Generator`.
+
+**Exmple:**
+```php
+<?php
+// src/Entity/Product.php
+
+namespace App\Entity;
+
+use App\Repository\ProductRepository;
+use Doctrine\ORM\Mapping as ORM;
+use Ifrost\DoctrineApiBundle\Entity\EntityInterface;
+use PlainDataTransformer\Transform;
+use Ramsey\Uuid\Doctrine\UuidV7Generator;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
+
+#[ORM\Entity(repositoryClass: ProductRepository::class)]
+class Product implements EntityInterface
+{
+    #[ORM\Id]
+    #[ORM\Column(type: "uuid_binary", unique: true)]
+    #[ORM\GeneratedValue(strategy: "CUSTOM")]
+    #[ORM\CustomIdGenerator(class: UuidV7Generator::class)]
+    private UuidInterface $uuid;
+
+    #[ORM\Column(length: 255)]
+    private string $name;
+
+    public function __construct(
+        UuidInterface $uuid,
+        string $name,
+    ) {
+        $this->uuid = $uuid;
+        $this->name = $name;
+    }
+
+    public function getUuid(): UuidInterface
+    {
+        return $this->uuid;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public static function getTableName(): string
+    {
+        return 'product';
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public static function getFields(): array
+    {
+        return array_keys(self::createFromArray([])->getWritableFormat());
+    }
+
+    public function getWritableFormat(): array
+    {
+        return [
+            'uuid' => $this->uuid->getBytes(),
+            'name' => $this->name,
+        ];
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'uuid' => (string) $this->uuid,
+            'name' => $this->name,
+        ];
+    }
+
+    public static function createFromArray(array $data): static|self
+    {
+        return new self(
+            $data['uuid'] ?? Uuid::uuid7(),
+            Transform::toString($data['name'] ?? ''),
+        );
+    }
+
+    public static function createFromRequest(array $data): static|self
+    {
+        return new self(
+            $data['uuid'] === null ? Uuid::uuid7() : Uuid::fromString($data['uuid']),
+            Transform::toString($data['name'] ?? ''),
+        );
+    }
+}
+```
+
+4. Create your controller:
 
 ```php
 <?php
@@ -53,7 +161,7 @@ class ProductController extends DoctrineApiController
 }
 ```
 
-3. Now you can debug your routes. Run command:
+5. Now you can debug your routes. Run command:
 
 ```
 php bin/console debug:router
