@@ -1,5 +1,5 @@
 # Changelog
-## Unreleased
+## [v6.2.0] - 2023.11.29
 ### Add
 - add [WithDbalWritableFormat](src/Entity/WithDbalWritableFormat.php) interface
 - add [DbClientInterface](src/Utility/DbClientInterface.php) interface
@@ -66,6 +66,7 @@
 - extend DoctrineApiController with ApiControllerTrait
 - add support for metadata `path` and `excludedActions` in Api attribute
 
+[v6.2.0]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.2.0]
 [v6.1.6]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.1.6]
 [v6.1.5]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.1.5]
 [v6.1.4]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.1.4]
