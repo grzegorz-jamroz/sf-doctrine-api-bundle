@@ -40,6 +40,48 @@ class CreateTest extends ProductTestCase
         );
     }
 
+    public function testShouldCreateRequestedProductWithoutGivenUuid(): void
+    {
+        // Expect & Given
+        $this->truncateTable(Product::getTableName());
+        $this->assertCount(0, $this->dbClient->fetchAll(EntitiesQuery::class, Product::getTableName()));
+        $uuid = 'f3e56592-0bfd-4669-be39-6ac8ab5ac55f';
+        $productData = $this->productsData->get($uuid);
+        unset($productData['uuid']);
+        $request = new Request([], $productData);
+        $controller = new DoctrineApiControllerVariant($request);
+
+        // When
+        $response = $controller->getApi(Product::class)->create();
+
+        // Then
+        $this->assertEquals(
+            array_filter(
+                $this->products->get($uuid)->jsonSerialize(),
+                fn (string $key) => $key !== 'uuid',
+                ARRAY_FILTER_USE_KEY
+            ),
+            array_filter(
+                json_decode($response->getContent(), true),
+                fn (string $key) => $key !== 'uuid',
+                ARRAY_FILTER_USE_KEY
+            ),
+        );
+        $this->assertEquals(
+            array_filter(
+                $this->products->get($uuid)->getWritableFormat(),
+                fn (string $key) => $key !== 'uuid',
+                ARRAY_FILTER_USE_KEY
+            ),
+            array_filter(
+                $this->dbClient->fetchAll(EntitiesQuery::class, Product::getTableName())[0],
+                fn (string $key) => $key !== 'uuid',
+                ARRAY_FILTER_USE_KEY
+            ),
+        );
+    }
+
+
     public function testShouldCreateProductWithoutTags(): void
     {
         // Expect & Given
