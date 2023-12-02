@@ -34,7 +34,7 @@ ifrost_doctrine_api_controllers:
 # ...
 ```
 
-2. Configure Doctrine to store UUIDs as binary strings (optional - only if you need different type)
+2. Configure Doctrine to store UUIDs as binary strings
 ```yaml
 # config/packages/doctrine.yaml
 doctrine:
