@@ -1,4 +1,10 @@
 # Changelog
+## Unreleased
+### Change
+- [DoctrineApi](src/Utility/DoctrineApi.php)
+  - method `update` - add mapping for previousData
+  - method `modify` - add mapping for previousData
+
 ## [v6.2.0] - 2023.11.29
 ### Add
 - add [WithDbalWritableFormat](src/Entity/WithDbalWritableFormat.php) interface

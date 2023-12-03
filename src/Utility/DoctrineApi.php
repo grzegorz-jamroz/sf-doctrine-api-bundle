@@ -127,7 +127,10 @@ class DoctrineApi implements ApiInterface
     public function update(): JsonResponse
     {
         $uuid = Uuid::fromString($this->apiRequest->getAttribute('uuid', ''));
-        $previousData = $this->fetchOne($uuid);
+        $previousData = array_map(
+            fn (mixed $value) => TransformRecord::toRead($value),
+            $this->fetchOne($uuid)
+        );
         $entity = $this->entityClassName::createFromRequest(
             [
                 ...$this->apiRequest->getRequest($this->entityClassName::getFields()),
@@ -162,7 +165,10 @@ class DoctrineApi implements ApiInterface
     public function modify(): JsonResponse
     {
         $uuid = Uuid::fromString($this->apiRequest->getAttribute('uuid', ''));
-        $previousData = $this->fetchOne($uuid);
+        $previousData = array_map(
+            fn (mixed $value) => TransformRecord::toRead($value),
+            $this->fetchOne($uuid)
+        );
         $entity = $this->entityClassName::createFromRequest([
             ...$this->entityClassName::createFromArray([...$previousData, 'uuid' => $uuid])->jsonSerialize(),
             ...$this->apiRequest->getRequest($this->entityClassName::getFields(), false),
