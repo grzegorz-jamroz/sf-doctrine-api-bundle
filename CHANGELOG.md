@@ -1,5 +1,5 @@
 # Changelog
-## Unreleased
+## [v6.2.1] - 2023.12.14
 ### Change
 - [DoctrineApi](src/Utility/DoctrineApi.php)
   - method `update` - add mapping for previousData
@@ -82,6 +82,7 @@
 - extend DoctrineApiController with ApiControllerTrait
 - add support for metadata `path` and `excludedActions` in Api attribute
 
+[v6.2.1]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.2.1]
 [v6.2.0]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.2.0]
 [v6.1.6]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.1.6]
 [v6.1.5]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.1.5]
