@@ -12,6 +12,9 @@
   - method `find`
     - fix `raw_data` option due to new "storing UUIDs strategy"
 
+### Add
+- tests for [DbalQuery](src/Query/DbalQuery.php)
+
 ## [v6.2.0] - 2023.11.29
 ### Add
 - add [WithDbalWritableFormat](src/Entity/WithDbalWritableFormat.php) interface
