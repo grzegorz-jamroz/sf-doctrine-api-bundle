@@ -169,10 +169,19 @@ class DoctrineApi implements ApiInterface
             fn (mixed $value) => TransformRecord::toRead($value),
             $this->fetchOne($uuid)
         );
-        $entity = $this->entityClassName::createFromRequest([
-            ...$this->entityClassName::createFromArray([...$previousData, 'uuid' => $uuid])->jsonSerialize(),
-            ...$this->apiRequest->getRequest($this->entityClassName::getFields(), false),
-            'uuid' => $uuid,
+        $keys = array_keys($this->apiRequest->getRequest($this->entityClassName::getFields(), false));
+        $entityWritableDataFromRequest = array_filter(
+            $this->entityClassName::createFromRequest([
+                ...$this->apiRequest->getRequest($this->entityClassName::getFields(), false),
+                'uuid' => $uuid,
+            ])->getWritableFormat(),
+            fn (string $key) => in_array($key, $keys),
+            ARRAY_FILTER_USE_KEY
+        );
+        $entity = $this->getEntityFromRecord([
+            ...$previousData,
+            ...$entityWritableDataFromRequest,
+            'uuid' => $previousData['uuid'],
         ]);
         $event = new BeforeModifyEvent(
             $entity,
@@ -193,6 +202,7 @@ class DoctrineApi implements ApiInterface
 
         return new JsonResponse($entity->jsonSerialize());
     }
+
 
     /**
      * @throws DbalException
@@ -219,7 +229,7 @@ class DoctrineApi implements ApiInterface
         $this->entityClassName = $entityClassName;
     }
 
-    private function getEntityDataFromRecord(array $record): array
+    private function getEntityFromRecord(array $record): EntityInterface
     {
         return $this->entityClassName::createFromArray(
             [
@@ -229,7 +239,12 @@ class DoctrineApi implements ApiInterface
                 ),
                 'uuid' => Uuid::fromBytes($record['uuid']),
             ]
-        )->jsonSerialize();
+        );
+    }
+
+    private function getEntityDataFromRecord(array $record): array
+    {
+        return $this->getEntityFromRecord($record)->jsonSerialize();
     }
 
     private function fetchOne(UuidInterface $uuid): array
