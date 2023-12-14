@@ -44,6 +44,30 @@ class FindTest extends ProductTestCase
         $this->assertEquals([$product->jsonSerialize()], json_decode($response->getContent(), true));
     }
 
+    public function testShouldReturnArrayWithOneProductWhenOptionRawDataIsTrue(): void
+    {
+        // Expect & Given
+        $this->truncateTable(Product::getTableName());
+        $controller = new DoctrineApiControllerVariant();
+        $uuid = '8b40a6d6-1a79-4edc-bfca-0f8d993c29f3';
+        $product = $this->products->get($uuid);
+        $this->dbClient->insert(Product::getTableName(), $product->getWritableFormat());
+
+        // When
+        $response = $controller->getApi(Product::class)->find(['raw_data' => true]);
+
+        // Then
+        $this->assertEquals(
+            [
+                [
+                    ...$product->getWritableFormat(),
+                    'uuid' => $uuid,
+                ],
+            ],
+            json_decode($response->getContent(), true)
+        );
+    }
+
     public function testShouldReturnArrayWithTwoProducts(): void
     {
         // Expect & Given

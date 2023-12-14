@@ -5,7 +5,12 @@
   - method `update` - add mapping for previousData
   - method `modify`
     - add mapping for previousData
-    - add filtering for request data 
+    - add filtering for request data
+
+### Fix
+- [DoctrineApi](src/Utility/DoctrineApi.php)
+  - method `find`
+    - fix `raw_data` option due to new "storing UUIDs strategy"
 
 ## [v6.2.0] - 2023.11.29
 ### Add

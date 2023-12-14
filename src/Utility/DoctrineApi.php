@@ -52,6 +52,11 @@ class DoctrineApi implements ApiInterface
                 'limit' => $this->apiRequest->getField('limit'),
             ])
         );
+
+        if (Transform::toBool($options['raw_data'] ?? false)) {
+            $records = array_map(fn ($data) => [...$data, 'uuid' => Uuid::fromBytes($data['uuid'])->toString()], $records);
+        }
+
         $event = new AfterFindEvent($this->entityClassName, $records);
         $this->dispatcher->dispatch($event, Events::AFTER_FIND);
 
