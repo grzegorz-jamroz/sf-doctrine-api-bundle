@@ -1,5 +1,5 @@
 # Changelog
-## Unreleased
+## [v6.3.0] - 2023.12.14
 ### Add
 - Support Symfony 7
   - update dependencies
@@ -87,6 +87,7 @@
 - extend DoctrineApiController with ApiControllerTrait
 - add support for metadata `path` and `excludedActions` in Api attribute
 
+[v6.3.0]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.3.0]
 [v6.2.1]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.2.1]
 [v6.2.0]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.2.0]
 [v6.1.6]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.1.6]
