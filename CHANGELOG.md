@@ -1,4 +1,9 @@
 # Changelog
+## Unreleased
+### Add
+- Support Symfony 7
+  - update dependencies
+
 ## [v6.2.1] - 2023.12.14
 ### Change
 - [DoctrineApi](src/Utility/DoctrineApi.php)

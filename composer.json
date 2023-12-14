@@ -30,7 +30,7 @@
     "grzegorz-jamroz/filesystem": "^0.1",
     "phpstan/phpstan": "^1.10",
     "phpunit/phpunit": "^9.5",
-    "symfony/dotenv": "^6.3",
-    "symfony/yaml": "^6.3"
+    "symfony/dotenv": "^6.0|^7.0",
+    "symfony/yaml": "^6.0|^7.0"
   }
 }
