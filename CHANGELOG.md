@@ -1,4 +1,8 @@
 # Changelog
+## Unreleased
+- [DoctrineApi](src/Utility/DoctrineApi.php)
+  - method `update` - changed uuid type to `string` in createFromRequest
+
 ## [v6.3.0] - 2023.12.14
 ### Add
 - Support Symfony 7

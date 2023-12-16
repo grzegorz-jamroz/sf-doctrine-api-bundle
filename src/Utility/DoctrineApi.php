@@ -139,7 +139,7 @@ class DoctrineApi implements ApiInterface
         $entity = $this->entityClassName::createFromRequest(
             [
                 ...$this->apiRequest->getRequest($this->entityClassName::getFields()),
-                'uuid' => $uuid,
+                'uuid' => $uuid->toString(),
             ]
         );
         $event = new BeforeUpdateEvent(
