@@ -13,7 +13,6 @@ abstract class DbalQueryConditionable extends DbalQuery
 
     public function __construct(
         Connection $connection,
-        private string $tableName,
         ?DbalCriteria $criteria = null
     ) {
         $this->criteria = $criteria ?? new DbalCriteria();
@@ -22,8 +21,6 @@ abstract class DbalQueryConditionable extends DbalQuery
 
     protected function prepareQuery(): void
     {
-        $this->select('*');
-        $this->from($this->tableName);
         $this->setMaxResults($this->criteria->getLimit());
         $this->setFirstResult($this->criteria->getOffset());
         $this->setCriteria();

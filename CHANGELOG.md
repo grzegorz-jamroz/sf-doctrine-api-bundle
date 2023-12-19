@@ -1,7 +1,12 @@
 # Changelog
 ## Unreleased
+### Change
 - [DoctrineApi](src/Utility/DoctrineApi.php)
   - method `update` - changed uuid type to `string` in createFromRequest
+- [DbalQueryConditionable](src/Query/DbalQueryConditionable.php)
+  - removed from query builder `select` and `from`
+- [EntitiesQuery](src/Query/Entity/EntitiesQuery.php)
+  - add to query builder `select` and `from`
 
 ## [v6.3.0] - 2023.12.14
 ### Add
