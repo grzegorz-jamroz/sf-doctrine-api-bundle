@@ -8,6 +8,10 @@
 - [EntitiesQuery](src/Query/Entity/EntitiesQuery.php)
   - add to query builder `select` and `from`
 
+### Fix
+- [DoctrineApi](src/Utility/DoctrineApi.php)
+  - method `create` - prevent from assigning uuid as UuidInterface when request contains uuid
+
 ## [v6.3.0] - 2023.12.14
 ### Add
 - Support Symfony 7

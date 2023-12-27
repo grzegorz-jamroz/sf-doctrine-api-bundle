@@ -102,7 +102,7 @@ class DoctrineApi implements ApiInterface
         $data = $this->apiRequest->getRequest($this->entityClassName::getFields());
 
         try {
-            $data['uuid'] = Uuid::fromString($data['uuid']);
+            Uuid::fromString($data['uuid']);
         } catch (\Throwable) {
             unset($data['uuid']);
         }
