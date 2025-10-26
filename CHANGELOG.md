@@ -15,6 +15,7 @@
 - update Queries
 - update [DoctrineApi](src/Utility/DoctrineApi.php)
 - update tests
+- update PHP CS Fixer and PHPStan configurations
 
 ### Fix
 - [DoctrineApi](src/Utility/DoctrineApi.php)
