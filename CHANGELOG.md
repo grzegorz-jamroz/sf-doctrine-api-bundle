@@ -11,6 +11,7 @@
 - [EntitiesQuery](src/Query/Entity/EntitiesQuery.php)
   - add to query builder `select` and `from`
 - Replace `Ramsey\Uuid` with`Symfony\Component\Uid\Uuid`
+- use property hooks for all Events
 - add commands and handlers for Entity Api CRUD
 - update Queries
 - update [DoctrineApi](src/Utility/DoctrineApi.php)
