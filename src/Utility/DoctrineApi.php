@@ -40,6 +40,11 @@ class DoctrineApi implements ApiInterface
         $this->setEntityClassName($entityClassName);
     }
 
+    /**
+     * @param array<string,mixed> $options
+     *
+     * @throws DbalException
+     */
     public function find(array $options = []): JsonResponse
     {
         $conditions = Transform::toArray($this->apiRequest->getField('conditions') ?? []);
@@ -55,9 +60,18 @@ class DoctrineApi implements ApiInterface
         );
 
         if (Transform::toBool($options['raw_data'] ?? false)) {
-            $records = array_map(fn ($data) => [...$data, 'uuid' => Uuid::fromBinary($data['uuid'])->toString()], $records);
+            $records = array_map(
+                fn ($data) => [
+                    ...$data,
+                    'uuid' => Uuid::fromBinary(
+                        Transform::toString($data['uuid'])
+                    )->toString(),
+                ],
+                $records,
+            );
         }
 
+        /** @var array<int, array<string, string|int|bool|float|null>> $records */
         $event = new AfterFindEvent($this->entityClassName, $records);
         $this->dispatcher->dispatch($event, Events::AFTER_FIND);
 
@@ -80,14 +94,16 @@ class DoctrineApi implements ApiInterface
     public function findOne(): JsonResponse
     {
         try {
+            $uuid = Transform::toString($this->apiRequest->getAttribute('uuid'));
+            /** @var array<string, string|int|bool|float|null> $record */
+            $record = $this->db->fetchOne(
+                EntityQuery::class,
+                $this->entityClassName::getTableName(),
+                Uuid::fromString($uuid)->toBinary(),
+            );
+
             return new JsonResponse(
-                $this->getEntityDataFromRecord(
-                    $this->db->fetchOne(
-                        EntityQuery::class,
-                        $this->entityClassName::getTableName(),
-                        Uuid::fromString($this->apiRequest->getAttribute('uuid', ''))->toBinary(),
-                    ),
-                ),
+                $this->getEntityDataFromRecord($record),
             );
         } catch (NotFoundException) {
             throw new NotFoundException(sprintf('Record "%s" not found', $this->entityClassName), 404);
@@ -100,12 +116,17 @@ class DoctrineApi implements ApiInterface
      */
     public function create(): JsonResponse
     {
-        $uuid = $this->apiRequest->getField('uuid', Uuid::v7()->toString());
+        $uuid = Transform::toString(
+            $this->apiRequest->getField(
+                'uuid',
+                Uuid::v7()->toString()
+            )
+        );
         $this->messageHandler->handle(
             new CreateEntity(
                 $uuid,
                 $this->entityClassName,
-                $this->apiRequest->getData(),
+                $this->getRequestData(),
             ),
         );
 
@@ -121,9 +142,9 @@ class DoctrineApi implements ApiInterface
     {
         $this->messageHandler->handle(
             new UpdateEntity(
-                $this->apiRequest->getRequiredAttribute('uuid'),
+                Transform::toString($this->apiRequest->getRequiredAttribute('uuid')),
                 $this->entityClassName,
-                $this->apiRequest->getData(),
+                $this->getRequestData(),
             ),
         );
 
@@ -139,9 +160,9 @@ class DoctrineApi implements ApiInterface
     {
         $this->messageHandler->handle(
             new ModifyEntity(
-                $this->apiRequest->getRequiredAttribute('uuid'),
+                Transform::toString($this->apiRequest->getRequiredAttribute('uuid')),
                 $this->entityClassName,
-                $this->apiRequest->getData(),
+                $this->getRequestData(),
             ),
         );
 
@@ -155,7 +176,7 @@ class DoctrineApi implements ApiInterface
     {
         $this->messageHandler->handle(
             new DeleteEntity(
-                $this->apiRequest->getRequiredAttribute('uuid'),
+                Transform::toString($this->apiRequest->getRequiredAttribute('uuid')),
                 $this->entityClassName,
             ),
         );
@@ -172,21 +193,48 @@ class DoctrineApi implements ApiInterface
         $this->entityClassName = $entityClassName;
     }
 
+    /**
+     * @param array<string, mixed> $record
+     */
     private function getEntityFromRecord(array $record): EntityInterface
     {
-        return $this->entityClassName::createFromArray(
+        /** @var EntityInterface $entity */
+        $entity = $this->entityClassName::createFromArray(
             [
                 ...array_map(
                     fn (mixed $value) => TransformRecord::toRead($value),
                     $record,
                 ),
-                'uuid' => Uuid::fromBinary($record['uuid']),
+                'uuid' => Uuid::fromBinary(
+                    Transform::toString($record['uuid'])
+                ),
             ],
         );
+
+        return $entity;
     }
 
+    /**
+     * @param array<string, string|int|bool|float|null> $record
+     *
+     * @return array<string, mixed>
+     */
     private function getEntityDataFromRecord(array $record): array
     {
         return $this->getEntityFromRecord($record)->jsonSerialize();
+    }
+
+    /**
+     * @return array<string, string|int|bool|float|array<string, mixed>|null>
+     */
+    private function getRequestData(): array
+    {
+        $data = array_filter(
+            $this->apiRequest->getData(),
+            fn (mixed $value) => is_string($value) || is_int($value) || is_bool($value) || is_float($value) || is_null($value) || is_array($value),
+        );
+
+        /** @var array<string, string|int|bool|float|array<string, mixed>|null> $data */
+        return $data;
     }
 }

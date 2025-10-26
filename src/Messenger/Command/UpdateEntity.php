@@ -6,25 +6,13 @@ namespace Ifrost\DoctrineApiBundle\Messenger\Command;
 
 class UpdateEntity
 {
+    /**
+     * @param array<string, string|int|bool|float|array<mixed,mixed>|null> $data
+     */
     public function __construct(
-        private string $uuid,
-        private string $entityClassName,
-        private array $data,
+        private(set) string $uuid,
+        private(set) string $entityClassName,
+        private(set) array $data,
     ) {
-    }
-
-    public function getUuid(): string
-    {
-        return $this->uuid;
-    }
-
-    public function getEntityClassName(): string
-    {
-        return $this->entityClassName;
-    }
-
-    public function getData(): array
-    {
-        return $this->data;
     }
 }

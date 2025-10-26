@@ -7,6 +7,9 @@ namespace Ifrost\DoctrineApiBundle\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Ifrost\DoctrineApiBundle\Query\DbalCondition;
 
+/**
+ * @extends ArrayCollection<int, DbalCondition>
+ */
 class ConditionCollection extends ArrayCollection
 {
     public function __construct(array $elements = [])
@@ -17,24 +20,25 @@ class ConditionCollection extends ArrayCollection
     /**
      * @param array<int|string, mixed> $conditions
      *
-     * @return DbalCondition[]
+     * @return array<int, DbalCondition>
      */
     public static function getConditions(array $conditions): array
     {
-        return array_reduce(
-            $conditions,
-            function (array $acc, mixed $condition) {
-                if ($condition instanceof DbalCondition) {
-                    $acc[] = $condition;
-                }
+        $output = [];
 
-                if (is_array($condition)) {
-                    $acc[] = DbalCondition::createFromArray($condition);
-                }
+        foreach ($conditions as $condition) {
+            if ($condition instanceof DbalCondition) {
+                $output[] = $condition;
 
-                return $acc;
-            },
-            [],
-        );
+                continue;
+            }
+
+            if (is_array($condition)) {
+                /** @var array<string, mixed> $condition */
+                $output[] = DbalCondition::createFromArray($condition);
+            }
+        }
+
+        return $output;
     }
 }

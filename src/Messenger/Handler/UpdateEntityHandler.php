@@ -25,14 +25,15 @@ class UpdateEntityHandler
 
     public function __invoke(UpdateEntity $command): void
     {
-        $uuid = Uuid::fromString($command->getUuid());
-        $entityClassName = $command->getEntityClassName();
+        $uuid = Uuid::fromString($command->uuid);
+        $entityClassName = $command->entityClassName;
 
         if (is_a($entityClassName, EntityInterface::class, true) === false) {
             throw new InvalidArgumentException(sprintf('$entityClassName has to be instance of %s', EntityInterface::class));
         }
 
         $data = $this->getData($command);
+        /** @var EntityInterface $entity */
         $entity = $entityClassName::createFromRequest(
             [
                 ...$data,
@@ -58,14 +59,18 @@ class UpdateEntityHandler
         }
     }
 
+    /**
+     * @return array<string, string|int|bool|float|array<mixed,mixed>|null>
+     */
     private function getData(UpdateEntity $command): array
     {
-        $entityClassName = $command->getEntityClassName();
+        $entityClassName = $command->entityClassName;
+        /** @var array<int, string> $entityFields */
         $entityFields = $entityClassName::getFields();
 
         return array_filter(
-            $command->getData(),
-            fn ($key) => in_array($key, $entityFields),
+            $command->data,
+            fn (string $key) => in_array($key, $entityFields),
             ARRAY_FILTER_USE_KEY
         );
     }

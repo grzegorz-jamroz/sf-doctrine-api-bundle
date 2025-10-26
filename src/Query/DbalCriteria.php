@@ -58,7 +58,7 @@ class DbalCriteria implements ArrayConstructable
         return $this->limit;
     }
 
-    public static function createFromArray(array $data): static|self
+    public static function createFromArray(array $data): self
     {
         /** @var array<string, string> $orderBy */
         $orderBy = Transform::toArray($data['orderBy'] ?? []);

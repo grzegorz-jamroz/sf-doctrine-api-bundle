@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Ifrost\DoctrineApiBundle\DependencyInjection;
 
 use Exception;
+use PlainDataTransformer\Transform;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -22,9 +23,10 @@ class IfrostDoctrineApiExtension extends Extension
     {
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
-
-        $container->setParameter('ifrost_doctrine_api.db_client', $config['db_client'] ?? []);
-        $container->setParameter('ifrost_doctrine_api.dbal_cache_adapter', $config['dbal_cache_adapter'] ?? []);
+        $dbClient = Transform::toArray($config['db_client'] ?? []);
+        $dbalCacheAdapter = Transform::toArray($config['dbal_cache_adapter'] ?? []);
+        $container->setParameter('ifrost_doctrine_api.db_client', $dbClient);
+        $container->setParameter('ifrost_doctrine_api.dbal_cache_adapter', $dbalCacheAdapter);
 
         $loader = new YamlFileLoader(
             $container,
@@ -32,11 +34,11 @@ class IfrostDoctrineApiExtension extends Extension
         );
         $loader->load('services.yaml');
 
-        if ($container->getParameter('ifrost_doctrine_api.db_client')['enabled']) {
+        if ($dbClient['enabled'] ?? true) {
             $loader->load('ifrost_doctrine_api.db_client.yaml');
         }
 
-        if ($container->getParameter('ifrost_doctrine_api.dbal_cache_adapter')['enabled']) {
+        if ($dbalCacheAdapter['enabled'] ?? false) {
             $loader->load('ifrost_doctrine_api.dbal_cache_adapter.yaml');
         }
     }

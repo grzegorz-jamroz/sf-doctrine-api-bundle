@@ -9,7 +9,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 class AfterFindEvent extends Event
 {
     /**
-     * @param array<int, string|int|bool|float|null>
+     * @param array<int, array<string, string|int|bool|float|null>> $data
      */
     public function __construct(
         private(set) string $entityClassName,

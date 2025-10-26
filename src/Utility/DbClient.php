@@ -89,8 +89,8 @@ class DbClient implements DbClientInterface
      *
      * Table expression and columns are not escaped and are not safe for user-input.
      *
-     * @param array<string, mixed>                                                 $data  Column-value pairs
-     * @param array<int, int|string|Type|null>|array<string, int|string|Type|null> $types Parameter types
+     * @param array<string, mixed>            $data  Column-value pairs
+     * @param array<int<0, max>, string|Type> $types Parameter types
      *
      * @throws Exception
      */
@@ -104,9 +104,9 @@ class DbClient implements DbClientInterface
      *
      * Table expression and columns are not escaped and are not safe for user-input.
      *
-     * @param array<string, mixed>                                                 $data     Column-value pairs
-     * @param array<string, mixed>                                                 $criteria Update criteria
-     * @param array<int, int|string|Type|null>|array<string, int|string|Type|null> $types    Parameter types
+     * @param array<string, mixed>            $data     Column-value pairs
+     * @param array<string, mixed>            $criteria Update criteria
+     * @param array<int<0, max>, string|Type> $types    Parameter types
      *
      * @throws Exception
      */
@@ -120,8 +120,8 @@ class DbClient implements DbClientInterface
      *
      * Table expression and columns are not escaped and are not safe for user-input.
      *
-     * @param array<string, mixed>                                                 $criteria Deletion criteria
-     * @param array<int, int|string|Type|null>|array<string, int|string|Type|null> $types    Parameter types
+     * @param array<string, mixed>            $criteria Deletion criteria
+     * @param array<int<0, max>, string|Type> $types    Parameter types
      *
      * @throws Exception
      */

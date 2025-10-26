@@ -37,5 +37,6 @@ return (new PhpCsFixer\Config())
             'import_constants' => false,
             'import_functions' => false,
         ],
+        'phpdoc_to_comment' => false,
     ])
     ->setFinder($finder);

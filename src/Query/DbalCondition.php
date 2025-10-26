@@ -51,7 +51,10 @@ class DbalCondition implements ArrayConstructable
         return $this->conditions;
     }
 
-    public static function createFromArray(array $data): static|self
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function createFromArray(array $data): self
     {
         $operator = DbalOperator::tryFrom(Transform::toString($data['operator'] ?? '')) ?? '';
 

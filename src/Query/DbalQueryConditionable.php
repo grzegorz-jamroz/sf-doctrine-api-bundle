@@ -44,9 +44,13 @@ abstract class DbalQueryConditionable extends DbalQuery
 
             if ($operator->isConjunction()) {
                 $this->andWhere($this->conjunction($condition));
-            } elseif ($operator->isComparison()) {
+            }
+
+            if ($operator->isComparison()) {
                 $this->andWhere($this->comparison($condition));
-            } elseif ($operator->isComparisonWithoutParam()) {
+            }
+
+            if ($operator->isComparisonWithoutParam()) {
                 $this->andWhere($this->comparisonWithoutParam($condition));
             }
         }
@@ -62,19 +66,25 @@ abstract class DbalQueryConditionable extends DbalQuery
 
             if ($operator->isConjunction()) {
                 $expressions[] = $this->conjunction($condition);
-            } elseif ($operator->isComparison()) {
+            }
+
+            if ($operator->isComparison()) {
                 $expressions[] = $this->comparison($condition);
-            } elseif ($operator->isComparisonWithoutParam()) {
+            }
+
+            if ($operator->isComparisonWithoutParam()) {
                 $expressions[] = $this->comparisonWithoutParam($condition);
             }
         }
 
+        /** @var 'and'|'or' $op */
         return $this->expr()->$op(...$expressions);
     }
 
     private function comparison(DbalCondition $condition): string
     {
         $op = $condition->getOperator()->value;
+        /** @var 'eq'|'neq'|'lt'|'lte'|'gt'|'gte'|'like'|'notLike'|'in'|'notIn' $op */
         $expr = $this->expr()->$op($condition->getField(), '?');
         $this->addParameter($condition->getValue());
 
@@ -83,6 +93,7 @@ abstract class DbalQueryConditionable extends DbalQuery
 
     private function comparisonWithoutParam(DbalCondition $condition): string
     {
+        /** @var 'isNotNull'|'isNull' $op */
         $op = $condition->getOperator()->value;
 
         return $this->expr()->$op($condition->getField());
