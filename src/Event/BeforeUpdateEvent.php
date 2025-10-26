@@ -15,5 +15,6 @@ class BeforeUpdateEvent extends Event
     public function __construct(
         private(set) EntityInterface $entity,
         public array $data,
-    ) {}
+    ) {
+    }
 }

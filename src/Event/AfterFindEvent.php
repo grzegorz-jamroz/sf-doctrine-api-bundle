@@ -14,5 +14,6 @@ class AfterFindEvent extends Event
     public function __construct(
         private(set) string $entityClassName,
         public array $data,
-    ) {}
+    ) {
+    }
 }

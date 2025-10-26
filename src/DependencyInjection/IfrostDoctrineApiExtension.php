@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Ifrost\DoctrineApiBundle\DependencyInjection;
 
+use Exception;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -15,7 +16,7 @@ class IfrostDoctrineApiExtension extends Extension
     /**
      * @param array<int|string, mixed> $configs
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function load(array $configs, ContainerBuilder $container): void
     {

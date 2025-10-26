@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Ifrost\DoctrineApiBundle\Messenger\Handler;
@@ -10,6 +11,7 @@ use Ifrost\DoctrineApiBundle\Events;
 use Ifrost\DoctrineApiBundle\Exception\NotUniqueException;
 use Ifrost\DoctrineApiBundle\Messenger\Command\CreateEntity;
 use Ifrost\DoctrineApiBundle\Utility\DbClientInterface;
+use InvalidArgumentException;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -18,8 +20,7 @@ class CreateEntityHandler
     public function __construct(
         private DbClientInterface $db,
         private EventDispatcherInterface $dispatcher,
-    )
-    {
+    ) {
     }
 
     public function __invoke(CreateEntity $command): void
@@ -28,7 +29,7 @@ class CreateEntityHandler
         $entityClassName = $command->getEntityClassName();
 
         if (is_a($entityClassName, EntityInterface::class, true) === false) {
-            throw new \InvalidArgumentException(sprintf('$entityClassName has to be instance of %s', EntityInterface::class));
+            throw new InvalidArgumentException(sprintf('$entityClassName has to be instance of %s', EntityInterface::class));
         }
 
         $data = $this->getData($command);
@@ -58,7 +59,7 @@ class CreateEntityHandler
 
         return array_filter(
             $command->getData(),
-            fn($key) => in_array($key, $entityFields),
+            fn ($key) => in_array($key, $entityFields),
             ARRAY_FILTER_USE_KEY
         );
     }

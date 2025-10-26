@@ -27,7 +27,7 @@ class DbalCriteria implements ArrayConstructable
         array $conditions = [],
         private array $orderings = [],
         private int $offset = 0,
-        private int $limit = 10
+        private int $limit = 10,
     ) {
         $this->conditions = ConditionCollection::getConditions($conditions);
     }

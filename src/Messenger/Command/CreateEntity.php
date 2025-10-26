@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Ifrost\DoctrineApiBundle\Messenger\Command;
@@ -9,8 +10,7 @@ class CreateEntity
         private string $uuid,
         private string $entityClassName,
         private array $data,
-    )
-    {
+    ) {
     }
 
     public function getUuid(): string

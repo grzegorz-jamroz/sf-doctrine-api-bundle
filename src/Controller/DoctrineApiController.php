@@ -15,6 +15,8 @@ use Ifrost\DoctrineApiBundle\Exception\NotFoundException;
 use Ifrost\DoctrineApiBundle\Query\DbalQuery;
 use Ifrost\DoctrineApiBundle\Utility\DbClientInterface;
 use Ifrost\DoctrineApiBundle\Utility\DoctrineApi;
+use ReflectionAttribute;
+use ReflectionClass;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -87,7 +89,7 @@ class DoctrineApiController extends ApiController
             );
         }
 
-        $attributes = (new \ReflectionClass(static::class))->getAttributes(ApiControllerAttribute::class, \ReflectionAttribute::IS_INSTANCEOF);
+        $attributes = (new ReflectionClass(static::class))->getAttributes(ApiControllerAttribute::class, ReflectionAttribute::IS_INSTANCEOF);
         $attributes[0] ?? throw new \RuntimeException(sprintf('Controller "%s" has to declare "%s" attribute.', static::class, ApiControllerAttribute::class));
         $attribute = $attributes[0]->newInstance();
         $entityClassName = $attribute->getEntity();

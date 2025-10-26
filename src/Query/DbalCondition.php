@@ -6,6 +6,7 @@ namespace Ifrost\DoctrineApiBundle\Query;
 
 use Ifrost\DoctrineApiBundle\Collection\ConditionCollection;
 use Ifrost\Foundations\ArrayConstructable;
+use InvalidArgumentException;
 use PlainDataTransformer\Transform;
 
 class DbalCondition implements ArrayConstructable
@@ -55,7 +56,7 @@ class DbalCondition implements ArrayConstructable
         $operator = DbalOperator::tryFrom(Transform::toString($data['operator'] ?? '')) ?? '';
 
         if ($operator === '') {
-            throw new \InvalidArgumentException(sprintf('Provided operator "%s" is invalid.', Transform::toString($data['operator'] ?? '')));
+            throw new InvalidArgumentException(sprintf('Provided operator "%s" is invalid.', Transform::toString($data['operator'] ?? '')));
         }
 
         return new self(

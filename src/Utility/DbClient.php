@@ -10,6 +10,7 @@ use Doctrine\DBAL\Types\Type;
 use Ifrost\DoctrineApiBundle\Exception\NotFoundException;
 use Ifrost\DoctrineApiBundle\Query\DbalQuery;
 use Psr\Cache\CacheItemPoolInterface;
+use RuntimeException;
 
 class DbClient implements DbClientInterface
 {
@@ -139,7 +140,7 @@ class DbClient implements DbClientInterface
         }
 
         if (!$query instanceof DbalQuery) {
-            throw new \RuntimeException(sprintf('Query is invalid. Query should be instance of %s (%s given).', DbalQuery::class, gettype($query)));
+            throw new RuntimeException(sprintf('Query is invalid. Query should be instance of %s (%s given).', DbalQuery::class, gettype($query)));
         }
 
         return $query;

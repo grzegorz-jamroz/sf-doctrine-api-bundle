@@ -20,6 +20,7 @@ use Ifrost\DoctrineApiBundle\Messenger\Command\UpdateEntity;
 use Ifrost\DoctrineApiBundle\Query\DbalCriteria;
 use Ifrost\DoctrineApiBundle\Query\Entity\EntitiesQuery;
 use Ifrost\DoctrineApiBundle\Query\Entity\EntityQuery;
+use InvalidArgumentException;
 use PlainDataTransformer\Transform;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Uid\Uuid;
@@ -165,7 +166,7 @@ class DoctrineApi implements ApiInterface
     private function setEntityClassName(string $entityClassName): void
     {
         if (!in_array(EntityInterface::class, Transform::toArray(class_implements($entityClassName)))) {
-            throw new \InvalidArgumentException(sprintf('Given argument entityClassName (%s) has to implement "%s" interface.', $entityClassName, EntityInterface::class));
+            throw new InvalidArgumentException(sprintf('Given argument entityClassName (%s) has to implement "%s" interface.', $entityClassName, EntityInterface::class));
         }
 
         $this->entityClassName = $entityClassName;
