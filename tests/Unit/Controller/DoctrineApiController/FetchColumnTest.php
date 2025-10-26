@@ -6,7 +6,6 @@ namespace Ifrost\DoctrineApiBundle\Tests\Unit\Controller\DoctrineApiController;
 
 use Ifrost\DoctrineApiBundle\Exception\NotFoundException;
 use Ifrost\DoctrineApiBundle\Query\Entity\EntitiesQuery;
-use PlainDataTransformer\Transform;
 use Ifrost\DoctrineApiBundle\Tests\Unit\ProductTestCase;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Entity\Product;
@@ -34,7 +33,7 @@ class FetchColumnTest extends ProductTestCase
         foreach ($this->products as $product) {
             $name = $controller->fetchColumn(
                 GetProductName::class,
-                $product->getUuid()->getBytes()
+                $product->getUuid()->toBinary(),
             );
             $this->assertEquals($product->getName(), $name);
         }
@@ -57,7 +56,7 @@ class FetchColumnTest extends ProductTestCase
         foreach ($this->products as $product) {
             $rate = $controller->fetchColumn(
                 GetProductRate::class,
-                $product->getUuid()->getBytes()
+                $product->getUuid()->toBinary(),
             );
             $this->assertEquals($product->getRate(), $rate);
         }
@@ -76,7 +75,7 @@ class FetchColumnTest extends ProductTestCase
         /* @var Product $product */
         $controller->fetchColumn(
             GetProductName::class,
-            $this->products->first()->getUuid()->getBytes()
+            $this->products->first()->getUuid()->toBinary(),
         );
     }
 }

@@ -6,11 +6,11 @@ namespace Ifrost\DoctrineApiBundle\Tests\Unit\Utility\DoctrineApi;
 
 use Ifrost\DoctrineApiBundle\Query\Entity\EntitiesQuery;
 use Ifrost\DoctrineApiBundle\Query\Entity\EntityQuery;
-use Ramsey\Uuid\Uuid;
-use Symfony\Component\HttpFoundation\Request;
 use Ifrost\DoctrineApiBundle\Tests\Unit\ProductTestCase;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Entity\Product;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\HttpFoundation\Request;
 
 class DeleteTest extends ProductTestCase
 {
@@ -22,7 +22,7 @@ class DeleteTest extends ProductTestCase
         $this->dbClient->insert(Product::getTableName(), $this->products->get($uuid)->getWritableFormat());
         $this->assertEquals(
             $this->products->get($uuid)->getWritableFormat(),
-            $this->dbClient->fetchOne(EntityQuery::class, Product::getTableName(), Uuid::fromString($uuid)->getBytes())
+            $this->dbClient->fetchOne(EntityQuery::class, Product::getTableName(), Uuid::fromString($uuid)->toBinary()),
         );
         $request = new Request([], [], ['uuid' => $uuid]);
         $controller = new DoctrineApiControllerVariant($request);

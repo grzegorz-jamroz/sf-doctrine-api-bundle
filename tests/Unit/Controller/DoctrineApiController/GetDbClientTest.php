@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Ifrost\DoctrineApiBundle\Tests\Unit\Controller\DoctrineApiController;
 
+use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
 use Ifrost\DoctrineApiBundle\Utility\DbClient;
 use PHPUnit\Framework\TestCase;
-use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
 
 class GetDbClientTest extends TestCase
 {

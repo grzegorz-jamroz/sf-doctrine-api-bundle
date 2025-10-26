@@ -11,8 +11,8 @@ class EntityQuery extends DbalQuery
 {
     public function __construct(
         Connection $connection,
-        private string $tableName,
-        private string $uuid,
+        protected string $tableName,
+        protected string $uuid,
     ) {
         parent::__construct($connection);
     }

@@ -16,8 +16,7 @@ class DbClient implements DbClientInterface
     public function __construct(
         private Connection $connection,
         ?CacheItemPoolInterface $cache = null,
-    )
-    {
+    ) {
         $cache !== null && $this->connection->getConfiguration()->setResultCache($cache);
     }
 
@@ -135,7 +134,7 @@ class DbClient implements DbClientInterface
         if (is_string($query)) {
             $query = new $query(
                 $this->connection,
-                ...$params
+                ...$params,
             );
         }
 

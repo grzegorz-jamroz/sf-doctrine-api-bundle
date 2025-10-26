@@ -1,5 +1,8 @@
 # Changelog
 ## Unreleased
+### Add
+- Add docker support for development environment
+
 ### Change
 - [DoctrineApi](src/Utility/DoctrineApi.php)
   - method `update` - changed uuid type to `string` in createFromRequest
@@ -7,10 +10,18 @@
   - removed from query builder `select` and `from`
 - [EntitiesQuery](src/Query/Entity/EntitiesQuery.php)
   - add to query builder `select` and `from`
+- Replace `Ramsey\Uuid` with`Symfony\Component\Uid\Uuid`
+- add commands and handlers for Entity Api CRUD
+- update Queries
+- update [DoctrineApi](src/Utility/DoctrineApi.php)
+- update tests
 
 ### Fix
 - [DoctrineApi](src/Utility/DoctrineApi.php)
   - method `create` - prevent from assigning uuid as UuidInterface when request contains uuid
+
+### Delete
+- remove `doctrine_dbal_types_uuid` from bundle configuration
 
 ## [v6.3.0] - 2023.12.14
 ### Add

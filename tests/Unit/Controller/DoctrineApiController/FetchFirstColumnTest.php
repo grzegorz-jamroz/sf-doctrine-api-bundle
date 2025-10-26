@@ -20,7 +20,6 @@ class FetchFirstColumnTest extends ProductTestCase
         $controller = new DoctrineApiControllerVariant();
         $this->assertEquals([], $this->dbClient->fetchAll(EntitiesQuery::class, Product::getTableName()));
         /** @var Product $product */
-
         foreach ($this->products as $product) {
             $this->dbClient->insert(Product::getTableName(), $product->getWritableFormat());
         }
@@ -89,7 +88,6 @@ class FetchFirstColumnTest extends ProductTestCase
         $this->assertEquals([], $this->dbClient->fetchAll(EntitiesQuery::class, Product::getTableName()));
         $productNames = array_map(fn (Product $product) => $product->getName(), $this->products->toArray());
         /** @var Product $product */
-
         foreach ($this->products as $product) {
             $this->dbClient->insert(Product::getTableName(), $product->getWritableFormat());
         }
@@ -99,7 +97,7 @@ class FetchFirstColumnTest extends ProductTestCase
         // When
         $results = $controller->fetchFirstColumn(
             GetAllProductName::class,
-            $product->getUuid()
+            $product->getUuid(),
         );
 
         // Then

@@ -10,7 +10,7 @@ use Ifrost\DoctrineApiBundle\Query\Entity\EntityQuery;
 use Ifrost\DoctrineApiBundle\Tests\Unit\ProductTestCase;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Entity\Product;
-use Ramsey\Uuid\Uuid;
+use Symfony\Component\Uid\Uuid;
 
 class FetchOneTest extends ProductTestCase
 {
@@ -30,7 +30,7 @@ class FetchOneTest extends ProductTestCase
         // When & Then
         $this->assertEquals(
             $this->products->get($uuid)->getWritableFormat(),
-            $controller->fetchOne(EntityQuery::class, Product::getTableName(), Uuid::fromString($uuid)->getBytes())
+            $controller->fetchOne(EntityQuery::class, Product::getTableName(), Uuid::fromString($uuid)->toBinary()),
         );
     }
 

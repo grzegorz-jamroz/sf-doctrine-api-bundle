@@ -6,14 +6,14 @@ namespace Ifrost\DoctrineApiBundle\Tests\Unit;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Entity\Product;
 use Ifrost\DoctrineApiBundle\Utility\DbClient;
 use Ifrost\DoctrineApiBundle\Utility\TransformRecord;
 use Ifrost\Filesystem\JsonFile;
 use PHPUnit\Framework\TestCase;
-use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
-use Ifrost\DoctrineApiBundle\Tests\Variant\Entity\Product;
 use PlainDataTransformer\TransformNumeric;
-use Ramsey\Uuid\Uuid;
+use Symfony\Component\Uid\Uuid;
 
 class ProductTestCase extends TestCase
 {
@@ -38,27 +38,27 @@ class ProductTestCase extends TestCase
             $productUuids,
             function (ArrayCollection $acc, string $uuid) use ($testDirectoryPath) {
                 $productData = array_map(
-                    function(mixed $value) {
+                    function (mixed $value) {
                         if (is_array($value)) {
                             return json_encode($value);
                         }
 
                         return $value;
                     },
-                    (new JsonFile(sprintf('%s/%s.json', $testDirectoryPath, $uuid)))->read()
+                    (new JsonFile(sprintf('%s/%s.json', $testDirectoryPath, $uuid)))->read(),
                 );
                 $acc->set($uuid, $productData);
 
                 return $acc;
             },
-            new ArrayCollection()
+            new ArrayCollection(),
         );
         $this->products = array_reduce(
             $this->productsData->toArray(),
             function (ArrayCollection $acc, array $productData) {
                 $productData = array_map(
                     fn (mixed $value) => TransformRecord::toRead($value),
-                    $productData
+                    $productData,
                 );
                 $acc->set(
                     $productData['uuid'],
@@ -67,13 +67,13 @@ class ProductTestCase extends TestCase
                             ...$productData,
                             'uuid' => Uuid::fromString($productData['uuid']),
                             'rate' => TransformNumeric::toInt($productData['rate'] ?? 0, 2),
-                        ]
-                    )
+                        ],
+                    ),
                 );
 
                 return $acc;
             },
-            new ArrayCollection()
+            new ArrayCollection(),
         );
         parent::setUp();
     }

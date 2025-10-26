@@ -12,13 +12,7 @@ class BeforeModifyEvent extends Event
     public function __construct(
         private EntityInterface $entity,
         private array $data,
-        private array $previousData,
     ) {
-    }
-
-    public function getEntity(): EntityInterface
-    {
-        return $this->entity;
     }
 
     /**
@@ -30,15 +24,15 @@ class BeforeModifyEvent extends Event
     }
 
     /**
-     * @var array<string, string|int|bool|float|null> $data
+     * @var array<string, string|int|bool|float|null>
      */
     public function setData(array $data): void
     {
         $this->data = $data;
     }
 
-    public function getPreviousData(): array
+    public function getEntity(): EntityInterface
     {
-        return $this->previousData;
+        return $this->entity;
     }
 }

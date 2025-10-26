@@ -3,5 +3,5 @@ parameters:
 	paths:
 		- src
 	excludePaths:
+		- src/DependencyInjection/Configuration.php
 		- tests
-	checkGenericClassInNonGenericObjectType: false

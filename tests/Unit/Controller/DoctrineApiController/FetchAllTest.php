@@ -36,7 +36,7 @@ class FetchAllTest extends ProductTestCase
         // When & Then
         $this->assertEquals(
             [$product->getWritableFormat()],
-            $controller->fetchAll(EntitiesQuery::class, Product::getTableName())
+            $controller->fetchAll(EntitiesQuery::class, Product::getTableName()),
         );
     }
 
@@ -53,7 +53,7 @@ class FetchAllTest extends ProductTestCase
         // When & Then
         $this->assertEquals(
             [$productOne->getWritableFormat(), $productTwo->getWritableFormat()],
-            $controller->fetchAll(EntitiesQuery::class, Product::getTableName())
+            $controller->fetchAll(EntitiesQuery::class, Product::getTableName()),
         );
     }
 
@@ -76,7 +76,7 @@ class FetchAllTest extends ProductTestCase
         // When & Then
         $this->assertEquals(
             [$this->products->get('f3e56592-0bfd-4669-be39-6ac8ab5ac55f')->getWritableFormat()],
-            $controller->fetchAll(EntitiesQuery::class, Product::getTableName(), $criteria)
+            $controller->fetchAll(EntitiesQuery::class, Product::getTableName(), $criteria),
         );
     }
 
@@ -103,7 +103,7 @@ class FetchAllTest extends ProductTestCase
                 $this->products->get('8b40a6d6-1a79-4edc-bfca-0f8d993c29f3')->getWritableFormat(),
                 $this->products->get('62d925ad-4ef7-47a9-be28-79d71534c099')->getWritableFormat(),
             ],
-            $controller->fetchAll(EntitiesQuery::class, Product::getTableName(), $criteria)
+            $controller->fetchAll(EntitiesQuery::class, Product::getTableName(), $criteria),
         );
     }
 }

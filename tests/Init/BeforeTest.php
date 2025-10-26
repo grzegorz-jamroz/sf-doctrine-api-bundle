@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Ifrost\DoctrineApiBundle\Tests\Init;
 
-use PHPUnit\Framework\TestCase;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
+use PHPUnit\Framework\TestCase;
 
 class BeforeTest extends TestCase
 {

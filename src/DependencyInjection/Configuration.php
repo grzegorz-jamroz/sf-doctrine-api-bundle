@@ -15,9 +15,6 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->getRootNode();
         $rootNode
             ->children()
-                ->booleanNode('doctrine_dbal_types_uuid')
-                    ->defaultValue(true)
-                ->end()
                 ->arrayNode('dbal_cache_adapter')
                     ->canBeEnabled()
                 ->end()

@@ -7,12 +7,12 @@ namespace Ifrost\DoctrineApiBundle\Tests\Unit\Utility\DoctrineApi;
 use Ifrost\DoctrineApiBundle\Entity\EntityInterface;
 use Ifrost\DoctrineApiBundle\Query\DbalOperator;
 use Ifrost\DoctrineApiBundle\Query\Entity\EntitiesQuery;
-use Ifrost\Filesystem\JsonFile;
-use Symfony\Component\HttpFoundation\Request;
 use Ifrost\DoctrineApiBundle\Tests\Unit\ProductTestCase;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Entity\Product;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Sample;
+use Ifrost\Filesystem\JsonFile;
+use Symfony\Component\HttpFoundation\Request;
 
 class FindTest extends ProductTestCase
 {
@@ -64,7 +64,7 @@ class FindTest extends ProductTestCase
                     'uuid' => $uuid,
                 ],
             ],
-            json_decode($response->getContent(), true)
+            json_decode($response->getContent(), true),
         );
     }
 
@@ -85,9 +85,9 @@ class FindTest extends ProductTestCase
         $this->assertEquals(
             [
                 $productOne->jsonSerialize(),
-                $productTwo->jsonSerialize()
+                $productTwo->jsonSerialize(),
             ],
-            json_decode($response->getContent(), true)
+            json_decode($response->getContent(), true),
         );
     }
 
@@ -144,7 +144,7 @@ class FindTest extends ProductTestCase
                 $this->products->get('8b40a6d6-1a79-4edc-bfca-0f8d993c29f3')->jsonSerialize(),
                 $this->products->get('62d925ad-4ef7-47a9-be28-79d71534c099')->jsonSerialize(),
             ],
-            $data
+            $data,
         );
     }
 
@@ -179,7 +179,7 @@ class FindTest extends ProductTestCase
             [
                 $this->products->get('62d925ad-4ef7-47a9-be28-79d71534c099')->jsonSerialize(),
             ],
-            $data
+            $data,
         );
     }
 
@@ -209,10 +209,9 @@ class FindTest extends ProductTestCase
                 $this->products->get('8b40a6d6-1a79-4edc-bfca-0f8d993c29f3')->jsonSerialize(),
                 $this->products->get('fe687d4a-a5fc-426b-ba15-13901bda54a6')->jsonSerialize(),
             ],
-            $data
+            $data,
         );
     }
-
 
     public function testShouldThrowInvalidArgumentExceptionWhenEntityClassNameIsNotInstanceOfEntityInterface(): void
     {

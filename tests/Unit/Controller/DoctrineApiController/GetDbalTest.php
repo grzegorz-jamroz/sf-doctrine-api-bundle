@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace Ifrost\DoctrineApiBundle\Tests\Unit\Controller\DoctrineApiController;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\Persistence\ManagerRegistry;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Sample;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 
 class GetDbalTest extends TestCase
 {

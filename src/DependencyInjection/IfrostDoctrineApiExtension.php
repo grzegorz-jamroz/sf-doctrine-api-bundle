@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Ifrost\DoctrineApiBundle\DependencyInjection;
 
-use PlainDataTransformer\Transform;
-use Ramsey\Uuid\Doctrine\UuidBinaryType;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -29,13 +27,9 @@ class IfrostDoctrineApiExtension extends Extension
 
         $loader = new YamlFileLoader(
             $container,
-            new FileLocator(__DIR__ . '/../../config')
+            new FileLocator(__DIR__ . '/../../config'),
         );
         $loader->load('services.yaml');
-
-        if (Transform::toBool($config['doctrine_dbal_types_uuid'])) {
-            $container->prependExtensionConfig('doctrine', ['dbal' => ['types' => ['uuid_binary' => UuidBinaryType::class]]]);
-        }
 
         if ($container->getParameter('ifrost_doctrine_api.db_client')['enabled']) {
             $loader->load('ifrost_doctrine_api.db_client.yaml');

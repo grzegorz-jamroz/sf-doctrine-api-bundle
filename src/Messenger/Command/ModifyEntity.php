@@ -1,16 +1,14 @@
 <?php
-
 declare(strict_types=1);
 
-namespace Ifrost\DoctrineApiBundle\Event;
+namespace Ifrost\DoctrineApiBundle\Messenger\Command;
 
-use Symfony\Contracts\EventDispatcher\Event;
-
-class BeforeDeleteEvent extends Event
+class ModifyEntity
 {
     public function __construct(
         private string $uuid,
         private string $entityClassName,
+        private array $data,
     )
     {
     }
@@ -23,5 +21,10 @@ class BeforeDeleteEvent extends Event
     public function getEntityClassName(): string
     {
         return $this->entityClassName;
+    }
+
+    public function getData(): array
+    {
+        return $this->data;
     }
 }

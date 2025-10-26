@@ -4,15 +4,11 @@ declare(strict_types=1);
 
 namespace Ifrost\DoctrineApiBundle\Tests\Unit\Query\DbalQuery;
 
-use Doctrine\DBAL\Cache\CacheException;
-use Ifrost\Filesystem\Directory;
-use PHPUnit\Framework\TestCase;
-use Psr\Cache\CacheItemPoolInterface;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
-use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Query\Product\GetAllProducts;
-use Ifrost\DoctrineApiBundle\Tests\Variant\Sample;
+use Ifrost\Filesystem\Directory;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 class GetCacheDirTest extends TestCase
 {

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Ifrost\DoctrineApiBundle\Tests\Unit\Query\DbalQuery;
 
 use Ifrost\DoctrineApiBundle\Query\DbalQuery;
-use PHPUnit\Framework\TestCase;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Sample;
+use PHPUnit\Framework\TestCase;
 
 class FetchAllTest extends TestCase
 {

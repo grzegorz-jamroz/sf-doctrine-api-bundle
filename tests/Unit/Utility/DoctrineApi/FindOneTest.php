@@ -6,11 +6,10 @@ namespace Ifrost\DoctrineApiBundle\Tests\Unit\Utility\DoctrineApi;
 
 use Ifrost\DoctrineApiBundle\Exception\NotFoundException;
 use Ifrost\DoctrineApiBundle\Query\Entity\EntitiesQuery;
-use Ifrost\DoctrineApiBundle\Query\Entity\EntityQuery;
-use Symfony\Component\HttpFoundation\Request;
 use Ifrost\DoctrineApiBundle\Tests\Unit\ProductTestCase;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Entity\Product;
+use Symfony\Component\HttpFoundation\Request;
 
 class FindOneTest extends ProductTestCase
 {

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Ifrost\DoctrineApiBundle\Tests\Unit\Routing\AnnotatedRouteControllerLoader;
 
-use Ifrost\ApiFoundation\Attribute\Api as ApiAttribute;
-use PHPUnit\Framework\TestCase;
+use Ifrost\ApiFoundation\Attribute\ApiController;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Routing\AnnotatedRouteControllerLoaderVariant;
+use PHPUnit\Framework\TestCase;
 
 class GetAttributeClassNameTest extends TestCase
 {
@@ -14,8 +14,8 @@ class GetAttributeClassNameTest extends TestCase
     {
         // When & Then
         $this->assertEquals(
-            ApiAttribute::class,
-            (new AnnotatedRouteControllerLoaderVariant())->getAttributeClassName()
+            ApiController::class,
+            (new AnnotatedRouteControllerLoaderVariant())->getAttributeClassName(),
         );
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Ifrost\DoctrineApiBundle\Tests\Unit\DependencyInjection\Configuration;
@@ -12,7 +13,7 @@ class GetConfigTreeBuilderTest extends TestCase
     public function testShouldReturnDefaultTreeBuilder()
     {
         // Given
-        $children = ['doctrine_dbal_types_uuid', 'dbal_cache_adapter'];
+        $children = ['dbal_cache_adapter'];
         $treeBuilder = (new Configuration())->getConfigTreeBuilder();
 
         // When & Then

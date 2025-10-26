@@ -10,15 +10,15 @@ use Ifrost\DoctrineApiBundle\Exception\NotFoundException;
 use Ifrost\DoctrineApiBundle\Exception\NotUniqueException;
 use Ifrost\DoctrineApiBundle\Query\Entity\EntitiesQuery;
 use Ifrost\DoctrineApiBundle\Query\Entity\EntityQuery;
-use Ifrost\DoctrineApiBundle\Utility\DoctrineApi;
-use Ramsey\Uuid\Uuid;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Ifrost\DoctrineApiBundle\Tests\Unit\ProductTestCase;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Entity\Product;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Utility\DbClientSecondVariant;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Utility\DbClientVariant;
+use Ifrost\DoctrineApiBundle\Utility\DoctrineApi;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ModifyTest extends ProductTestCase
 {
@@ -30,7 +30,7 @@ class ModifyTest extends ProductTestCase
         $this->dbClient->insert(Product::getTableName(), $this->products->get($uuid)->getWritableFormat());
         $this->assertEquals(
             $this->products->get($uuid)->getWritableFormat(),
-            $this->dbClient->fetchOne(EntityQuery::class, Product::getTableName(), Uuid::fromString($uuid)->getBytes())
+            $this->dbClient->fetchOne(EntityQuery::class, Product::getTableName(), Uuid::fromString($uuid)->toBinary()),
         );
         $requestData = [
             'code' => 'EBG34F321',
@@ -45,34 +45,15 @@ class ModifyTest extends ProductTestCase
         // Then
         $this->assertEquals(
             [
-                'uuid' => Uuid::fromString($uuid)->getBytes(),
+                'uuid' => Uuid::fromString($uuid)->toBinary(),
                 'code' => 'EBG34F321',
                 'name' => 'Headphones',
                 'description' => 'Shure',
                 'rate' => 400,
                 'tags' => '[]',
             ],
-            $this->dbClient->fetchOne(EntityQuery::class, Product::getTableName(), Uuid::fromString($uuid)->getBytes())
+            $this->dbClient->fetchOne(EntityQuery::class, Product::getTableName(), Uuid::fromString($uuid)->toBinary()),
         );
-    }
-
-    public function testShouldThrowNotFoundExceptionWhenTryingToModifyProductWhichDoesNotExist()
-    {
-        // Expect
-        $this->expectException(NotFoundException::class);
-        $this->expectExceptionMessage(sprintf('Record "%s" not found', Product::class));
-        $this->truncateTable(Product::getTableName());
-
-        // Given
-        $uuid = 'f3e56592-0bfd-4669-be39-6ac8ab5ac55f';
-        $requestData = [
-            'name' => 'accordion',
-        ];
-        $request = new Request([], $requestData, ['uuid' => $uuid]);
-        $controller = new DoctrineApiControllerVariant($request);
-
-        // When & Then
-        $controller->getApi(Product::class)->modify();
     }
 
     public function testShouldThrowNotUniqueExceptionWhenTryingToUpdateProductWhichHasNotUniqueCode()
@@ -100,42 +81,61 @@ class ModifyTest extends ProductTestCase
         $controller->getApi(Product::class)->modify();
     }
 
-    public function testShouldThrowDbalExceptionWhenUnknownErrorOccurredDuringCreatingEntity()
+    public function testShouldNotThrowAnyExceptionWhenRequestDoesNotContainAnyField()
     {
         // Expect & Given
         $this->truncateTable(Product::getTableName());
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Unknown error occurred in fetchOne');
         $controller = new DoctrineApiControllerVariant();
         $dbClient = new DbClientSecondVariant($controller->getDbal());
         $requestStack = new RequestStack();
         $requestStack->push(new Request([], [], ['uuid' => 'f3e56592-0bfd-4669-be39-6ac8ab5ac55f']));
 
         // When & Then
-        (new DoctrineApi(Product::class, $dbClient, new ApiRequest($requestStack), $controller->getEventDispatcher()))->modify();
+        (new DoctrineApi(
+            Product::class,
+            $dbClient,
+            new ApiRequest($requestStack),
+            $controller->getMessageHandler(),
+            $controller->getEventDispatcher()
+        ))->modify();
+        $this->assertEquals(1, 1);
     }
 
-    public function testShouldThrowDbalExceptionWhenUnknownErrorOccurred()
+    public function testShouldNotThrowAnyExceptionWhenRecordDoesNotExist()
     {
         // Expect & Given
         $this->truncateTable(Product::getTableName());
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Unknown error occurred');
-        $uuid = 'f3e56592-0bfd-4669-be39-6ac8ab5ac55f';
-        $this->dbClient->insert(Product::getTableName(), $this->products->get($uuid)->getWritableFormat());
-        $this->assertEquals(
-            $this->products->get($uuid)->getWritableFormat(),
-            $this->dbClient->fetchOne(EntityQuery::class, Product::getTableName(), Uuid::fromString($uuid)->getBytes())
-        );
         $controller = new DoctrineApiControllerVariant();
-        $dbClient = new DbClientVariant($controller->getDbal());
+        $dbClient = new DbClientSecondVariant($controller->getDbal());
         $requestStack = new RequestStack();
-        $requestData = [
-            'name' => 'Headphones',
-        ];
-        $requestStack->push(new Request([], $requestData, ['uuid' => $uuid]));
+        $requestStack->push(new Request([], ['name' => 'Foo'], ['uuid' => 'f3e56592-0bfd-4669-be39-6ac8ab5ac55f']));
 
         // When & Then
-        (new DoctrineApi(Product::class, $dbClient, new ApiRequest($requestStack), $controller->getEventDispatcher()))->modify();
+        (new DoctrineApi(
+            Product::class,
+            $dbClient,
+            new ApiRequest($requestStack),
+            $controller->getMessageHandler(),
+            $controller->getEventDispatcher()
+        ))->modify();
+        $this->assertEquals(1, 1);
+    }
+
+    public function testShouldNotThrowAnyExceptionWhenTryingToModifyProductWhichDoesNotExist()
+    {
+        // Expect
+        $this->truncateTable(Product::getTableName());
+
+        // Given
+        $uuid = 'f3e56592-0bfd-4669-be39-6ac8ab5ac55f';
+        $requestData = [
+            'name' => 'accordion',
+        ];
+        $request = new Request([], $requestData, ['uuid' => $uuid]);
+        $controller = new DoctrineApiControllerVariant($request);
+
+        // When & Then
+        $controller->getApi(Product::class)->modify();
+        $this->assertEquals(1, 1);
     }
 }

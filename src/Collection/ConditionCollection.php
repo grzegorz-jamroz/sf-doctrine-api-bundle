@@ -34,7 +34,7 @@ class ConditionCollection extends ArrayCollection
 
                 return $acc;
             },
-            []
+            [],
         );
     }
 }

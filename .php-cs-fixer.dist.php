@@ -31,5 +31,11 @@ return (new PhpCsFixer\Config())
         'return_type_declaration' => ['space_before' => 'none'],
         'single_trait_insert_per_statement' => true,
         'yoda_style' => false,
+        'fully_qualified_strict_types' => false,
+        'global_namespace_import' => [
+            'import_classes' => true,
+            'import_constants' => false,
+            'import_functions' => false,
+        ],
     ])
     ->setFinder($finder);

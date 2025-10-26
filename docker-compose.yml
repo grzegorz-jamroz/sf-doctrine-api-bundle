@@ -1,0 +1,43 @@
+services:
+  app:
+    environment:
+      - PHP_IDE_CONFIG=serverName=app
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    working_dir: /app
+    container_name: sf-doctrine-api-bundle-app
+    volumes:
+      - ./bin:/app/bin
+      - ./config:/app/config
+      - ./src:/app/src
+      - ./tests:/app/tests
+      - ./.php-cs-fixer.dist.php:/app/.php-cs-fixer.dist.php
+      - ./composer.json:/app/composer.json
+      - ./phpstan.neon:/app/phpstan.neon
+      - ./phpunit.xml:/app/phpunit.xml
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - db
+    networks:
+      - sf-doctrine-api-bundle-network
+
+  db:
+    image: mariadb:10.11
+    container_name: sf-doctrine-api-bundle-db
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: db
+      MARIADB_USER: db
+      MARIADB_PASSWORD: db
+    ports:
+      - "3306:3306"
+    working_dir: /var/sql
+    networks:
+      - sf-doctrine-api-bundle-network
+
+networks:
+  sf-doctrine-api-bundle-network:
+    driver: bridge

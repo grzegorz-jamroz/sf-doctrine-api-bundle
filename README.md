@@ -5,12 +5,18 @@
 </p>
 
 <p align="center">
-    <img src="https://img.shields.io/badge/php->=8.1-blue?colorB=%238892BF" alt="Code Coverage">  
+    <img src="https://img.shields.io/badge/php->=8.4-blue?colorB=%238892BF" alt="Code Coverage">  
     <img src="https://img.shields.io/badge/coverage-100%25-brightgreen" alt="Code Coverage">   
     <img src="https://img.shields.io/badge/release-v6.3.0-blue" alt="Release Version">   
 </p>
 
-## Installation
+# Table of Contents
+- [Installation](#installation)
+- [Customizations](#customizations)
+- [Configuration](#configuration)
+- [Development with Docker](#development-with-docker)
+
+# Installation
 
 ```
 composer require grzegorz-jamroz/sf-doctrine-api-bundle
@@ -34,21 +40,7 @@ ifrost_doctrine_api_controllers:
 # ...
 ```
 
-2. Configure Doctrine to store UUIDs as binary strings
-```yaml
-# config/packages/doctrine.yaml
-doctrine:
-    dbal:
-        types:
-            uuid_binary:  Ramsey\Uuid\Doctrine\UuidBinaryType
-# Uncomment if using doctrine/orm <2.8
-        # mapping_types:
-            # uuid_binary: binary
-```
-
-**Note:** It is possible to configure Doctrine to store UUIDs in different way - you can read about it [here](https://github.com/ramsey/uuid-doctrine). Please note that bundle will work only with UUIDs stored as binary types.
-
-3. Create Entity which implements [EntityInterface](src/Entity/EntityInterface.php) and in this case annotate properties by setting the `@Column` type to `uuid_binary`, and define custom generator of `Ramsey\Uuid\Doctrine\UuidV7Generator`.
+3. Create Entity which implements [EntityInterface](src/Entity/EntityInterface.php)
 
 **Exmple:**
 ```php
@@ -61,31 +53,30 @@ use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Ifrost\DoctrineApiBundle\Entity\EntityInterface;
 use PlainDataTransformer\Transform;
-use Ramsey\Uuid\Doctrine\UuidV7Generator;
-use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product implements EntityInterface
 {
     #[ORM\Id]
-    #[ORM\Column(type: "uuid_binary", unique: true)]
-    #[ORM\GeneratedValue(strategy: "CUSTOM")]
-    #[ORM\CustomIdGenerator(class: UuidV7Generator::class)]
-    private UuidInterface $uuid;
+    #[ORM\Column(type: UuidType::NAME, unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    private Uuid $uuid;
 
     #[ORM\Column(length: 255)]
     private string $name;
 
     public function __construct(
-        UuidInterface $uuid,
+        Uuid $uuid,
         string $name,
     ) {
         $this->uuid = $uuid;
         $this->name = $name;
     }
 
-    public function getUuid(): UuidInterface
+    public function getUuid(): Uuid
     {
         return $this->uuid;
     }
@@ -111,7 +102,7 @@ class Product implements EntityInterface
     public function getWritableFormat(): array
     {
         return [
-            'uuid' => $this->uuid->getBytes(),
+            'uuid' => $this->uuid->toBinary(),
             'name' => $this->name,
         ];
     }
@@ -127,7 +118,7 @@ class Product implements EntityInterface
     public static function createFromArray(array $data): static|self
     {
         return new self(
-            $data['uuid'] ?? Uuid::uuid7(),
+            $data['uuid'] ?? Uuid::v7(),
             Transform::toString($data['name'] ?? ''),
         );
     }
@@ -135,7 +126,7 @@ class Product implements EntityInterface
     public static function createFromRequest(array $data): static|self
     {
         return new self(
-            $data['uuid'] === null ? Uuid::uuid7() : Uuid::fromString($data['uuid']),
+            $data['uuid'] === null ? Uuid::v7() : Uuid::fromString($data['uuid']),
             Transform::toString($data['name'] ?? ''),
         );
     }
@@ -183,7 +174,7 @@ you should get output:
  ------------------- -------- -------- ------ -------------------------- 
 ```
 
-## More custom usage
+# Customizations
 
 If you decided that you want to change routing configuration for some specific route just add `Route` attribute with new parameters. For example:
 
@@ -278,7 +269,6 @@ You can add `config/packages/ifrost_doctrine_api.yaml` in your project to enable
 # config/packages/ifrost_doctrine_api.yaml
 # default config
 ifrost_doctrine_api:
-    doctrine_dbal_types_uuid: true
     dbal_cache_adapter:
       enabled: false
     db_client:
@@ -290,10 +280,55 @@ ifrost_doctrine_api:
 ```yaml 
 # config/packages/ifrost_doctrine_api.yaml
 ifrost_doctrine_api:
-    doctrine_dbal_types_uuid: true
     dbal_cache_adapter:
       enabled: true
     db_client:
       enabled: true
 # ...
+```
+
+---
+
+# Development with Docker
+
+### Build and run the containers:
+```shell
+docker compose up -d
+```
+
+### Copy vendor folder from container to host
+
+```shell
+docker compose cp app:/app/vendor ./vendor
+```
+
+### Run static analysis
+
+```shell
+docker compose exec app bin/fix
+```
+
+### Run tests
+
+```shell
+docker compose exec app bin/test
+```
+
+Run single test file:
+
+```shell
+docker compose exec app vendor/bin/phpunit --filter <testMethodName> <path/to/TestFile.php>
+docker compose exec app vendor/bin/phpunit --filter testShouldReturnExpectedFloat tests/Unit/TransformNumeric/ToFloatTest.php
+```
+
+### Enable xdebug
+
+```shell
+docker compose exec app xdebug on
+```
+
+### Disable xdebug
+
+```shell
+docker compose exec app xdebug off
 ```

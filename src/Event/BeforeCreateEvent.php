@@ -29,7 +29,7 @@ class BeforeCreateEvent extends Event
     }
 
     /**
-     * @var array<string, string|int|bool|float|null> $data
+     * @var array<string, string|int|bool|float|null>
      */
     public function setData(array $data): void
     {

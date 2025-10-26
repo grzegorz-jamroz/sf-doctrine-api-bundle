@@ -1,18 +1,19 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Ifrost\DoctrineApiBundle\Tests\Unit\Query;
 
+use Doctrine\Bundle\DoctrineBundle\ConnectionFactory;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DriverManager;
 use Ifrost\DoctrineApiBundle\Query\DbalCondition;
 use Ifrost\DoctrineApiBundle\Query\DbalCriteria;
 use Ifrost\DoctrineApiBundle\Query\DbalOperator;
 use Ifrost\DoctrineApiBundle\Query\Entity\EntitiesQuery;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Entity\Product;
 use Ifrost\Filesystem\JsonFile;
 use PHPUnit\Framework\TestCase;
 use PlainDataTransformer\Transform;
-use Ifrost\DoctrineApiBundle\Tests\Variant\Entity\Product;
 
 class DbalQueryConditionableTest extends TestCase
 {
@@ -20,7 +21,7 @@ class DbalQueryConditionableTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->dbal = DriverManager::getConnection([
+        $this->dbal = new ConnectionFactory()->createConnection([
             'url' => Transform::toString($_ENV['DATABASE_URL'] ?? ''),
         ]);
     }
@@ -122,11 +123,11 @@ SELECT * FROM product WHERE (name = ?) OR (((description LIKE ?) AND (rate > ?))
 SQL;
 
         // When & Then
-        $conditions = array_map(fn(array $conditionData) => DbalCondition::createFromArray($conditionData), $variantOne);
+        $conditions = array_map(fn (array $conditionData) => DbalCondition::createFromArray($conditionData), $variantOne);
         $criteria = new DbalCriteria($conditions);
         $this->assertEquals($variantOneExpectedQuery, (new EntitiesQuery($this->dbal, Product::getTableName(), $criteria))->getSQL());
 
-        $conditions = array_map(fn(array $conditionData) => DbalCondition::createFromArray($conditionData), $variantTwo);
+        $conditions = array_map(fn (array $conditionData) => DbalCondition::createFromArray($conditionData), $variantTwo);
         $criteria = new DbalCriteria($conditions);
         $this->assertEquals($variantTwoExpectedQuery, (new EntitiesQuery($this->dbal, Product::getTableName(), $criteria))->getSQL());
     }
@@ -136,7 +137,7 @@ SQL;
         // Given
         $operators = [
             null,
-            '>>'
+            '>>',
         ];
 
         // Expect

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Ifrost\DoctrineApiBundle\Tests\Unit\Query\DbalQuery;
 
+use Doctrine\Bundle\DoctrineBundle\ConnectionFactory;
 use Doctrine\DBAL\Cache\QueryCacheProfile;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DriverManager;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Query\Product\GetAllProductsByName;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Query\Product\GetAllProductsByNameWithCache;
 use PHPUnit\Framework\TestCase;
@@ -18,7 +18,7 @@ class GetQueryCacheProfileTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->dbal = DriverManager::getConnection([
+        $this->dbal = new ConnectionFactory()->createConnection([
             'url' => Transform::toString($_ENV['DATABASE_URL'] ?? ''),
         ]);
     }

@@ -1,6 +1,5 @@
 # default values
 ifrost_doctrine_api:
-  doctrine_dbal_types_uuid: true
   # instance of Psr\Cache\CacheItemPoolInterface
   dbal_cache_adapter:
     enabled: false

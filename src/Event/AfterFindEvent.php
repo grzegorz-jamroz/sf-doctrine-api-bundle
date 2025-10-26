@@ -28,7 +28,7 @@ class AfterFindEvent extends Event
     }
 
     /**
-     * @var array<int, string|int|bool|float|null> $data
+     * @var array<int, string|int|bool|float|null>
      */
     public function setData(array $data): void
     {

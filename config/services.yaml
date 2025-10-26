@@ -5,3 +5,27 @@ services:
       $locator: '@file_locator'
       $loader: '@Ifrost\DoctrineApiBundle\Routing\AnnotatedRouteControllerLoader'
     tags: [routing.loader]
+
+  Ifrost\DoctrineApiBundle\Messenger\Handler\CreateEntityHandler:
+    arguments:
+      $db: '@ifrost_doctrine_api.db_client'
+      $dispatcher: '@event_dispatcher'
+    tags: [ messenger.message_handler ]
+
+  Ifrost\DoctrineApiBundle\Messenger\Handler\UpdateEntityHandler:
+    arguments:
+      $db: '@ifrost_doctrine_api.db_client'
+      $dispatcher: '@event_dispatcher'
+    tags: [ messenger.message_handler ]
+
+  Ifrost\DoctrineApiBundle\Messenger\Handler\ModifyEntityHandler:
+    arguments:
+      $db: '@ifrost_doctrine_api.db_client'
+      $dispatcher: '@event_dispatcher'
+    tags: [ messenger.message_handler ]
+
+  Ifrost\DoctrineApiBundle\Messenger\Handler\DeleteEntityHandler:
+    arguments:
+      $db: '@ifrost_doctrine_api.db_client'
+      $dispatcher: '@event_dispatcher'
+    tags: [ messenger.message_handler ]

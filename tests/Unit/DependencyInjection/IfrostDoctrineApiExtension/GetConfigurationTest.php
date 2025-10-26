@@ -5,19 +5,16 @@ declare(strict_types=1);
 namespace Ifrost\DoctrineApiBundle\Tests\Unit\DependencyInjection\IfrostDoctrineApiExtension;
 
 use Ifrost\DoctrineApiBundle\DependencyInjection\IfrostDoctrineApiExtension;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Sample;
 use PHPUnit\Framework\TestCase;
-use Psr\Cache\CacheItemPoolInterface;
-use Ramsey\Uuid\Doctrine\UuidBinaryType;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Config\Definition\Exception\InvalidTypeException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
-use Ifrost\DoctrineApiBundle\Tests\Variant\Sample;
 
 class GetConfigurationTest extends TestCase
 {
-
     public function testShouldLoadConfigWithAllOptionsDisabled()
     {
         // Expect
@@ -26,9 +23,7 @@ class GetConfigurationTest extends TestCase
 
         // Given
         $configs = [
-            'ifrost_doctrine_api' => [
-                'doctrine_dbal_types_uuid' => false,
-            ],
+            'ifrost_doctrine_api' => [],
         ];
         $containerBuilder = new ContainerBuilder();
         $containerBuilder->setParameter('kernel.cache_dir', sprintf('%s\var\cache\test', ABSPATH));
@@ -47,7 +42,6 @@ class GetConfigurationTest extends TestCase
         // Given
         $configs = [
             'ifrost_doctrine_api' => [
-                'doctrine_dbal_types_uuid' => true,
                 'dbal_cache_adapter' => true,
             ],
         ];
@@ -58,7 +52,6 @@ class GetConfigurationTest extends TestCase
         (new IfrostDoctrineApiExtension())->load($configs, $containerBuilder);
 
         // Then
-        $this->assertEquals(UuidBinaryType::class, $containerBuilder->getExtensionConfig('doctrine')[0]['dbal']['types']['uuid_binary']);
         $this->assertInstanceOf(FilesystemAdapter::class, $containerBuilder->get('ifrost_doctrine_api.dbal_cache_adapter'));
     }
 

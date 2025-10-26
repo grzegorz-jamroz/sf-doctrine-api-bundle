@@ -9,7 +9,7 @@ use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use Ifrost\ApiBundle\Controller\ApiController;
 use Ifrost\ApiFoundation\ApiInterface;
-use Ifrost\ApiFoundation\Attribute\Api;
+use Ifrost\ApiFoundation\Attribute\ApiController as ApiControllerAttribute;
 use Ifrost\ApiFoundation\Traits\ApiControllerTrait;
 use Ifrost\DoctrineApiBundle\Exception\NotFoundException;
 use Ifrost\DoctrineApiBundle\Query\DbalQuery;
@@ -78,15 +78,27 @@ class DoctrineApiController extends ApiController
     protected function getApi(string $entityClassName = ''): ApiInterface
     {
         if ($entityClassName !== '') {
-            return new DoctrineApi($entityClassName, $this->getDbClient(), $this->getApiRequestService(), $this->getEventDispatcher());
+            return new DoctrineApi(
+                $entityClassName,
+                $this->getDbClient(),
+                $this->getApiRequestService(),
+                $this->getMessageHandler(),
+                $this->getEventDispatcher()
+            );
         }
 
-        $attributes = (new \ReflectionClass(static::class))->getAttributes(Api::class, \ReflectionAttribute::IS_INSTANCEOF);
-        $attributes[0] ?? throw new \RuntimeException(sprintf('Controller "%s" has to declare "%s" attribute.', static::class, Api::class));
+        $attributes = (new \ReflectionClass(static::class))->getAttributes(ApiControllerAttribute::class, \ReflectionAttribute::IS_INSTANCEOF);
+        $attributes[0] ?? throw new \RuntimeException(sprintf('Controller "%s" has to declare "%s" attribute.', static::class, ApiControllerAttribute::class));
         $attribute = $attributes[0]->newInstance();
         $entityClassName = $attribute->getEntity();
 
-        return new DoctrineApi($entityClassName, $this->getDbClient(), $this->getApiRequestService(), $this->getEventDispatcher());
+        return new DoctrineApi(
+            $entityClassName,
+            $this->getDbClient(),
+            $this->getApiRequestService(),
+            $this->getMessageHandler(),
+            $this->getEventDispatcher()
+        );
     }
 
     protected function getDbal(): Connection

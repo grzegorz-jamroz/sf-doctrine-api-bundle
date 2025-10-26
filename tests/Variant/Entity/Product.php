@@ -5,13 +5,12 @@ namespace Ifrost\DoctrineApiBundle\Tests\Variant\Entity;
 use Ifrost\DoctrineApiBundle\Entity\EntityInterface;
 use PlainDataTransformer\Transform;
 use PlainDataTransformer\TransformNumeric;
-use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Uid\Uuid;
 
 class Product implements EntityInterface
 {
     public function __construct(
-        private UuidInterface $uuid,
+        private Uuid $uuid,
         private string $name,
         private string $code,
         private string $description,
@@ -20,7 +19,7 @@ class Product implements EntityInterface
     ) {
     }
 
-    public function getUuid(): UuidInterface
+    public function getUuid(): Uuid
     {
         return $this->uuid;
     }
@@ -67,7 +66,7 @@ class Product implements EntityInterface
     {
         return [
             ...$this->jsonSerialize(),
-            'uuid' => $this->uuid->getBytes(),
+            'uuid' => $this->uuid->toBinary(),
             'tags' => json_encode($this->tags),
             'rate' => $this->rate,
         ];
@@ -87,8 +86,10 @@ class Product implements EntityInterface
 
     public static function createFromArray(array $data): static|self
     {
+        $uuid = $data['uuid'] ?? Uuid::v7();
+
         return new self(
-            $data['uuid'] ?? Uuid::uuid7(),
+            is_string($uuid) ? Uuid::fromString($uuid) : $uuid,
             Transform::toString($data['name'] ?? ''),
             Transform::toString($data['code'] ?? ''),
             Transform::toString($data['description'] ?? ''),
@@ -99,8 +100,10 @@ class Product implements EntityInterface
 
     public static function createFromRequest(array $data): static|self
     {
+        $uuid = $data['uuid'] ?? Uuid::v7();
+
         return new self(
-            isset($data['uuid']) ? Uuid::fromString($data['uuid']) : Uuid::uuid7(),
+            is_string($uuid) ? Uuid::fromString($uuid) : $uuid,
             Transform::toString($data['name'] ?? ''),
             Transform::toString($data['code'] ?? ''),
             Transform::toString($data['description'] ?? ''),

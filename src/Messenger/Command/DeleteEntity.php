@@ -1,12 +1,9 @@
 <?php
-
 declare(strict_types=1);
 
-namespace Ifrost\DoctrineApiBundle\Event;
+namespace Ifrost\DoctrineApiBundle\Messenger\Command;
 
-use Symfony\Contracts\EventDispatcher\Event;
-
-class BeforeDeleteEvent extends Event
+class DeleteEntity
 {
     public function __construct(
         private string $uuid,

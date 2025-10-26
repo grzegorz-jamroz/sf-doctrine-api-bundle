@@ -14,7 +14,7 @@ class GetTypeTest extends TestCase
         // When & Then
         $this->assertEquals(
             'doctrine_api_attribute',
-            (new DoctrineApiLoaderVariant())->getType()
+            (new DoctrineApiLoaderVariant())->getType(),
         );
     }
 }

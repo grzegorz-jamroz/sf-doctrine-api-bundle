@@ -6,17 +6,19 @@ namespace Ifrost\DoctrineApiBundle\Tests\Unit\Utility\DoctrineApi;
 
 use Doctrine\DBAL\Exception;
 use Ifrost\ApiBundle\Utility\ApiRequest;
+use Ifrost\DoctrineApiBundle\Entity\EntityInterface;
 use Ifrost\DoctrineApiBundle\Exception\NotUniqueException;
 use Ifrost\DoctrineApiBundle\Query\Entity\EntitiesQuery;
 use Ifrost\DoctrineApiBundle\Query\Entity\EntityQuery;
-use Ifrost\DoctrineApiBundle\Utility\DoctrineApi;
-use Ramsey\Uuid\Uuid;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Ifrost\DoctrineApiBundle\Tests\Unit\ProductTestCase;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Controller\DoctrineApiControllerVariant;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Entity\Product;
+use Ifrost\DoctrineApiBundle\Tests\Variant\Sample;
 use Ifrost\DoctrineApiBundle\Tests\Variant\Utility\DbClientVariant;
+use Ifrost\DoctrineApiBundle\Utility\DoctrineApi;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class CreateTest extends ProductTestCase
 {
@@ -36,7 +38,7 @@ class CreateTest extends ProductTestCase
         // Then
         $this->assertEquals(
             $this->products->get($uuid)->getWritableFormat(),
-            $controller->fetchOne(EntityQuery::class, Product::getTableName(), Uuid::fromString($uuid)->getBytes())
+            $controller->fetchOne(EntityQuery::class, Product::getTableName(), Uuid::fromString($uuid)->toBinary()),
         );
     }
 
@@ -53,34 +55,23 @@ class CreateTest extends ProductTestCase
 
         // When
         $response = $controller->getApi(Product::class)->create();
+        $content = json_decode($response->getContent(), true);
 
         // Then
-        $this->assertEquals(
-            array_filter(
-                $this->products->get($uuid)->jsonSerialize(),
-                fn (string $key) => $key !== 'uuid',
-                ARRAY_FILTER_USE_KEY
-            ),
-            array_filter(
-                json_decode($response->getContent(), true),
-                fn (string $key) => $key !== 'uuid',
-                ARRAY_FILTER_USE_KEY
-            ),
-        );
+        $this->assertInstanceOf(Uuid::class, Uuid::fromString($content['uuid']));
         $this->assertEquals(
             array_filter(
                 $this->products->get($uuid)->getWritableFormat(),
                 fn (string $key) => $key !== 'uuid',
-                ARRAY_FILTER_USE_KEY
+                ARRAY_FILTER_USE_KEY,
             ),
             array_filter(
                 $this->dbClient->fetchAll(EntitiesQuery::class, Product::getTableName())[0],
                 fn (string $key) => $key !== 'uuid',
-                ARRAY_FILTER_USE_KEY
+                ARRAY_FILTER_USE_KEY,
             ),
         );
     }
-
 
     public function testShouldCreateProductWithoutTags(): void
     {
@@ -99,7 +90,7 @@ class CreateTest extends ProductTestCase
         // Then
         $this->assertEquals(
             $this->products->get($uuid)->getWritableFormat(),
-            $controller->fetchOne(EntityQuery::class, Product::getTableName(), Uuid::fromString($uuid)->getBytes())
+            $controller->fetchOne(EntityQuery::class, Product::getTableName(), Uuid::fromString($uuid)->toBinary()),
         );
     }
 
@@ -118,7 +109,7 @@ class CreateTest extends ProductTestCase
         // Then
         $this->assertEquals(
             $this->products->get($uuid)->getWritableFormat(),
-            $controller->fetchOne(EntityQuery::class, Product::getTableName(), Uuid::fromString($uuid)->getBytes())
+            $controller->fetchOne(EntityQuery::class, Product::getTableName(), Uuid::fromString($uuid)->toBinary()),
         );
     }
 
@@ -157,19 +148,25 @@ class CreateTest extends ProductTestCase
         $controller->getApi(Product::class)->create();
     }
 
-
-    public function testShouldThrowDbalExceptionWhenUnknownErrorOccurred()
+    public function testShouldThrowInvalidArgumentExceptionWhenEntityClassNameIsNotInstanceOfEntityInterface()
     {
         // Expect & Given
+        $entityClassName = Sample::class;
         $this->truncateTable(Product::getTableName());
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Unknown error occurred');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(sprintf('Given argument entityClassName (%s) has to implement "%s" interface.', $entityClassName, EntityInterface::class));
         $controller = new DoctrineApiControllerVariant();
         $dbClient = new DbClientVariant($controller->getDbal());
         $requestStack = new RequestStack();
         $requestStack->push(new Request());
 
         // When & Then
-        (new DoctrineApi(Product::class, $dbClient, new ApiRequest($requestStack), $controller->getEventDispatcher()))->create();
+        (new DoctrineApi(
+            $entityClassName,
+            $dbClient,
+            new ApiRequest($requestStack),
+            $controller->getMessageHandler(),
+            $controller->getEventDispatcher()
+        ))->create();
     }
 }
