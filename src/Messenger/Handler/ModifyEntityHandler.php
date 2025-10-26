@@ -45,14 +45,14 @@ class ModifyEntityHandler
         $event = new BeforeModifyEvent($entity, $writableData);
         $this->dispatcher->dispatch($event, Events::BEFORE_MODIFY);
 
-        if ($event->getData() === []) {
+        if ($event->data === []) {
             return;
         }
 
         try {
             $this->db->update(
                 $entityClassName::getTableName(),
-                $event->getData(),
+                $event->data,
                 ['uuid' => $uuid->toBinary()],
             );
         } catch (UniqueConstraintViolationException) {

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+php -dxdebug.coverage_enable=1 -dxdebug.mode=coverage vendor/bin/phpunit --coverage-text
+

@@ -9,19 +9,9 @@ use Symfony\Contracts\EventDispatcher\Event;
 class BeforeDeleteEvent extends Event
 {
     public function __construct(
-        private string $uuid,
-        private string $entityClassName,
+        private(set) string $uuid,
+        private(set) string $entityClassName,
     )
     {
-    }
-
-    public function getUuid(): string
-    {
-        return $this->uuid;
-    }
-
-    public function getEntityClassName(): string
-    {
-        return $this->entityClassName;
     }
 }

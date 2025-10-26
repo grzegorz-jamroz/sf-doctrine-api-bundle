@@ -6,7 +6,7 @@
 
 <p align="center">
     <img src="https://img.shields.io/badge/php->=8.4-blue?colorB=%238892BF" alt="Code Coverage">  
-    <img src="https://img.shields.io/badge/coverage-100%25-brightgreen" alt="Code Coverage">   
+    <img src="https://img.shields.io/badge/coverage-100%25 files|100%25 lines-brightgreen" alt="Code Coverage">   
     <img src="https://img.shields.io/badge/release-v6.3.0-blue" alt="Release Version">   
 </p>
 
@@ -312,6 +312,14 @@ docker compose exec app bin/fix
 
 ```shell
 docker compose exec app bin/test
+```
+
+### Run coverage report
+
+1. [Enable xdebug](#enable-xdebug)
+2. Run:
+```shell
+docker compose exec app bin/coverage
 ```
 
 Run single test file:

@@ -61,13 +61,13 @@ class DoctrineApi implements ApiInterface
         $this->dispatcher->dispatch($event, Events::AFTER_FIND);
 
         if (Transform::toBool($options['raw_data'] ?? false)) {
-            return new JsonResponse($event->getData());
+            return new JsonResponse($event->data);
         }
 
         return new JsonResponse(
             array_map(
                 fn (array $record) => $this->getEntityDataFromRecord($record),
-                $event->getData(),
+                $event->data,
             ),
         );
     }
@@ -187,18 +187,5 @@ class DoctrineApi implements ApiInterface
     private function getEntityDataFromRecord(array $record): array
     {
         return $this->getEntityFromRecord($record)->jsonSerialize();
-    }
-
-    private function fetchOne(Uuid $uuid): array
-    {
-        try {
-            return $this->db->fetchOne(
-                EntityQuery::class,
-                $this->entityClassName::getTableName(),
-                $uuid->toBinary(),
-            );
-        } catch (NotFoundException) {
-            throw new NotFoundException(sprintf('Record "%s" not found', $this->entityClassName), 404);
-        }
     }
 }

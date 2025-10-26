@@ -37,14 +37,14 @@ class CreateEntityHandler
         $event = new BeforeCreateEvent($entity, $entity->getWritableFormat());
         $this->dispatcher->dispatch($event, Events::BEFORE_CREATE);
 
-        if ($event->getData() === []) {
+        if ($event->data === []) {
             return;
         }
 
         try {
             $this->db->insert(
                 $entityClassName::getTableName(),
-                $event->getData(),
+                $event->data,
             );
         } catch (UniqueConstraintViolationException) {
             throw new NotUniqueException(sprintf('Unable to create "%s" due to not unique fields.', $entityClassName), 409);
