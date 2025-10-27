@@ -7,7 +7,7 @@
 <p align="center">
     <img src="https://img.shields.io/badge/php->=8.4-blue?colorB=%238892BF" alt="Code Coverage">  
     <img src="https://img.shields.io/badge/coverage-100%25 files|100%25 lines-brightgreen" alt="Code Coverage">   
-    <img src="https://img.shields.io/badge/release-v6.3.0-blue" alt="Release Version">   
+    <img src="https://img.shields.io/badge/release-v7.0.0-blue" alt="Release Version">   
 </p>
 
 # Table of Contents
@@ -314,6 +314,13 @@ docker compose exec app bin/fix
 docker compose exec app bin/test
 ```
 
+Run single test file:
+
+```shell
+docker compose exec app vendor/bin/phpunit --filter <testMethodName> <path/to/TestFile.php>
+docker compose exec app vendor/bin/phpunit --filter testShouldReturnExpectedFloat tests/Unit/TransformNumeric/ToFloatTest.php
+```
+
 ### Run coverage report
 
 1. [Enable xdebug](#enable-xdebug)
@@ -322,12 +329,6 @@ docker compose exec app bin/test
 docker compose exec app bin/coverage
 ```
 
-Run single test file:
-
-```shell
-docker compose exec app vendor/bin/phpunit --filter <testMethodName> <path/to/TestFile.php>
-docker compose exec app vendor/bin/phpunit --filter testShouldReturnExpectedFloat tests/Unit/TransformNumeric/ToFloatTest.php
-```
 
 ### Enable xdebug
 

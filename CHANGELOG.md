@@ -1,5 +1,5 @@
 # Changelog
-## Unreleased
+## [v7.0.0] - 2025.10.27
 ### Add
 - Add docker support for development environment
 
@@ -113,11 +113,12 @@
 - extend DoctrineApiController with ApiControllerTrait
 - add support for metadata `path` and `excludedActions` in Api attribute
 
-[v6.3.0]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.3.0]
-[v6.2.1]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.2.1]
-[v6.2.0]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.2.0]
-[v6.1.6]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.1.6]
-[v6.1.5]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.1.5]
-[v6.1.4]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.1.4]
-[v6.1.3]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.1.3]
-[v6.1.2]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.1.2]
+[v7.0.0]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v7.0.0
+[v6.3.0]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.3.0
+[v6.2.1]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.2.1
+[v6.2.0]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.2.0
+[v6.1.6]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.1.6
+[v6.1.5]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.1.5
+[v6.1.4]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.1.4
+[v6.1.3]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.1.3
+[v6.1.2]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.1.2
