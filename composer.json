@@ -20,9 +20,9 @@
   },
   "require": {
     "grzegorz-jamroz/foundations": "^1.0",
-    "grzegorz-jamroz/sf-api-foundation": "^7.0",
-    "grzegorz-jamroz/sf-api-bundle": "^7.0",
-    "symfony/uid": "^6.0|^7.0",
+    "grzegorz-jamroz/sf-api-foundation": "^8.0",
+    "grzegorz-jamroz/sf-api-bundle": "^8.0",
+    "symfony/uid": "^6.0|^7.0|^8.0",
     "doctrine/doctrine-bundle": "^2.0",
     "doctrine/orm": "^2.0|^3.0"
   },
@@ -31,7 +31,7 @@
     "phpunit/phpunit": "^12.4",
     "friendsofphp/php-cs-fixer": "^3.89",
     "phpstan/phpstan": "^2.1",
-    "symfony/dotenv": "^6.0|^7.0",
-    "symfony/yaml": "^6.0|^7.0"
+    "symfony/dotenv": "^6.0|^7.0|^8.0",
+    "symfony/yaml": "^6.0|^7.0|^8.0"
   }
 }

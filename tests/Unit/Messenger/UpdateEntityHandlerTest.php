@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class UpdateEntityHandlerTest extends TestCase
 {
     public function testShouldThrowInvalidArgumentExceptionWhenGivenClassNameIsNotEntityInterface(): void
