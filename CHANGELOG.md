@@ -1,5 +1,5 @@
 # Changelog
-## Unreleased
+## [v8.0.1] - 2026.02.15
 ### add
 - add support for `doctrine/doctrine-bundle` version 3.0
 
