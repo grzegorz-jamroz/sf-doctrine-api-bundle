@@ -7,7 +7,7 @@
 <p align="center">
     <img src="https://img.shields.io/badge/php->=8.4-blue?colorB=%238892BF" alt="Code Coverage">  
     <img src="https://img.shields.io/badge/coverage-100%25 files|100%25 lines-brightgreen" alt="Code Coverage">   
-    <img src="https://img.shields.io/badge/release-v7.0.0-blue" alt="Release Version">   
+    <img src="https://img.shields.io/badge/release-v8.0.0-blue" alt="Release Version">   
 </p>
 
 # Table of Contents

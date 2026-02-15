@@ -1,5 +1,5 @@
 # Changelog
-## Unreleased
+## [v8.0.0] - 2026.02.15
 ### Add
 - Symfony 8 support
 
