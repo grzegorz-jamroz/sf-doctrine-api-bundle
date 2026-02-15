@@ -1,4 +1,8 @@
 # Changelog
+## Unreleased
+### add
+- add support for `doctrine/doctrine-bundle` version 3.0
+
 ## [v8.0.0] - 2026.02.15
 ### Add
 - Symfony 8 support

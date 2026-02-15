@@ -23,7 +23,7 @@
     "grzegorz-jamroz/sf-api-foundation": "^8.0",
     "grzegorz-jamroz/sf-api-bundle": "^8.0",
     "symfony/uid": "^6.0|^7.0|^8.0",
-    "doctrine/doctrine-bundle": "^2.0",
+    "doctrine/doctrine-bundle": "^2.0|^3.0",
     "doctrine/orm": "^2.0|^3.0"
   },
   "require-dev": {
