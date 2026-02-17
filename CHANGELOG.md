@@ -1,5 +1,5 @@
 # Changelog
-## Unreleased
+## [v8.0.2] - 2026.02.17
 ### Add
 - add transaction management methods to [DbClient](src/Utility/DbClient.php) and [DbClientInterface](src/Utility/DbClientInterface.php)
 
@@ -125,6 +125,9 @@
 - extend DoctrineApiController with ApiControllerTrait
 - add support for metadata `path` and `excludedActions` in Api attribute
 
+[v8.0.2]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v8.0.2
+[v8.0.1]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v8.0.1
+[v8.0.0]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v8.0.0
 [v7.0.0]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v7.0.0
 [v6.3.0]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.3.0
 [v6.2.1]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v6.2.1
