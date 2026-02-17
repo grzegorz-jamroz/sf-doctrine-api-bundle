@@ -83,4 +83,19 @@ interface DbClientInterface
      * @throws Exception
      */
     public function delete(string $table, array $criteria, array $types = []): void;
+
+    /**
+     * @throws Exception
+     */
+    public function beginTransaction(): void;
+
+    /**
+     * @throws Exception
+     */
+    public function commit(): void;
+
+    /**
+     * @throws Exception
+     */
+    public function rollBack(): void;
 }

@@ -130,6 +130,30 @@ class DbClient implements DbClientInterface
         $this->connection->delete($table, $criteria, $types);
     }
 
+    /**
+     * @throws Exception
+     */
+    public function beginTransaction(): void
+    {
+        $this->connection->beginTransaction();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function commit(): void
+    {
+        $this->connection->commit();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function rollBack(): void
+    {
+        $this->connection->rollBack();
+    }
+
     private function getDbalQuery(string|DbalQuery $query, mixed ...$params): DbalQuery
     {
         if (is_string($query)) {
