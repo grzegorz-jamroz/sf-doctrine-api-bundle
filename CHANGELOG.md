@@ -1,5 +1,5 @@
 # Changelog
-## Unreleased
+## [v8.0.3] - 2026.03.13
 ### Add
 - add possibility to set UUID fields which should be converted from binary to string in `DbalQuery` with new method `getBinaryUuidFields`
 - add possibility to set result data key case in DbalQuery methods (snake_case or camelCase) with new `bool` property `useCamelCase`
@@ -130,6 +130,7 @@
 - extend DoctrineApiController with ApiControllerTrait
 - add support for metadata `path` and `excludedActions` in Api attribute
 
+[v8.0.3]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v8.0.3
 [v8.0.2]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v8.0.2
 [v8.0.1]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v8.0.1
 [v8.0.0]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v8.0.0
