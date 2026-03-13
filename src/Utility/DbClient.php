@@ -30,8 +30,7 @@ class DbClient implements DbClientInterface
     public function fetchColumn(string|DbalQuery $query, mixed ...$params): mixed
     {
         $query = $this->getDbalQuery($query, ...$params);
-        $result = $query->executeQuery();
-        $result = $result->fetchOne();
+        $result = $query->executeQuery()->fetchOne();
 
         if (false === $result) {
             throw new NotFoundException(sprintf('Record not found for query "%s"', $query::class), 404);
@@ -49,7 +48,7 @@ class DbClient implements DbClientInterface
      */
     public function fetchFirstColumn(string|DbalQuery $query, mixed ...$params): array
     {
-        return $this->getDbalQuery($query, ...$params)->executeQuery()->fetchFirstColumn();
+        return $this->getDbalQuery($query, ...$params)->fetchFirstColumn();
     }
 
     /**
@@ -63,7 +62,7 @@ class DbClient implements DbClientInterface
     public function fetchOne(string|DbalQuery $query, mixed ...$params): array
     {
         $query = $this->getDbalQuery($query, ...$params);
-        $result = $query->executeQuery()->fetchAssociative();
+        $result = $query->fetchAssociative();
 
         if (false === $result) {
             throw new NotFoundException(sprintf('Record not found for query "%s"', $query::class), 404);
@@ -81,7 +80,7 @@ class DbClient implements DbClientInterface
      */
     public function fetchAll(string|DbalQuery $query, mixed ...$params): array
     {
-        return $this->getDbalQuery($query, ...$params)->executeQuery()->fetchAllAssociative();
+        return $this->getDbalQuery($query, ...$params)->fetchAllAssociative();
     }
 
     /**

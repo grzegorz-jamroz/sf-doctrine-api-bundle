@@ -1,4 +1,9 @@
 # Changelog
+## Unreleased
+### Add
+- add possibility to set UUID fields which should be converted from binary to string in `DbalQuery` with new method `getBinaryUuidFields`
+- add possibility to set result data key case in DbalQuery methods (snake_case or camelCase) with new `bool` property `useCamelCase`
+
 ## [v8.0.2] - 2026.02.17
 ### Add
 - add transaction management methods to [DbClient](src/Utility/DbClient.php) and [DbClientInterface](src/Utility/DbClientInterface.php)
