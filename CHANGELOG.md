@@ -1,4 +1,8 @@
 # Changelog
+## [Unreleased]
+### Add
+- add possibility to set JSON fields which should be converted to `array` in `DbalQuery` with new method `getJsonFields`
+
 ## [v8.0.3] - 2026.03.13
 ### Add
 - add possibility to set UUID fields which should be converted from binary to string in `DbalQuery` with new method `getBinaryUuidFields`

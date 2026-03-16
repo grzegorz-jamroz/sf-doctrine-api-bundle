@@ -26,7 +26,9 @@ abstract class DbalQuery extends QueryBuilder
     {
         return array_map(
             fn(array $row) => $this->transformKeyCase(
-                $this->convertBinaryUuids($row)
+                $this->convertJsonToArray(
+                    $this->convertBinaryUuids($row)
+                )
             ),
             $this->executeQuery()->fetchFirstColumn(),
         );
@@ -44,7 +46,9 @@ abstract class DbalQuery extends QueryBuilder
         }
 
         return $this->transformKeyCase(
-            $this->convertBinaryUuids($result)
+            $this->convertJsonToArray(
+                $this->convertBinaryUuids($result)
+            )
         );
     }
 
@@ -55,7 +59,9 @@ abstract class DbalQuery extends QueryBuilder
     {
         return array_map(
             fn(array $row) => $this->transformKeyCase(
-                $this->convertBinaryUuids($row)
+                $this->convertJsonToArray(
+                    $this->convertBinaryUuids($row)
+                )
             ),
             $this->executeQuery()->fetchAllAssociative(),
         );
@@ -77,6 +83,14 @@ abstract class DbalQuery extends QueryBuilder
      * @return string[]
      */
     public function getBinaryUuidFields(): array
+    {
+        return [];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getJsonFields(): array
     {
         return [];
     }
@@ -107,6 +121,26 @@ abstract class DbalQuery extends QueryBuilder
 
             try {
                 $row[$field] = Uuid::fromBinary($row[$field])->toString();
+            } catch (Throwable) {
+            }
+        }
+
+        return $row;
+    }
+
+    /**
+     * @param array<string, mixed> $row
+     * @return array<string, mixed>
+     */
+    private function convertJsonToArray(array $row): array
+    {
+        foreach ($this->getJsonFields() as $field) {
+            if (!isset($row[$field]) || $row[$field] === null) {
+                continue;
+            }
+
+            try {
+                $row[$field] = json_decode($row[$field], true, flags: JSON_THROW_ON_ERROR);
             } catch (Throwable) {
             }
         }
