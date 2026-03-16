@@ -1,5 +1,5 @@
 # Changelog
-## [Unreleased]
+## [v8.0.4] - 2026.03.16
 ### Add
 - add possibility to set JSON fields which should be converted to `array` in `DbalQuery` with new method `getJsonFields`
 
@@ -134,6 +134,7 @@
 - extend DoctrineApiController with ApiControllerTrait
 - add support for metadata `path` and `excludedActions` in Api attribute
 
+[v8.0.4]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v8.0.4
 [v8.0.3]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v8.0.3
 [v8.0.2]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v8.0.2
 [v8.0.1]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v8.0.1
