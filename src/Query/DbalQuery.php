@@ -9,6 +9,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Result;
 use Psr\Cache\CacheItemPoolInterface;
+use RuntimeException;
 use Symfony\Component\Uid\Uuid;
 use Throwable;
 
@@ -24,12 +25,28 @@ abstract class DbalQuery extends QueryBuilder
 
     public function fetchFirstColumn(): array
     {
+        $transform = function ($row) {
+            if ($this->getFirstColumn() === '') {
+                throw new RuntimeException('First column is not defined for this query');
+            }
+
+            $isBinary = in_array($this->getFirstColumn(), $this->getBinaryUuidFields());
+
+            if ($isBinary) {
+                return Uuid::fromBinary($row)->toString();
+            }
+
+            $isJson = in_array($this->getFirstColumn(), $this->getJsonFields());
+
+            if ($isJson) {
+                return $this->convertJsonToArray($row);
+            }
+
+            return $row;
+        };
+
         return array_map(
-            fn(array $row) => $this->transformKeyCase(
-                $this->convertJsonToArray(
-                    $this->convertBinaryUuids($row)
-                )
-            ),
+            fn(mixed $row) => $transform($row),
             $this->executeQuery()->fetchFirstColumn(),
         );
     }
@@ -93,6 +110,11 @@ abstract class DbalQuery extends QueryBuilder
     public function getJsonFields(): array
     {
         return [];
+    }
+
+    public function getFirstColumn(): string
+    {
+        return '';
     }
 
     public function getQueryCacheProfile(): ?QueryCacheProfile

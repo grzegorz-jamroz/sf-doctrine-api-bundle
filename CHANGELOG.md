@@ -1,4 +1,8 @@
 # Changelog
+## [Unreleased]
+### Fix
+fix handling binary UUIDs and JSON fields in `fetchFirstColumn` method of `DbalQuery`
+
 ## [v8.0.4] - 2026.03.16
 ### Add
 - add possibility to set JSON fields which should be converted to `array` in `DbalQuery` with new method `getJsonFields`
