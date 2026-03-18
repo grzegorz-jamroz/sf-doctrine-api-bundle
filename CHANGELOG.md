@@ -1,7 +1,7 @@
 # Changelog
-## [Unreleased]
+## [v8.0.5] - 2026.03.18
 ### Fix
-fix handling binary UUIDs and JSON fields in `fetchFirstColumn` method of `DbalQuery`
+- fix handling binary UUIDs and JSON fields in `fetchFirstColumn` method of `DbalQuery`
 
 ## [v8.0.4] - 2026.03.16
 ### Add
@@ -138,6 +138,7 @@ fix handling binary UUIDs and JSON fields in `fetchFirstColumn` method of `DbalQ
 - extend DoctrineApiController with ApiControllerTrait
 - add support for metadata `path` and `excludedActions` in Api attribute
 
+[v8.0.5]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v8.0.5
 [v8.0.4]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v8.0.4
 [v8.0.3]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v8.0.3
 [v8.0.2]: https://github.com/grzegorz-jamroz/sf-doctrine-api-bundle/releases/tag/v8.0.2
